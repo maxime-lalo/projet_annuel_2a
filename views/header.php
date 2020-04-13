@@ -1,47 +1,65 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="" name="descriptison">
+  <meta content="" name="keywords">
 
-	<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+  <!-- Favicons -->
+  <link href="/public/assets/img/favicon.png" rel="icon">
+  <link href="/public/assets/img/apple-touch-icon.png" rel="apple-touch-icon">
 
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Montserrat:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="/public/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/public/assets/vendor/icofont/icofont.min.css" rel="stylesheet">
+  <link href="/public/assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+  <link href="/public/assets/vendor/venobox/venobox.css" rel="stylesheet">
+  <link href="/public/assets/vendor/remixicon/remixicon.css" rel="stylesheet">
+  <link href="/public/assets/vendor/owl.carousel/assets/owl.carousel.min.css" rel="stylesheet">
+  <link href="/public/assets/vendor/aos/aos.css" rel="stylesheet">
+
+  <!-- Template Main CSS File -->
+  <link href="/public/assets/css/style.css" rel="stylesheet">
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-	<a class="navbar-brand" href="/">Navbar</a>
-	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-		<span class="navbar-toggler-icon"></span>
-	</button>
+<header id="header" class="fixed-top d-flex align-items-center" style="background: rgba(2, 5, 161, 0.91)">
+	<div class="container d-flex align-items-center">
 
-	<div class="collapse navbar-collapse" id="navbarSupportedContent">
-		<ul class="navbar-nav mr-auto">
-			<li class="nav-item active">
-				<a class="nav-link" href="/<?= LANG;?>/"><?= translate("Accueil");?> <span class="sr-only">(current)</span></a>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link" href="/<?= LANG;?>/entrepot/localisation"><?= translate("Localisation");?></a>
-			</li>
-			<li class="nav-item dropdown">
-				<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-					<?= translate("Langage");?>
-				</a>
-				<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-					<?php
+		<div class="logo mr-auto">
+			<h1 class="text-light"><a href="/<?= LANG;?>"><span>Projet annuel</span></a></h1>
+			<!-- Uncomment below if you prefer to use an image logo -->
+			<!-- <a href="index.html"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
+		</div>
+	  <nav class="nav-menu d-none d-lg-block">
+		<ul>
+			<li class="active"><a href="/<?= LANG;?>"><?= translate("Accueil");?></a></li>
+			<li><a href="/<?= LANG;?>/entrepot/localisation"><?= translate("Localisation");?></a></li>
+			<li class="drop-down"><a href="#"><?= translate("Langage");?></a>
+				<ul>
+					<?php 
 					foreach (POSSIBLE_LANGUAGES as $key => $value) {
-						if (LANG != $value) {
-							$urlExplode = explode("/", $url);
-							$urlExplode[0] = $value;
+						if ($value != LANG) {
+							$actualUrl = $_SERVER['REQUEST_URI'];
+							$actualUrl = explode('/',$actualUrl);
+							if (in_array($actualUrl[1], POSSIBLE_LANGUAGES)) {
+								$actualUrl[1] = $value;
+								unset($actualUrl[0]);
+							}else{
+								$actualUrl[0] = $value;
+							}
 							?>
-							<a class="dropdown-item" href="/<?= implode('/',$urlExplode);?>"><?= strtoupper($value);?></a>
+							<li><a href="/<?= implode('/',$actualUrl);?>"><?= strtoupper($value);?></a></li>
 							<?php
 						}
 					}
 					?>
-				</div>
+				</ul>
 			</li>
 		</ul>
+	  </nav>
 	</div>
-</nav>
-	<div class="container-fluid">
+</header>

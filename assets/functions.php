@@ -11,3 +11,33 @@ function translate(string $toTranslate):?string{
 		}
 	}
 }
+
+function requirePublic(string $ressource):?string{
+	return NULL;
+}
+
+function getMimeType(string $extension):?string{
+	switch ($extension) {
+		case 'css':
+			return 'text/css';
+			break;
+		case 'json':
+			return 'application/json';
+			break;
+		case 'js':
+			return 'application/javascript';
+			break;
+		case 'png':
+			return 'image/png';
+			break;
+		case 'jpeg':
+			return 'image/jpeg';
+			break;
+		case 'jpg':
+			return 'image/jpeg';
+			break;
+		default:
+			return "text/html";
+			break;
+	}
+}
