@@ -1,5 +1,4 @@
 <?php 
-
 function translate(string $toTranslate):?string{
 	if (LANG == "fr") {
 		return $toTranslate;
