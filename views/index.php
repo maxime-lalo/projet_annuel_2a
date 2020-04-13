@@ -1,4 +1,4 @@
 <div>
-	<title>Accueil</title>
-	<p>Page d'accueil</p>
+	<title><?= translate('Accueil');?></title>
+	<p><?= translate("Page d'accueil");?></p>
 </div>

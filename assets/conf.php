@@ -5,3 +5,5 @@ DEFINE('POSSIBLE_LANGUAGES',[
 	'fr',
 	'es'
 ]);
+
+DEFINE('DEFAULT_LANG','fr');

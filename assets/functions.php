@@ -8,7 +8,7 @@ function translate(string $toTranslate):?string{
 		if (isset($translations[$toTranslate])) {
 			return $translations[$toTranslate];
 		}else{
-			return '<span style="color:red">Missing translation : <b>'.$toTranslate.'</b></span>';
+			return '<span style="color:red">Missing translation in lang <b>'.strtoupper(LANG).'</b>  =>  <b>'.$toTranslate.'</b></span>';
 		}
 	}
 }

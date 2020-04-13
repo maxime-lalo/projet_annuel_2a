@@ -5,15 +5,20 @@ require_once __DIR__ . '/../assets/functions.php';
 $url = $_SERVER['REQUEST_URI'];
 $url = substr($url, 1,strlen($url));
 
+if (substr($url,-1) == '/') {
+	$url = substr($url, 0,strlen($url)-1);
+}
+
 require_once __DIR__ . '/../views/header.php';
 if (empty($url)) {
+	DEFINE('LANG',DEFAULT_LANG);
 	require_once __DIR__ . '/../views/index.php';
 }else{
 	$explodedUrl = explode("/", explode("?",$url)[0]);
 
 	DEFINE('LANG',$explodedUrl[0]);
 	unset($explodedUrl[0]);
-	
+
 	if (in_array(LANG,POSSIBLE_LANGUAGES)) {
 		if (empty($explodedUrl)) {
 			require_once __DIR__ . '/../views/index.php';
