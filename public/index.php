@@ -19,22 +19,22 @@ if (empty($url)) {
 	DEFINE('LANG',$explodedUrl[0]);
 	unset($explodedUrl[0]);
 
-	if (in_array(LANG,POSSIBLE_LANGUAGES)) {
-		if (empty($explodedUrl)) {
-			require_once __DIR__ . '/../views/index.php';
-		}else{
-			$path = "/".implode("/", $explodedUrl).".php";
-			if (file_exists(__DIR__ . '/../views/' . $path)) {
+	$path = "/".implode("/", $explodedUrl).".php";
+	if (file_exists(__DIR__ . '/../views/' . $path)) {
+		if (in_array(LANG,POSSIBLE_LANGUAGES)) {
+			if (empty($explodedUrl)) {
+				require_once __DIR__ . '/../views/index.php';
+			}else{
 				http_response_code(200);
 				require_once __DIR__ . '/../views/' . $path;
-			}else{
-				http_response_code(404);	
-				require_once __DIR__ . '/../views/errors/404.php';
 			}
+		}else{
+			http_response_code(400);
+			require_once __DIR__ . '/../views/errors/400.php';
 		}
 	}else{
-		http_response_code(400);
-		require_once __DIR__ . '/../views/errors/400.php';
+		http_response_code(404);	
+		require_once __DIR__ . '/../views/errors/404.php';
 	}
 }
 require_once __DIR__ . '/../views/footer.php';
