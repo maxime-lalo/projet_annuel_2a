@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../assets/conf.php';
+require_once __DIR__ . '/../.env';
 require_once __DIR__ . '/../assets/functions.php';
 
 $url = $_SERVER['REQUEST_URI'];
