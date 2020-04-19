@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/../.env';
 require_once __DIR__ . '/../assets/functions.php';
+require_once __DIR__ . '/../utils/database/DatabaseManager.php';
 
 $url = $_SERVER['REQUEST_URI'];
 $url = substr($url, 1,strlen($url));
