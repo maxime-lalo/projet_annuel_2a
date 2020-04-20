@@ -65,7 +65,16 @@
                     <li><a href="/<?= LANG;?>/compte/InscriptionClient"><?= translate("Client");?></a></li>
                 </ul>
             </li>
-            <li><a href="/<?= LANG;?>/compte/connexion"><?= translate("Connexion");?></a>
+            <?php if (!isset($_COOKIE["user_id"])) { ?>
+                <li><a href="/<?= LANG; ?>/compte/connexion"><?= translate("Connexion"); ?></a></li>
+            <?php } else { ?>
+                <li class="drop-down"><a href="#"><?= translate("Mon Compte"); ?></a>
+                    <ul>
+                        <li><a href="/<?= LANG; ?>/compte/Compte"><?= translate("Profil"); ?></a></li>
+                        <li><a href="#"><?= translate("Déconnexion"); ?></a></li>
+                    </ul>
+                </li>
+            <?php } ?>
 		</ul>
 	  </nav>
 	</div>
