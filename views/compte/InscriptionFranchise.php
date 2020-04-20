@@ -35,7 +35,7 @@
             </div>
             <div class="form-group col-md-6">
                 <label for="phone">Telephone</label>
-                <input required type="tel" class="form-control" name="phone">
+                <input required type="tel" class="form-control" name="phone" pattern="^((\+\d{1,3}(-| )?\(?\d\)?(-| )?\d{1,5})|(\(?\d{2,6}\)?))(-| )?(\d{3,4})(-| )?(\d{4})(( x| ext)\d{1,5}){0,1}$">
             </div>
             <div class="form-group col-md-3">
                 <label for="CvToUpload">CV</label>
