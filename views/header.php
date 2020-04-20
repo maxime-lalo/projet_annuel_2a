@@ -59,6 +59,13 @@
 					?>
 				</ul>
 			</li>
+            <li class="drop-down"><a href="#"><?= translate("Inscription");?></a>
+                <ul>
+                    <li><a href="/<?= LANG;?>/compte/InscriptionFranchise"><?= translate("Franchisé");?></a></li>
+                    <li><a href="/<?= LANG;?>/compte/InscriptionClient"><?= translate("Client");?></a></li>
+                </ul>
+            </li>
+            <li><a href="/<?= LANG;?>/compte/connexion"><?= translate("Connexion");?></a>
 		</ul>
 	  </nav>
 	</div>
