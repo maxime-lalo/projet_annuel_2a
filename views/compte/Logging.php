@@ -16,7 +16,9 @@ if(isset($_POST['mail']) && isset($_POST['password'])){
 
         header('Location: Compte');
     }
-    else echo "user introuvable";
+    else {
+        header('Location: connexion');
+    }
 
 
 

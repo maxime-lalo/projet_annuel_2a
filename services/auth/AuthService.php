@@ -88,11 +88,11 @@ class AuthService
     public function log(string $mail, string $password): ?int
     {
         $hashed = hash('sha256', $password);
-        $userData = $this->db->find('SELECT id FROM user WHERE email = ? AND password = ?', [
+        $userData = $this->db->find('SELECT id, activated FROM user WHERE email = ? AND password = ?', [
             $mail,
             $hashed
         ]);
-        if ($userData === null) {
+        if ($userData === null || $userData['activated'] == 0) {
             return null;
         }
         return $userData['id'];
