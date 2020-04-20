@@ -2,44 +2,46 @@
 require_once __DIR__ . '/../../services/auth/AuthService.php';
 require_once __DIR__ . '/../../utils/database/DatabaseManager.php';
 
+$manager = new DatabaseManager();
+$authService = new AuthService($manager);
 $user_id = $_COOKIE["user_id"];
-if (isset($user_id)) {
-    $manager = new DatabaseManager();
-    $authService = new AuthService($manager);
-    $user = $authService->getUserFromId($user_id);
 
+if (isset($_POST['submit']) && isset($_POST['firstname']) && isset($_POST['lastname'])
+    && isset($_POST['email']) && isset($_POST['phone'])
+    && isset($_POST['city']) && isset($_POST['address']) && isset($_POST['number'])) {
+    $user = $authService->updateUser($_POST['firstname'], $_POST['lastname'], $_POST['email'],
+        $_POST['phone'], $_POST['address'], $_POST['number'], $_POST['city'], $user_id);
+} else {
+    $user = $authService->getUserFromId($user_id);
 }
 ?>
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<!------ Include the above in your HEAD tag ---------->
 
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<!------ Include the above in your HEAD tag ---------->
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<hr>
 <br>
 <div class="container-fluid txt-container">
-    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <!------ Include the above in your HEAD tag ---------->
-
-    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <!------ Include the above in your HEAD tag ---------->
-
-    <head>
-
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    </head>
-
-
-    <hr>
     <div class="container bootstrap snippet">
         <div class="row">
-            <div class="col-sm-10"><h1><?= $user->getFirstname(). ' ' .  $user->getLastname(); ?></h1></div>
+            <div class="col-sm-10"><h1><?= $user->getFirstname() . ' ' . $user->getLastname(); ?></h1></div>
             <div class="col-sm-2"><a href="#" class="pull-right"><img title="profile image"
-                                                                           class="img-circle img-responsive"
-                                                                           src="http://www.gravatar.com/avatar/28fd20ccec6865e2d5f0e1f4446eb7bf?s=100"></a>
+                                                                      class="img-circle img-responsive"
+                                                                      src="http://www.gravatar.com/avatar/28fd20ccec6865e2d5f0e1f4446eb7bf?s=100"></a>
             </div>
         </div>
         <div class="row">
@@ -92,19 +94,22 @@ if (isset($user_id)) {
                 <div class="tab-content">
                     <div class="tab-pane active" id="home">
                         <hr>
-                        <form class="form" action="##" method="post" id="registrationForm">
+                        <form class="form" action="Compte" method="post"
+                              id="registrationForm">
                             <div class="form-group">
 
                                 <div class="col-xs-6">
-                                    <label for="first_name"><h4>First name</h4></label>
-                                    <input type="text" class="form-control" name="first_name" id="first_name" value="<?= $user->getFirstname();?>">
+                                    <label for="firstname"><h4>First name</h4></label>
+                                    <input required type="text" class="form-control" name="firstname"
+                                           value="<?= $user->getFirstname(); ?>">
                                 </div>
                             </div>
                             <div class="form-group">
 
                                 <div class="col-xs-6">
-                                    <label for="last_name"><h4>Last name</h4></label>
-                                    <input type="text" class="form-control" name="last_name" id="last_name" value="<?= $user->getLastname();?>">
+                                    <label for="lastname"><h4>Last name</h4></label>
+                                    <input required type="text" class="form-control" name="lastname"
+                                           value="<?= $user->getLastname(); ?>">
                                 </div>
                             </div>
 
@@ -112,34 +117,39 @@ if (isset($user_id)) {
 
                                 <div class="col-xs-6">
                                     <label for="phone"><h4>Phone</h4></label>
-                                    <input type="text" class="form-control" name="phone" id="phone" value="<?= $user->getPhone();?>"
-                                           placeholder="enter phone" title="enter your phone number if any.">
+                                    <input required type="tel" class="form-control" name="phone"
+                                           pattern="^((\+\d{1,3}(-| )?\(?\d\)?(-| )?\d{1,5})|(\(?\d{2,6}\)?))(-| )?(\d{3,4})(-| )?(\d{4})(( x| ext)\d{1,5}){0,1}$"
+                                           value="<?= $user->getPhone(); ?>">
                                 </div>
                             </div>
 
-                                <div class="col-xs-6">
-                                    <label for="email"><h4>Email</h4></label>
-                                    <input type="email" class="form-control" name="email" id="email" value="<?= $user->getEmail();?>">
-                                </div>
+                            <div class="col-xs-6">
+                                <label for="email"><h4>Email</h4></label>
+                                <input required type="email" class="form-control" name="email"
+                                       value="<?= $user->getEmail(); ?>">
+                            </div>
 
                             <div class="col-xs-6">
                                 <label for="address"><h4>Rue</h4></label>
-                                <input type="text" class="form-control" name="address" value="<?= $user->getStreetName();?>">
+                                <input required type="text" class="form-control" name="address"
+                                       value="<?= $user->getStreetName(); ?>">
                             </div>
                             <div class="col-xs-6">
                                 <label for="number"><h4>Numéro</h4></label>
-                                <input type="text" class="form-control" name="number"  value="<?= $user->getStreetNumber();?>">
+                                <input required type="number" class="form-control" name="number"
+                                       value="<?= $user->getStreetNumber(); ?>">
                             </div>
                             <div class="form-group">
                                 <div class="col-xs-6">
                                     <label for="city"><h4>Ville</h4></label>
-                                    <input type="text" class="form-control" name="city" value="<?= $user->getCity();?>">
+                                    <input required type="text" class="form-control" name="city"
+                                           value="<?= $user->getCity(); ?>">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="col-xs-12">
                                     <br>
-                                    <button disabled class="btn btn-lg btn-success" type="submit"><i
+                                    <button class="btn btn-lg btn-success" type="submit" name="submit"><i
                                                 class="glyphicon glyphicon-ok-sign"></i> Save
                                     </button>
                                     <button class="btn btn-lg" type="reset"><i class="glyphicon glyphicon-repeat"></i>

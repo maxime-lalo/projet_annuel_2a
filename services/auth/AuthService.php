@@ -126,4 +126,23 @@ class AuthService
         return $affectedRows !== 0;
     }
 
+    public function updateUser(string $firstname, string $lastname, string $email,
+                               string $phone, string $street_name, string $street_number, string $city, int $id): ?User
+    {
+        $userData = $this->db->exec('Update user SET firstname = ?, lastname = ? , email =? , phone = ?, street_name = ?,street_number = ? , city = ? WHERE id = ?', [
+            $firstname,
+            $lastname,
+            $email,
+            $phone,
+            $street_name,
+            $street_number,
+            $city,
+            $id
+        ]);
+        if ($userData === null) {
+            return null;
+        }
+        return $this->getUserFromId($id);
+    }
+
 }
