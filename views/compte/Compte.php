@@ -1,9 +1,13 @@
 <?php
 require_once __DIR__ . '/../../services/auth/AuthService.php';
+require_once __DIR__ . '/../../services/TruckService.php';
+require_once __DIR__ . '/../../services/WarehouseService.php';
 require_once __DIR__ . '/../../utils/database/DatabaseManager.php';
 
 $manager = new DatabaseManager();
 $authService = new AuthService($manager);
+$truckService = new TruckService($manager);
+$warehouseService = new WarehouseService($manager);
 $user_id = $_COOKIE["user_id"];
 
 if (isset($_POST['submit']) && isset($_POST['firstname']) && isset($_POST['lastname'])
@@ -13,6 +17,11 @@ if (isset($_POST['submit']) && isset($_POST['firstname']) && isset($_POST['lastn
         $_POST['phone'], $_POST['address'], $_POST['number'], $_POST['city'], $user_id);
 } else {
     $user = $authService->getUserFromId($user_id);
+
+    if ($user->isWorker()) {
+        $truck = $truckService->getTruckFromUserId($user_id);
+        $warehouse = $warehouseService->getWarehouseFromUserId($user_id);
+    }
 }
 ?>
 <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
@@ -84,9 +93,11 @@ if (isset($_POST['submit']) && isset($_POST['firstname']) && isset($_POST['lastn
             </div><!--/col-3-->
             <div class="col-sm-9">
                 <ul class="nav nav-tabs">
-                    <li class="active"><a data-toggle="tab" href="#home">Home</a></li>
-                    <li><a data-toggle="tab" href="#messages">Menu 1</a></li>
-                    <li><a data-toggle="tab" href="#settings">Menu 2</a></li>
+                    <li class="active"><a data-toggle="tab" href="#home">Informations</a></li>
+                    <?php if ($user->isWorker()) { ?>
+                        <li><a data-toggle="tab" href="#messages">Camion</a></li>
+                        <li><a data-toggle="tab" href="#settings">Entrepot</a></li>
+                    <?php } ?>
                 </ul>
 
 
@@ -161,34 +172,88 @@ if (isset($_POST['submit']) && isset($_POST['firstname']) && isset($_POST['lastn
                         <hr>
 
                     </div><!--/tab-pane-->
+
                     <div class="tab-pane" id="messages">
+                        <?php if (!isset($truck)) {
+                            echo 'pas de camion rattaché';
+                        }
+                        else{ ?>
+                        <div class="form-group">
+
+                            <div class="col-xs-6">
+                                <label for="mileage"><h4>Mileage</h4></label>
+                                <input required disabled type="text" class="form-control" name="mileage"
+                                       value="<?= $truck->getMileage(); ?>">
+                            </div>
+                            <div class="col-xs-6">
+                                <label for="register"><h4>Date Register</h4></label>
+                                <input required disabled type="text" class="form-control" name="register"
+                                       value="<?= $truck->getDateRegister(); ?>">
+                            </div>
+
+                            <div class="col-xs-6">
+                                <label for="lastcheck"><h4>Date last check</h4></label>
+                                <input required disabled type="text" class="form-control" name="lastcheck"
+                                       value="<?= $truck->getDateCheck(); ?>">
+                            </div>
+                        </div>
+                        <?php } ?>
+
 
                     </div><!--/tab-pane-->
                     <div class="tab-pane" id="settings">
-                    </div>
+                        <?php if (!isset($warehouse)) {
+                            echo 'pas d\'entrepot rattaché';
+                        }
+                        else{ ?>
+                        <div class="form-group">
 
-                </div><!--/tab-pane-->
-            </div><!--/tab-content-->
+                            <div class="col-xs-6">
+                                <label for="name"><h4>Nom</h4></label>
+                                <input required disabled type="text" class="form-control" name="name"
+                                       value="<?= $warehouse->getName(); ?>">
+                            </div>
+                            <div class="col-xs-6">
+                                <label for="city"><h4>Ville</h4></label>
+                                <input required disabled type="text" class="form-control" name="city"
+                                       value="<?= $warehouse->getCity(); ?>">
+                            </div>
 
-        </div><!--/col-9-->
-    </div><!--/row-->
-    <script>
-        $(document).ready(function () {
-            var readURL = function (input) {
-                if (input.files && input.files[0]) {
-                    var reader = new FileReader();
+                            <div class="col-xs-6">
+                                <label for="street_name"><h4>Rue</h4></label>
+                                <input required disabled type="text" class="form-control" name="street_name"
+                                       value="<?= $warehouse->getStreetName(); ?>">
+                            </div>
+                            <div class="col-xs-6">
+                                <label for="street_number"><h4>Numéro</h4></label>
+                                <input required disabled type="text" class="form-control" name="street_number"
+                                       value="<?= $warehouse->getStreetNumber(); ?>">
+                            </div>
+                        </div>
 
-                    reader.onload = function (e) {
-                        $('.avatar').attr('src', e.target.result);
+                    </div><!--/tab-pane-->
+                    <?php } ?>
+                </div><!--/tab-content-->
+
+            </div><!--/col-9-->
+        </div><!--/row-->
+        <script>
+            $(document).ready(function () {
+                var readURL = function (input) {
+                    if (input.files && input.files[0]) {
+                        var reader = new FileReader();
+
+                        reader.onload = function (e) {
+                            $('.avatar').attr('src', e.target.result);
+                        }
+
+                        reader.readAsDataURL(input.files[0]);
                     }
-
-                    reader.readAsDataURL(input.files[0]);
                 }
-            }
 
 
-            $(".file-upload").on('change', function () {
-                readURL(this);
+                $(".file-upload").on('change', function () {
+                    readURL(this);
+                });
             });
-        });
-    </script>
+        </script>
