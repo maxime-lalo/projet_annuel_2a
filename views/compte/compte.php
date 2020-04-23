@@ -1,12 +1,12 @@
 <?php
 require_once __DIR__ . "/../../services/auth/AuthService.php";
-require_once __DIR__ . "/../../repositories/TruckRepository.php";
+require_once __DIR__ . "/../../repositories/FoodTruckRepository.php";
 require_once __DIR__ . "/../../repositories/WarehouseRepository.php";
 require_once __DIR__ . "/../../utils/database/DatabaseManager.php";
 
 $manager = new DatabaseManager();
 $authService = new AuthService($manager);
-$truckService = new TruckRepository();
+$truckService = new FoodTruckRepository();
 $warehouseService = new WarehouseRepository();
 $user_id = $_COOKIE["user_id"];
 

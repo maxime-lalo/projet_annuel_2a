@@ -1,7 +1,7 @@
 <?php
 
 require_once __DIR__ . '/../../utils/database/DatabaseManager.php';
-require_once __DIR__ . '/../../models/user.php';
+require_once __DIR__ . '/../../models/User.php';
 
 
 class AuthService
