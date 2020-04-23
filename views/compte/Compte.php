@@ -1,13 +1,13 @@
 <?php
-require_once __DIR__ . '/../../services/auth/AuthService.php';
-require_once __DIR__ . '/../../services/TruckService.php';
-require_once __DIR__ . '/../../services/WarehouseService.php';
-require_once __DIR__ . '/../../utils/database/DatabaseManager.php';
+require_once __DIR__ . "/../../services/auth/AuthService.php";
+require_once __DIR__ . "/../../repositories/TruckRepository.php";
+require_once __DIR__ . "/../../repositories/WarehouseRepository.php";
+require_once __DIR__ . "/../../utils/database/DatabaseManager.php";
 
 $manager = new DatabaseManager();
 $authService = new AuthService($manager);
-$truckService = new TruckService($manager);
-$warehouseService = new WarehouseService($manager);
+$truckService = new TruckRepository();
+$warehouseService = new WarehouseRepository();
 $user_id = $_COOKIE["user_id"];
 
 if (isset($_POST['submit']) && isset($_POST['firstname']) && isset($_POST['lastname'])
@@ -19,8 +19,8 @@ if (isset($_POST['submit']) && isset($_POST['firstname']) && isset($_POST['lastn
     $user = $authService->getUserFromId($user_id);
 
     if ($user->isWorker()) {
-        $truck = $truckService->getTruckFromUserId($user_id);
-        $warehouse = $warehouseService->getWarehouseFromUserId($user_id);
+        $truck = $truckService->getFromUserId($user_id);
+        $warehouse = $warehouseService->getFromUserId($user_id);
     }
 }
 ?>

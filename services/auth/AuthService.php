@@ -71,16 +71,17 @@ class AuthService
         if ($affectedRows === 0) {
             return null;
         }
-        return new User(
-            $this->db->getLastInsertId(),
-            $firstname,
-            $lasname,
-            $hashed,
-            $email,
-            $phone,
-            $street_name,
-            $street_number,
-            $city);
+        return new User([
+            "id" => $this->db->getLastInsertId(),
+            "firstname" => $firstname,
+            "lastname" => $lasname,
+            "password" => $hashed,
+            "email" => $email,
+            "phone" => $phone,
+            "street_name" => $street_name,
+            "street_number" => $street_number,
+            "city" => $city
+        ]);
     }
 
     public function log(string $mail, string $password): ?int
@@ -99,27 +100,26 @@ class AuthService
     public function getUserFromId(int $id): ?User
     {
 
-        $userData = $this->db->find('SELECT firstname, lastname ,password , email , phone , street_name , street_number , city , is_client , is_worker , is_employe
-        FROM user WHERE id = ?', [
+        $userData = $this->db->find('SELECT * FROM user WHERE id = ?', [
             $id
         ]);
         if ($userData === null) {
             return null;
         }
-        return new User(
-            $id,
-            $userData['firstname'],
-            $userData['lastname'],
-            $userData['password'],
-            $userData['email'],
-            $userData['phone'],
-            $userData['street_name'],
-            $userData['street_number'],
-            $userData['city'],
-            $userData['is_client'],
-            $userData['is_worker'],
-            $userData['is_employe']
-        );
+        return new User([
+            "id" => $id,
+            "firstname" => $userData['firstname'],
+            "lastname" => $userData['lastname'],
+            "password" => $userData['password'],
+            "email" => $userData['email'],
+            "phone" => $userData['phone'],
+            "street_name" => $userData['street_name'],
+            "street_number" => $userData['street_number'],
+            "city" => $userData['city'],
+            "is_client" => $userData['is_client'],
+            "is_worker" => $userData['is_worker'],
+            "is_employe" => $userData['is_employe']
+        ]);
 
     }
 

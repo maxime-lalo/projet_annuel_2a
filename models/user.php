@@ -34,6 +34,18 @@ class User implements JsonSerializable
         $this->street_name = $user['street_name'];
         $this->street_number = $user['street_number'];
         $this->city = $user['city'];
+
+        if (isset($user['is_worker'])) {
+            $this->is_worker = $user['is_worker'];
+        }
+
+        if (isset($user['is_client'])) {
+            $this->is_worker = $user['is_client'];
+        }
+
+        if (isset($user['is_employe'])) {
+            $this->is_worker = $user['is_employe'];
+        }
     }
 
     /**
