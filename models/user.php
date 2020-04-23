@@ -1,7 +1,8 @@
 <?php
 
 
-class User implements JsonSerializable {
+class User implements JsonSerializable
+{
 
     private int $id;
     private string $firstname;
@@ -9,12 +10,17 @@ class User implements JsonSerializable {
     private string $password;
     private string $email;
     private string $phone;
-    private string $street_name	;
+    private string $street_name;
     private int $street_number;
     private string $city;
     private DateTime $date_register;
+    private int $is_client;
+    private int $is_worker;
+    private int $is_employe;
 
-    public function jsonSerialize() {
+
+    public function jsonSerialize()
+    {
         return get_object_vars($this);
     }
 
@@ -22,11 +28,15 @@ class User implements JsonSerializable {
                                 string $firstname,
                                 string $lastname,
                                 string $password,
-                                string $email ,
+                                string $email,
                                 string $phone,
                                 string $street_name,
                                 int $street_number,
-                                string $city) {
+                                string $city,
+                                int $is_client,
+                                int $is_worker,
+                                int $is_employe)
+    {
         $this->id = $id;
         $this->firstname = $firstname;
         $this->lastname = $lastname;
@@ -36,6 +46,9 @@ class User implements JsonSerializable {
         $this->street_name = $street_name;
         $this->street_number = $street_number;
         $this->city = $city;
+        $this->is_client = $is_client;
+        $this->is_employe = $is_employe;
+        $this->is_worker = $is_worker;
     }
 
     /**
@@ -182,6 +195,75 @@ class User implements JsonSerializable {
         $this->city = $city;
     }
 
+    /**
+     * @return DateTime
+     */
+    public function getDateRegister(): DateTime
+    {
+        return $this->date_register;
+    }
+
+    /**
+     * @param DateTime $date_register
+     */
+    public function setDateRegister(DateTime $date_register): void
+    {
+        $this->date_register = $date_register;
+    }
+
+    /**
+     * @return int
+     */
+    public function isClient(): bool
+    {
+        if ($this->is_client != 0)
+        return true;
+        else return false;
+    }
+
+    /**
+     * @param int $is_client
+     */
+    public function setIsClient(int $is_client): void
+    {
+        $this->is_client = $is_client;
+    }
+
+    /**
+     * @return int
+     */
+    public function isWorker(): bool
+    {
+        if ($this->is_worker != 0)
+            return true;
+        else return false;
+    }
+
+    /**
+     * @param int $is_worker
+     */
+    public function setIsWorker(int $is_worker): void
+    {
+        $this->is_worker = $is_worker;
+    }
+
+    /**
+     * @return int
+     */
+    public function isEmploye(): bool
+    {
+        if ($this->is_employe != 0)
+            return true;
+        else return false;
+    }
+
+    /**
+     * @param int $is_employe
+     */
+    public function setIsEmploye(int $is_employe): void
+    {
+        $this->is_employe = $is_employe;
+    }
 
 
 

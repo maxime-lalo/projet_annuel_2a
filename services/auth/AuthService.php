@@ -14,8 +14,6 @@ class AuthService
         $this->db = $db;
     }
 
-    // Todo functions subscribe, connexion , etc ...
-
 
     public function subscribeClient(string $firstname, string $lasname, string $password, string $email, string $phone, string $street_name,
                                     int $street_number,
@@ -101,7 +99,8 @@ class AuthService
     public function getUserFromId(int $id): ?User
     {
 
-        $userData = $this->db->find('SELECT firstname, lastname ,password , email , phone , street_name , street_number , city FROM user WHERE id = ?', [
+        $userData = $this->db->find('SELECT firstname, lastname ,password , email , phone , street_name , street_number , city , is_client , is_worker , is_employe
+        FROM user WHERE id = ?', [
             $id
         ]);
         if ($userData === null) {
@@ -116,7 +115,11 @@ class AuthService
             $userData['phone'],
             $userData['street_name'],
             $userData['street_number'],
-            $userData['city']);
+            $userData['city'],
+            $userData['is_client'],
+            $userData['is_worker'],
+            $userData['is_employe']
+        );
 
     }
 
