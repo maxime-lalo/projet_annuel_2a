@@ -1,4 +1,4 @@
-<form enctype="multipart/form-data" method="post" action="InsertWorker">
+<form enctype="multipart/form-data" method="post" action="insertWorker">
     <br>
     <div class="container-fluid txt-container">
 
