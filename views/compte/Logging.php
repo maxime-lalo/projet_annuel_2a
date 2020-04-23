@@ -15,7 +15,7 @@ if(isset($_POST['mail']) && isset($_POST['password'])){
         header('Location: Compte');
     }
     else {
-        //header('Location: connexion');
+        header('Location: connexion');
     }
 
 
