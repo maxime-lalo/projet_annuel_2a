@@ -19,7 +19,7 @@ class Truck
     {
         $this->id = $truck['id'];
         $this->date_register = $truck['date_register'];
-        $this->date_check = $truck['date_check'];
+        $this->date_check = $truck['date_last_check'];
         $this->mileage = $truck['mileage'];
     }
 

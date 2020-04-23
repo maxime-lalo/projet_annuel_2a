@@ -12,7 +12,7 @@ if(isset($_POST['mail']) && isset($_POST['password'])){
         else
         setcookie('user_id', $user);
 
-        header('Location: Compte');
+        header('Location: compte');
     }
     else {
         header('Location: connexion');

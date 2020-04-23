@@ -37,16 +37,17 @@ class AuthService
         if ($affectedRows === 0) {
             return null;
         }
-        return new User(
-            $this->db->getLastInsertId(),
-            $firstname,
-            $lasname,
-            $hashed,
-            $email,
-            $phone,
-            $street_name,
-            $street_number,
-            $city);
+        return new User([
+            "id" => $this->db->getLastInsertId(),
+            "firstname" => $firstname,
+            "lastname" => $lasname,
+            "password" => $hashed,
+            "email" => $email,
+            "phone" => $phone,
+            "street_name" => $street_name,
+            "street_number" => $street_number,
+            "city" => $city
+        ]);
     }
 
     public function subscribeWorker(string $firstname, string $lasname, string $password, string $email, string $phone, string $street_name,
@@ -99,7 +100,7 @@ class AuthService
 
     public function getUserFromId(int $id): ?User
     {
-
+        var_dump($id);
         $userData = $this->db->find('SELECT * FROM user WHERE id = ?', [
             $id
         ]);

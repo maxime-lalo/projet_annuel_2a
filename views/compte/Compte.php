@@ -174,30 +174,33 @@ if (isset($_POST['submit']) && isset($_POST['firstname']) && isset($_POST['lastn
                     </div><!--/tab-pane-->
 
                     <div class="tab-pane" id="messages">
-                        <?php if (!isset($truck)) {
+                        <?php 
+                        if (!isset($truck)) {
                             echo 'pas de camion rattaché';
-                        }
-                        else{ ?>
-                        <div class="form-group">
+                        }else{ 
+                            ?>
+                            <div class="form-group">
 
-                            <div class="col-xs-6">
-                                <label for="mileage"><h4>Mileage</h4></label>
-                                <input required disabled type="text" class="form-control" name="mileage"
-                                       value="<?= $truck->getMileage(); ?>">
-                            </div>
-                            <div class="col-xs-6">
-                                <label for="register"><h4>Date Register</h4></label>
-                                <input required disabled type="text" class="form-control" name="register"
-                                       value="<?= $truck->getDateRegister(); ?>">
-                            </div>
+                                <div class="col-xs-6">
+                                    <label for="mileage"><h4>Mileage</h4></label>
+                                    <input required disabled type="text" class="form-control" name="mileage"
+                                           value="<?= $truck->getMileage(); ?>">
+                                </div>
+                                <div class="col-xs-6">
+                                    <label for="register"><h4>Date Register</h4></label>
+                                    <input required disabled type="text" class="form-control" name="register"
+                                           value="<?= $truck->getDateRegister(); ?>">
+                                </div>
 
-                            <div class="col-xs-6">
-                                <label for="lastcheck"><h4>Date last check</h4></label>
-                                <input required disabled type="text" class="form-control" name="lastcheck"
-                                       value="<?= $truck->getDateCheck(); ?>">
+                                <div class="col-xs-6">
+                                    <label for="lastcheck"><h4>Date last check</h4></label>
+                                    <input required disabled type="text" class="form-control" name="lastcheck"
+                                           value="<?= $truck->getDateCheck(); ?>">
+                                </div>
                             </div>
-                        </div>
-                        <?php } ?>
+                        <?php 
+                        } 
+                        ?>
 
 
                     </div><!--/tab-pane-->

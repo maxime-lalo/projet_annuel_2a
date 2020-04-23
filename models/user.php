@@ -35,17 +35,9 @@ class User implements JsonSerializable
         $this->street_number = $user['street_number'];
         $this->city = $user['city'];
 
-        if (isset($user['is_worker'])) {
-            $this->is_worker = $user['is_worker'];
-        }
-
-        if (isset($user['is_client'])) {
-            $this->is_worker = $user['is_client'];
-        }
-
-        if (isset($user['is_employe'])) {
-            $this->is_worker = $user['is_employe'];
-        }
+        $this->is_worker = isset($user['is_worker'])?$user['is_worker']:0;
+        $this->is_client = isset($user['is_client'])?$user['is_client']:0;
+        $this->is_employe = isset($user['is_employe'])?$user['is_employe']:0;
     }
 
     /**
@@ -213,9 +205,7 @@ class User implements JsonSerializable
      */
     public function isClient(): bool
     {
-        if ($this->is_client != 0)
-        return true;
-        else return false;
+        return $this->is_client;
     }
 
     /**
@@ -231,9 +221,7 @@ class User implements JsonSerializable
      */
     public function isWorker(): bool
     {
-        if ($this->is_worker != 0)
-            return true;
-        else return false;
+        return $this->is_worker;
     }
 
     /**
@@ -249,9 +237,7 @@ class User implements JsonSerializable
      */
     public function isEmploye(): bool
     {
-        if ($this->is_employe != 0)
-            return true;
-        else return false;
+        return $this->is_employe;
     }
 
     /**
