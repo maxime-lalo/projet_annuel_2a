@@ -1,3 +1,4 @@
+<title><?= translate("Accueil");?></title>
   <!-- ======= Hero Section ======= -->
   <section id="hero">
 
