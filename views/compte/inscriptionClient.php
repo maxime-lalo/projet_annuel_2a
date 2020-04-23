@@ -1,4 +1,4 @@
-<form method="post" action="InsertClient">
+<form method="post" action="insertClient">
     <br>
     <div class="container-fluid txt-container">
 

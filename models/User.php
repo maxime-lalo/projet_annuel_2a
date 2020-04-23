@@ -24,31 +24,20 @@ class User implements JsonSerializable
         return get_object_vars($this);
     }
 
-    public function __construct(int $id,
-                                string $firstname,
-                                string $lastname,
-                                string $password,
-                                string $email,
-                                string $phone,
-                                string $street_name,
-                                int $street_number,
-                                string $city,
-                                int $is_client,
-                                int $is_worker,
-                                int $is_employe)
-    {
-        $this->id = $id;
-        $this->firstname = $firstname;
-        $this->lastname = $lastname;
-        $this->password = $password;
-        $this->email = $email;
-        $this->phone = $phone;
-        $this->street_name = $street_name;
-        $this->street_number = $street_number;
-        $this->city = $city;
-        $this->is_client = $is_client;
-        $this->is_employe = $is_employe;
-        $this->is_worker = $is_worker;
+    public function __construct(array $user) {
+        $this->id = $user['id'];
+        $this->firstname = $user['firstname'];
+        $this->lastname = $user['lastname'];
+        $this->password = $user['password'];
+        $this->email = $user['email'];
+        $this->phone = $user['phone'];
+        $this->street_name = $user['street_name'];
+        $this->street_number = $user['street_number'];
+        $this->city = $user['city'];
+
+        $this->is_worker = isset($user['is_worker'])?$user['is_worker']:0;
+        $this->is_client = isset($user['is_client'])?$user['is_client']:0;
+        $this->is_employe = isset($user['is_employe'])?$user['is_employe']:0;
     }
 
     /**
@@ -216,9 +205,7 @@ class User implements JsonSerializable
      */
     public function isClient(): bool
     {
-        if ($this->is_client != 0)
-        return true;
-        else return false;
+        return $this->is_client;
     }
 
     /**
@@ -234,9 +221,7 @@ class User implements JsonSerializable
      */
     public function isWorker(): bool
     {
-        if ($this->is_worker != 0)
-            return true;
-        else return false;
+        return $this->is_worker;
     }
 
     /**
@@ -252,9 +237,7 @@ class User implements JsonSerializable
      */
     public function isEmploye(): bool
     {
-        if ($this->is_employe != 0)
-            return true;
-        else return false;
+        return $this->is_employe;
     }
 
     /**

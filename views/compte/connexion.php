@@ -1,4 +1,4 @@
-<form method="post" action="Logging">
+<form method="post" action="logging">
     <br>
     <div class="container-fluid txt-container">
         <h3 align="center"><?= translate("Connexion");?></h3>

@@ -17,7 +17,6 @@ if (isset($_POST['firstname']) && isset($_POST['lastname']) &&
         die();
     }
     http_response_code(201);
-    var_dump($user);
 } else {
     http_response_code(400);
 }

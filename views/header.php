@@ -61,8 +61,8 @@
 			</li>
             <li class="drop-down"><a href="#"><?= translate("Inscription");?></a>
                 <ul>
-                    <li><a href="/<?= LANG;?>/compte/InscriptionFranchise"><?= translate("Franchisé");?></a></li>
-                    <li><a href="/<?= LANG;?>/compte/InscriptionClient"><?= translate("Client");?></a></li>
+                    <li><a href="/<?= LANG;?>/compte/inscriptionFranchise"><?= translate("Franchisé");?></a></li>
+                    <li><a href="/<?= LANG;?>/compte/inscriptionClient"><?= translate("Client");?></a></li>
                 </ul>
             </li>
             <?php if (!isset($_COOKIE["user_id"])) { ?>
@@ -70,7 +70,7 @@
             <?php } else { ?>
                 <li class="drop-down"><a href="#"><?= translate("Mon Compte"); ?></a>
                     <ul>
-                        <li><a href="/<?= LANG; ?>/compte/Compte"><?= translate("Profil"); ?></a></li>
+                        <li><a href="/<?= LANG; ?>/compte/compte"><?= translate("Profil"); ?></a></li>
                         <li><a href="#"><?= translate("Déconnexion"); ?></a></li>
                     </ul>
                 </li>

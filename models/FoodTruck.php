@@ -1,7 +1,7 @@
 <?php
 
 
-class Truck
+class FoodTruck
 {
     private int $id;
     private string $date_register;
@@ -9,18 +9,18 @@ class Truck
     private int $mileage;
 
     /**
-     * Truck constructor.
+     * FoodTruck constructor.
      * @param int $id
      * @param string $date_register
      * @param string $date_check
      * @param int $mileage
      */
-    public function __construct(int $id, string $date_register, string $date_check, int $mileage)
+    public function __construct(array $truck)
     {
-        $this->id = $id;
-        $this->date_register = $date_register;
-        $this->date_check = $date_check;
-        $this->mileage = $mileage;
+        $this->id = $truck['id'];
+        $this->date_register = $truck['date_register'];
+        $this->date_check = $truck['date_last_check'];
+        $this->mileage = $truck['mileage'];
     }
 
     /**

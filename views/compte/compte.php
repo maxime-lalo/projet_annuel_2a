@@ -1,13 +1,13 @@
 <?php
-require_once __DIR__ . '/../../services/auth/AuthService.php';
-require_once __DIR__ . '/../../services/TruckService.php';
-require_once __DIR__ . '/../../services/WarehouseService.php';
-require_once __DIR__ . '/../../utils/database/DatabaseManager.php';
+require_once __DIR__ . "/../../services/auth/AuthService.php";
+require_once __DIR__ . "/../../repositories/FoodTruckRepository.php";
+require_once __DIR__ . "/../../repositories/WarehouseRepository.php";
+require_once __DIR__ . "/../../utils/database/DatabaseManager.php";
 
 $manager = new DatabaseManager();
 $authService = new AuthService($manager);
-$truckService = new TruckService($manager);
-$warehouseService = new WarehouseService($manager);
+$truckService = new FoodTruckRepository();
+$warehouseService = new WarehouseRepository();
 $user_id = $_COOKIE["user_id"];
 
 if (isset($_POST['submit']) && isset($_POST['firstname']) && isset($_POST['lastname'])
@@ -19,8 +19,8 @@ if (isset($_POST['submit']) && isset($_POST['firstname']) && isset($_POST['lastn
     $user = $authService->getUserFromId($user_id);
 
     if ($user->isWorker()) {
-        $truck = $truckService->getTruckFromUserId($user_id);
-        $warehouse = $warehouseService->getWarehouseFromUserId($user_id);
+        $truck = $truckService->getFromUserId($user_id);
+        $warehouse = $warehouseService->getFromUserId($user_id);
     }
 }
 ?>
@@ -48,9 +48,8 @@ if (isset($_POST['submit']) && isset($_POST['firstname']) && isset($_POST['lastn
     <div class="container bootstrap snippet">
         <div class="row">
             <div class="col-sm-10"><h1><?= $user->getFirstname() . ' ' . $user->getLastname(); ?></h1></div>
-            <div class="col-sm-2"><a href="#" class="pull-right"><img title="profile image"
-                                                                      class="img-circle img-responsive"
-                                                                      src="http://www.gravatar.com/avatar/28fd20ccec6865e2d5f0e1f4446eb7bf?s=100"></a>
+            <div class="col-sm-2"><a href="#" class="pull-right">
+                <img title="profile image" class="img-circle img-responsive" src="http://www.gravatar.com/avatar/28fd20ccec6865e2d5f0e1f4446eb7bf?s=100"></a>
             </div>
         </div>
         <div class="row">
@@ -175,30 +174,33 @@ if (isset($_POST['submit']) && isset($_POST['firstname']) && isset($_POST['lastn
                     </div><!--/tab-pane-->
 
                     <div class="tab-pane" id="messages">
-                        <?php if (!isset($truck)) {
+                        <?php 
+                        if (!isset($truck)) {
                             echo 'pas de camion rattaché';
-                        }
-                        else{ ?>
-                        <div class="form-group">
+                        }else{ 
+                            ?>
+                            <div class="form-group">
 
-                            <div class="col-xs-6">
-                                <label for="mileage"><h4>Mileage</h4></label>
-                                <input required disabled type="text" class="form-control" name="mileage"
-                                       value="<?= $truck->getMileage(); ?>">
-                            </div>
-                            <div class="col-xs-6">
-                                <label for="register"><h4>Date Register</h4></label>
-                                <input required disabled type="text" class="form-control" name="register"
-                                       value="<?= $truck->getDateRegister(); ?>">
-                            </div>
+                                <div class="col-xs-6">
+                                    <label for="mileage"><h4>Mileage</h4></label>
+                                    <input required disabled type="text" class="form-control" name="mileage"
+                                           value="<?= $truck->getMileage(); ?>">
+                                </div>
+                                <div class="col-xs-6">
+                                    <label for="register"><h4>Date Register</h4></label>
+                                    <input required disabled type="text" class="form-control" name="register"
+                                           value="<?= $truck->getDateRegister(); ?>">
+                                </div>
 
-                            <div class="col-xs-6">
-                                <label for="lastcheck"><h4>Date last check</h4></label>
-                                <input required disabled type="text" class="form-control" name="lastcheck"
-                                       value="<?= $truck->getDateCheck(); ?>">
+                                <div class="col-xs-6">
+                                    <label for="lastcheck"><h4>Date last check</h4></label>
+                                    <input required disabled type="text" class="form-control" name="lastcheck"
+                                           value="<?= $truck->getDateCheck(); ?>">
+                                </div>
                             </div>
-                        </div>
-                        <?php } ?>
+                        <?php 
+                        } 
+                        ?>
 
 
                     </div><!--/tab-pane-->

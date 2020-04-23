@@ -17,13 +17,13 @@ class Warehouse
      * @param int $street_number
      * @param string $city
      */
-    public function __construct(int $id, string $name, string $street_name, int $street_number, string $city)
+    public function __construct(array $warehouse)
     {
-        $this->id = $id;
-        $this->name = $name;
-        $this->street_name = $street_name;
-        $this->street_number = $street_number;
-        $this->city = $city;
+        $this->id = $warehouse['id'];
+        $this->name = $warehouse['name'];
+        $this->street_name = $warehouse['street_name'];
+        $this->street_number = $warehouse['street_number'];
+        $this->city = $warehouse['city'];
     }
 
     /**
