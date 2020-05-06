@@ -37,28 +37,6 @@
 	  <nav class="nav-menu d-none d-lg-block">
 		<ul>
 			<li class="active"><a href="/<?= LANG;?>"><?= translate("Accueil");?></a></li>
-			<li><a href="/<?= LANG;?>/entrepot/localisation"><?= translate("Localisation");?></a></li>
-			<li class="drop-down"><a href="#"><?= translate("Langage");?></a>
-				<ul>
-					<?php 
-					foreach (POSSIBLE_LANGUAGES as $key => $value) {
-						if ($value != LANG) {
-							$actualUrl = $_SERVER['REQUEST_URI'];
-							$actualUrl = explode('/',$actualUrl);
-							if (in_array($actualUrl[1], POSSIBLE_LANGUAGES)) {
-								$actualUrl[1] = $value;
-								unset($actualUrl[0]);
-							}else{
-								$actualUrl[0] = $value;
-							}
-							?>
-							<li><a href="/<?= implode('/',$actualUrl);?>"><?= strtoupper($value);?></a></li>
-							<?php
-						}
-					}
-					?>
-				</ul>
-			</li>
             <li class="drop-down"><a href="#"><?= translate("Inscription");?></a>
                 <ul>
                     <li><a href="/<?= LANG;?>/compte/inscriptionFranchise"><?= translate("Franchisé");?></a></li>
@@ -75,6 +53,27 @@
                     </ul>
                 </li>
             <?php } ?>
+            <li class="drop-down"><a href="#"><?= translate("Langage");?></a>
+                <ul>
+                    <?php
+                    foreach (POSSIBLE_LANGUAGES as $key => $value) {
+                        if ($value != LANG) {
+                            $actualUrl = $_SERVER['REQUEST_URI'];
+                            $actualUrl = explode('/',$actualUrl);
+                            if (in_array($actualUrl[1], POSSIBLE_LANGUAGES)) {
+                                $actualUrl[1] = $value;
+                                unset($actualUrl[0]);
+                            }else{
+                                $actualUrl[0] = $value;
+                            }
+                            ?>
+                            <li><a href="/<?= implode('/',$actualUrl);?>"><?= strtoupper($value);?></a></li>
+                            <?php
+                        }
+                    }
+                    ?>
+                </ul>
+            </li>
 		</ul>
 	  </nav>
 	</div>
