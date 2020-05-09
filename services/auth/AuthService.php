@@ -149,4 +149,17 @@ class AuthService
         return $this->getUserFromId($id);
     }
 
+    public function updateMdpUser(int $id, string $password): ?User
+    {
+        $hashed = hash('sha256', $password);
+        $userData = $this->db->exec('Update user SET password = ? WHERE id = ?', [
+            $hashed,
+            $id
+        ]);
+        if ($userData === null) {
+            return null;
+        }
+        return $this->getUserFromId($id);
+    }
+
 }
