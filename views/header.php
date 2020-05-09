@@ -49,7 +49,7 @@
                 <li class="drop-down"><a href="#"><?= translate("Mon Compte"); ?></a>
                     <ul>
                         <li><a href="/<?= LANG; ?>/compte/compte"><?= translate("Profil"); ?></a></li>
-                        <li><a href="#"><?= translate("Déconnexion"); ?></a></li>
+                        <li><a href="/<?= LANG; ?>/compte/deconnexion"><?= translate("Déconnexion"); ?></a></li>
                     </ul>
                 </li>
             <?php } ?>
