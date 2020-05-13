@@ -49,6 +49,8 @@
                 <li class="drop-down"><a href="#"><?= translate("Mon Compte"); ?></a>
                     <ul>
                         <li><a href="/<?= LANG; ?>/compte/compte"><?= translate("Profil"); ?></a></li>
+                        <li><a href="/<?= LANG; ?>/compte/gestionTruck"><?= translate("Gestion Camions"); ?></a></li>
+                        <li><a href="/<?= LANG; ?>/compte/gestionWarehouse"><?= translate("Gestion Entrepots"); ?></a></li>
                         <li><a href="/<?= LANG; ?>/compte/deconnexion"><?= translate("Déconnexion"); ?></a></li>
                     </ul>
                 </li>
