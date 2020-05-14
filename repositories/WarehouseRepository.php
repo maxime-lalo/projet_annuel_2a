@@ -6,6 +6,6 @@ class WarehouseRepository extends AbstractRepository
 {
     public function getFromUserId(int $userId){
     	$warehouse = $this->dbManager->find("SELECT * FROM user a INNER JOIN WAREHOUSE b ON a.warehouse_id = b.id WHERE a.id = ?",[ $userId ]);
-    	return new Warehouse($warehouse);
+    	return $warehouse == null ? null: new Warehouse($warehouse);
     }
 }

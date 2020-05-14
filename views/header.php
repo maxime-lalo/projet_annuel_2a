@@ -41,13 +41,14 @@
 	  <nav class="nav-menu d-none d-lg-block">
 		<ul>
 			<li class="active"><a href="/<?= LANG;?>"><?= translate("Accueil");?></a></li>
+            <?php if (!isset($_COOKIE["user_id"])) { ?>
             <li class="drop-down"><a href="#"><?= translate("Inscription");?></a>
                 <ul>
                     <li><a href="/<?= LANG;?>/compte/inscriptionFranchise"><?= translate("Franchisé");?></a></li>
                     <li><a href="/<?= LANG;?>/compte/inscriptionClient"><?= translate("Client");?></a></li>
                 </ul>
             </li>
-            <?php if (!isset($_COOKIE["user_id"])) { ?>
+
                 <li><a href="/<?= LANG; ?>/compte/connexion"><?= translate("Connexion"); ?></a></li>
             <?php } else { ?>
                 <li class="drop-down"><a href="#"><?= translate("Mon Compte"); ?></a>
