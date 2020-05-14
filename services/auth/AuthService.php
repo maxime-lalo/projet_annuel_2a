@@ -100,7 +100,6 @@ class AuthService
 
     public function getUserFromId(int $id): ?User
     {
-        var_dump($id);
         $userData = $this->db->find('SELECT * FROM user WHERE id = ?', [
             $id
         ]);

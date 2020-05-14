@@ -10,6 +10,7 @@ $truckService = new FoodTruckRepository();
 $warehouseService = new WarehouseRepository();
 $user_id = $_COOKIE["user_id"];
 $error = '';
+$user = $authService->getUserFromId($user_id);
 
 if (isset($_POST['submit']) && isset($_POST['firstname']) && isset($_POST['lastname'])
     && isset($_POST['email']) && isset($_POST['phone'])
@@ -22,24 +23,18 @@ else if(isset($_POST['conf_mdp']) && isset($_POST['submitMdp']) && isset($_POST[
     $user = $authService->updateMdpUser($user_id , $_POST['mdp']);
     else {
         $error = "Les mot de passe ne correspondent pas";
-        $user = $authService->getUserFromId($user_id);
 
     }
 
 }
 else {
-    $user = $authService->getUserFromId($user_id);
-
     if ($user->isWorker()) {
         $truck = $truckService->getFromUserId($user_id);
         $warehouse = $warehouseService->getFromUserId($user_id);
     }
 }
 ?>
-
-<hr>
-<br>
-<div class="container-fluid txt-container">
+<div class="container-fluid">
     <div class="container bootstrap snippet">
         <div class="row">
             <div class="col-sm-10">

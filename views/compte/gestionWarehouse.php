@@ -1,5 +1,3 @@
-<hr>
-<br>
 <div class="container-fluid txt-container">
     
         <?php

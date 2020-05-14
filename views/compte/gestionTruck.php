@@ -1,5 +1,3 @@
-<hr>
-<br>
 <div class="container-fluid txt-container">
         <?php
         require_once __DIR__ . "/../../repositories/FoodTruckRepository.php";

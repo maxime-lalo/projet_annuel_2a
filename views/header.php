@@ -1,3 +1,13 @@
+<?php
+require_once __DIR__ . "/../services/auth/AuthService.php";
+require_once __DIR__ . "/../utils/database/DatabaseManager.php";
+
+$manager = new DatabaseManager();
+$authService = new AuthService($manager);
+if(isset($_COOKIE['user_id'])){
+    $user = $authService->getUserFromId($_COOKIE["user_id"]);
+}
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -41,13 +51,14 @@
 	  <nav class="nav-menu d-none d-lg-block">
 		<ul>
 			<li class="active"><a href="/<?= LANG;?>"><?= translate("Accueil");?></a></li>
+            <?php if (!isset($_COOKIE["user_id"])) { ?>
             <li class="drop-down"><a href="#"><?= translate("Inscription");?></a>
                 <ul>
                     <li><a href="/<?= LANG;?>/compte/inscriptionFranchise"><?= translate("Franchisé");?></a></li>
                     <li><a href="/<?= LANG;?>/compte/inscriptionClient"><?= translate("Client");?></a></li>
                 </ul>
             </li>
-            <?php if (!isset($_COOKIE["user_id"])) { ?>
+
                 <li><a href="/<?= LANG; ?>/compte/connexion"><?= translate("Connexion"); ?></a></li>
             <?php } else { ?>
                 <li class="drop-down"><a href="#"><?= translate("Mon Compte"); ?></a>
