@@ -3,7 +3,9 @@
 <div class="container-fluid txt-container">
         <?php
         require_once __DIR__ . "/../../repositories/FoodTruckRepository.php";
+        require_once __DIR__ . "/../../repositories/UserRepository.php";
 
+        $userService = new UserRepository();
         $truckService = new FoodTruckRepository();
 
         if(!isset($_GET['id'])){
@@ -38,6 +40,8 @@
         }
         else{
           $truck = $truckService->getOneById($_GET['id']);
+          $user = $userService->getFromTruckId($_GET['id']);
+          $users = $userService->getAll();
           ?>
           <div class="tab-pane" id="camions">
               <h4>Gestion du Camion</h4>
@@ -64,6 +68,28 @@
                                     <input required  type="date" class="form-control" name="lastcheck"
                                            value="<?= $truck->getDateCheck(); ?>">
                                 </div>
+
+                                <?php if(isset($user)){ ?>
+
+           
+                                <div class="col-xs-6">
+                                    <label for="nameWorker"><h4>Name Worker</h4></label>
+                                    <input required  type="text" class="form-control" name="nameWorker"
+                                           value="<?= $user->getFirstname()  . ' ' . $user->getLastName();?>">
+                                </div>
+
+                                <div class="col-xs-6">
+                                    <label for="localisation"><h4>Localisation</h4></label>
+                                    <input required  type="text" class="form-control" name="localisation"
+                                           value="<?= $user->getCity();?>">
+                                </div>
+
+                                <?php }
+                                else{  ?>
+
+  
+
+                                <?php } ?>
                             </div>
                             <?php
         }

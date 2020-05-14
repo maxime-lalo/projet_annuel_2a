@@ -46,7 +46,7 @@
 else{
     $warehouse = $warehouseService->getOneById($_GET['id']);
     ?>
-    <div class="tab-pane" id="camions">
+    <div class="tab-pane" id="warehouse">
         <h4>Gestion de l'entrepôt</h4>
                   <hr>                        
                       <div class="form-group">
@@ -77,6 +77,19 @@ else{
                                      value="<?= $warehouse->getCity(); ?>">
                           </div>
                       </div>
+
+                      
+                      <table id="warehouseList" class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
+            <thead>
+            <tr>
+                <th class="th-sm">Id</th>
+                <th class="th-sm">Name</th>
+                <th class="th-sm">Street Name</th>
+                <th class="th-sm">Street Number</th>
+                <th class="th-sm">City</th>
+            </tr>
+            </thead>
+            <tbody>
                       <?php
   }
 ?>
