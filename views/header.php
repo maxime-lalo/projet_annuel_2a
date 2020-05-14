@@ -1,3 +1,13 @@
+<?php
+require_once __DIR__ . "/../services/auth/AuthService.php";
+require_once __DIR__ . "/../utils/database/DatabaseManager.php";
+
+$manager = new DatabaseManager();
+$authService = new AuthService($manager);
+if(isset($_COOKIE['user_id'])){
+    $user = $authService->getUserFromId($_COOKIE["user_id"]);
+}
+?>
 <!DOCTYPE html>
 <html>
 <head>
