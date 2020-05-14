@@ -1,6 +1,17 @@
 <?php
 require_once __DIR__ . "/../../repositories/UserRepository.php";
 $uRepository = new UserRepository();
+
+if ( isset($_GET['id']) && isset($_GET['type']) ){
+    if ($_GET['type'] == "accept" OR $_GET['type'] == "refuse"){
+        $update = $uRepository->processWorker($_GET['id'],$_GET['type']);
+        if ($update){
+            new SweetAlert("success","Succès","L'utilisateur a bien été mis à jour");
+        }else{
+            new SweetAlert("error","Erreur","Erreur lors de la mise à jour de l'utilisateur");
+        }
+    }
+}
 ?>
 <div class="container">
     <h1 id="page-title">
@@ -27,26 +38,35 @@ $uRepository = new UserRepository();
         </thead>
         <tbody>
             <?php
-            foreach ($uRepository->getNotActivatedWorkers() as $user){
+            $users = $uRepository->getNotActivatedWorkers();
+            if ($users != null){
+                foreach ($uRepository->getNotActivatedWorkers() as $user){
+                    ?>
+                    <tr>
+                        <td><?= $user->getId();?></td>
+                        <td><?= $user->getFirstname() . " " . $user->getLastname() ;?></td>
+                        <td><?= $user->getEmail();?></td>
+                        <td><?= $user->getPhone();?></td>
+                        <td><?= $user->getCity();?></td>
+                        <td><a class="btn btn-primary" href="/file?type=view&file=resumees/<?= str_replace("@","_",$user->getEmail());?>/CV.pdf" target="blank_">
+                                <i class="fa fa-eye"></i>
+                            </a>
+                        </td>
+                        <td>
+                            <a class="btn btn-success" href="?id=<?= $user->getId();?>&type=accept">
+                                <i class="fas fa-check"></i>
+                            </a>
+                            <a class="btn btn-danger" href="?id=<?= $user->getId();?>&type=refuse">
+                                <i class="fas fa-times"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    <?php
+                }
+            }else{
                 ?>
-                <tr>
-                    <td><?= $user->getId();?></td>
-                    <td><?= $user->getFirstname() . " " . $user->getLastname() ;?></td>
-                    <td><?= $user->getEmail();?></td>
-                    <td><?= $user->getPhone();?></td>
-                    <td><?= $user->getCity();?></td>
-                    <td><a class="btn btn-primary" href="/file?type=view&file=resumees/<?= str_replace("@","_",$user->getEmail());?>/CV.pdf" target="blank_">
-                            <i class="fa fa-eye"></i>
-                        </a>
-                    </td>
-                    <td>
-                        <button class="btn btn-success">
-                            <i class="fas fa-check"></i>
-                        </button>
-                        <button class="btn btn-danger">
-                            <i class="fas fa-times"></i>
-                        </button>
-                    </td>
+                <tr style="background-color:lightgray">
+                    <td colspan="7" class="text-center"><?= translate("Aucun franchisé en attente");?></td>
                 </tr>
                 <?php
             }

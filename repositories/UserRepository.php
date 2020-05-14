@@ -21,4 +21,15 @@ class UserRepository extends AbstractRepository
         }
         return $returnUsers;
     }
+
+    public function processWorker(int $id, string $type):?bool{
+        if ($type == "accept"){
+            // envoyer un mail pour prévenir que l'utilisateur est accepté
+            $u = $this->dbManager->exec('UPDATE user SET activated = 1 WHERE id = ?',[$id]);
+        }else{
+            // envoyer un mail pour prévenir que l'utilisateur est refusé
+            $u = $this->dbManager->exec('UPDATE user SET activated = 2 WHERE id = ?',[$id]);
+        }
+        return $u > 0;
+    }
 }

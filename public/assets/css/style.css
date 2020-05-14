@@ -13,6 +13,9 @@ body {
   color: #444444;
   margin-top: 8rem !important;
 }
+.swal2-popup {
+  font-size: 1.6rem !important;
+}
 #page-title{
   padding-top: 3rem !important;
   border-bottom: 2px solid rgb(2,5,161);
