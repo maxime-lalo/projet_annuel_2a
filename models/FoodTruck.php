@@ -1,7 +1,7 @@
 <?php
 
 
-class Truck
+class FoodTruck
 {
     private int $id;
     private string $date_register;
@@ -9,7 +9,7 @@ class Truck
     private int $mileage;
 
     /**
-     * Truck constructor.
+     * FoodTruck constructor.
      * @param int $id
      * @param string $date_register
      * @param string $date_check
@@ -44,7 +44,7 @@ class Truck
      */
     public function getDateRegister(): string
     {
-        return $this->date_register;
+        return substr($this->date_register,0,10);
     }
 
     /**
@@ -60,7 +60,7 @@ class Truck
      */
     public function getDateCheck(): string
     {
-        return $this->date_check;
+        return substr($this->date_check, 0 , 10);
     }
 
     /**

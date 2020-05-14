@@ -1,7 +1,7 @@
 <?php
 
 require_once __DIR__ . '/../../utils/database/DatabaseManager.php';
-require_once __DIR__ . '/../../models/user.php';
+require_once __DIR__ . '/../../models/User.php';
 
 
 class AuthService
@@ -141,6 +141,19 @@ class AuthService
             $street_name,
             $street_number,
             $city,
+            $id
+        ]);
+        if ($userData === null) {
+            return null;
+        }
+        return $this->getUserFromId($id);
+    }
+
+    public function updateMdpUser(int $id, string $password): ?User
+    {
+        $hashed = hash('sha256', $password);
+        $userData = $this->db->exec('Update user SET password = ? WHERE id = ?', [
+            $hashed,
             $id
         ]);
         if ($userData === null) {
