@@ -35,7 +35,10 @@ $uRepository = new UserRepository();
                     <td><?= $user->getEmail();?></td>
                     <td><?= $user->getPhone();?></td>
                     <td><?= $user->getCity();?></td>
-                    <td><button class="btn btn-primary"><i class="fa fa-eye"></i></button></td>
+                    <td><a class="btn btn-primary" href="/file?type=view&file=resumees/<?= str_replace("@","_",$user->getEmail());?>/CV.pdf" target="blank_">
+                            <i class="fa fa-eye"></i>
+                        </a>
+                    </td>
                     <td>
                         <button class="btn btn-success">
                             <i class="fas fa-check"></i>
