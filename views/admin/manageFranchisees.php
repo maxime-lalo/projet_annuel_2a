@@ -38,9 +38,7 @@ if ( isset($_GET['id']) && isset($_GET['type']) ){
         </thead>
         <tbody>
             <?php
-            $users = $uRepository->getNotActivatedWorkers();
-            if ($users != null){
-                foreach ($uRepository->getNotActivatedWorkers() as $user){
+            foreach ($uRepository->getNotActivatedWorkers() as $user){
                     ?>
                     <tr>
                         <td><?= $user->getId();?></td>
@@ -48,9 +46,21 @@ if ( isset($_GET['id']) && isset($_GET['type']) ){
                         <td><?= $user->getEmail();?></td>
                         <td><?= $user->getPhone();?></td>
                         <td><?= $user->getCity();?></td>
-                        <td><a class="btn btn-primary" href="/file?type=view&file=resumees/<?= str_replace("@","_",$user->getEmail());?>/CV.pdf" target="blank_">
-                                <i class="fa fa-eye"></i>
-                            </a>
+                        <td>
+                            <?php
+
+                            $fileName = array_diff(scandir(__DIR__ . "/../../uploads/resumees/" . str_replace("@","_",$user->getEmail())), array('.', '..'));
+                            if (isset($fileName[2])){
+                                ?>
+                                <a class="btn btn-primary" href="/file?type=view&file=resumees/<?= str_replace("@","_",$user->getEmail())."/".$fileName[2];?>" target="blank_">
+                                    <i class="fa fa-eye"></i>
+                                </a>
+                                <?php
+                            }else{
+                                echo "CV non trouvé";
+                            }
+
+                            ?>
                         </td>
                         <td>
                             <a class="btn btn-success" href="?id=<?= $user->getId();?>&type=accept">
@@ -63,6 +73,8 @@ if ( isset($_GET['id']) && isset($_GET['type']) ){
                     </tr>
                     <?php
                 }
+            $users = $uRepository->getNotActivatedWorkers();
+            if ($users != null){
             }else{
                 ?>
                 <tr style="background-color:lightgray">
