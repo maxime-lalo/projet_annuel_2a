@@ -52,7 +52,7 @@ if ( isset($_GET['id']) && isset($_GET['type']) ){
                             $fileName = array_diff(scandir(__DIR__ . "/../../uploads/resumees/" . str_replace("@","_",$user->getEmail())), array('.', '..'));
                             if (isset($fileName[2])){
                                 ?>
-                                <a class="btn btn-primary" href="/file?type=view&file=resumees/<?= str_replace("@","_",$user->getEmail())."/".$fileName[2];?>" target="blank_">
+                                <a class="btn btn-primary" href="/file?type=download&file=resumees/<?= str_replace("@","_",$user->getEmail())."/".$fileName[2];?>" target="blank_">
                                     <i class="fa fa-eye"></i>
                                 </a>
                                 <?php
