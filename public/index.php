@@ -48,7 +48,8 @@ if ($explodedUrl[0] == 'public') {
                     readfile($file);
                     exit;
                 }elseif($_GET['type'] == "view"){
-                    header('Content-Type: application/pdf');
+                    $explodeName = explode(".",$fileName);
+                    header(getMimeType($explodeName[count($explodeName)-1]));
                     $fp = fopen($file,"r");
                     while($data = fread($fp, 1024)){
                         echo $data;
