@@ -26,6 +26,29 @@ if ($explodedUrl[0] == 'public') {
 		http_response_code(404);
 		echo "Ressource non trouvée";
 	}
+}elseif($explodedUrl[0] == 'file'){
+    if (!isset($_GET['file'])){        echo "Veuillez renseigner un nom de fichier";
+    }else{
+        $fileName = $_GET['file'];
+        $file = __DIR__ . '/../uploads/' . $fileName;
+        if (file_exists($file)) {
+            header('Content-Description: File Transfer');
+            header('Content-Type: application/octet-stream');
+            header('Content-Disposition: attachment; filename=' . basename($file));
+            header('Content-Transfer-Encoding: binary');
+            header('Expires: 0');
+            header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+            header('Pragma: public');
+            header('Content-Length: ' . filesize($file));
+            ob_clean();
+            flush();
+            readfile($file);
+            exit;
+        } else {
+            echo "Fichier introuvable";
+        }
+    }
+
 }else{
 	if (empty($url)) {
 		DEFINE('LANG',DEFAULT_LANG);
