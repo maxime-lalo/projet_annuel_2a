@@ -27,24 +27,41 @@ if ($explodedUrl[0] == 'public') {
 		echo "Ressource non trouvée";
 	}
 }elseif($explodedUrl[0] == 'file'){
-    if (!isset($_GET['file'])){        echo "Veuillez renseigner un nom de fichier";
+    if (!isset($_GET['file'])){
+        echo "Veuillez renseigner un nom de fichier";
     }else{
         $fileName = $_GET['file'];
         $file = __DIR__ . '/../uploads/' . $fileName;
-        if (file_exists($file)) {
-            header('Content-Description: File Transfer');
-            header('Content-Type: application/octet-stream');
-            header('Content-Disposition: attachment; filename=' . basename($file));
-            header('Content-Transfer-Encoding: binary');
-            header('Expires: 0');
-            header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
-            header('Pragma: public');
-            header('Content-Length: ' . filesize($file));
-            ob_clean();
-            flush();
-            readfile($file);
-            exit;
-        } else {
+        if (file_exists($file)){
+            if (isset($_GET['type'])){
+                if ($_GET['type'] == "download"){
+                    header('Content-Description: File Transfer');
+                    header('Content-Type: application/octet-stream');
+                    header('Content-Disposition: attachment; filename=' . basename($file));
+                    header('Content-Transfer-Encoding: binary');
+                    header('Expires: 0');
+                    header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+                    header('Pragma: public');
+                    header('Content-Length: ' . filesize($file));
+                    ob_clean();
+                    flush();
+                    readfile($file);
+                    exit;
+                }elseif($_GET['type'] == "view"){
+                    header('Content-Type: application/pdf');
+                    $fp = fopen($file,"r");
+                    while($data = fread($fp, 1024)){
+                        echo $data;
+                    }
+                    fclose($fp);
+                    exit;
+                }else{
+                    echo "Type non valide";
+                }
+            }else{
+                echo "Veuillez renseigner un type, download ou view";
+            }
+        }else{
             echo "Fichier introuvable";
         }
     }
