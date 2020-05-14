@@ -9,7 +9,7 @@ if (isset($_POST['firstname']) && isset($_POST['lastname']) &&
 
     $target_dir = "uploads/";
     $cvFileType = strtolower(pathinfo( $_FILES["CvToUpload"]["name"], PATHINFO_EXTENSION));
-    $target_file = $target_dir . 'CV_' . $_POST['firstname'] . '_' . $_POST['lastname'] . '.' . $cvFileType;
+    $target_file = __DIR__ . "/../../" . $target_dir . 'CV_' . $_POST['firstname'] . '_' . $_POST['lastname'] . '.' . $cvFileType;
     $uploadOk = 1;
 
 

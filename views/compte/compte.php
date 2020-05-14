@@ -9,13 +9,25 @@ $authService = new AuthService($manager);
 $truckService = new FoodTruckRepository();
 $warehouseService = new WarehouseRepository();
 $user_id = $_COOKIE["user_id"];
+$error = '';
 
 if (isset($_POST['submit']) && isset($_POST['firstname']) && isset($_POST['lastname'])
     && isset($_POST['email']) && isset($_POST['phone'])
     && isset($_POST['city']) && isset($_POST['address']) && isset($_POST['number'])) {
     $user = $authService->updateUser($_POST['firstname'], $_POST['lastname'], $_POST['email'],
         $_POST['phone'], $_POST['address'], $_POST['number'], $_POST['city'], $user_id);
-} else {
+}
+else if(isset($_POST['conf_mdp']) && isset($_POST['submitMdp']) && isset($_POST['mdp'])){
+    if($_POST['conf_mdp'] == $_POST['mdp'])
+    $user = $authService->updateMdpUser($user_id , $_POST['mdp']);
+    else {
+        $error = "Les mot de passe ne correspondent pas";
+        $user = $authService->getUserFromId($user_id);
+
+    }
+
+}
+else {
     $user = $authService->getUserFromId($user_id);
 
     if ($user->isWorker()) {
@@ -24,28 +36,16 @@ if (isset($_POST['submit']) && isset($_POST['firstname']) && isset($_POST['lastn
     }
 }
 ?>
-<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<!------ Include the above in your HEAD tag ---------->
 
-<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<!------ Include the above in your HEAD tag ---------->
-
-<head>
-
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-</head>
 <hr>
 <br>
 <div class="container-fluid txt-container">
     <div class="container bootstrap snippet">
+        <div class="row">
+            <div class="col-sm-10">
+             <h1 style="color: #721c24"><?=$error;?></h1>
+            </div>
+        </div>
         <div class="row">
             <div class="col-sm-10"><h1><?= $user->getFirstname() . ' ' . $user->getLastname(); ?></h1></div>
             <div class="col-sm-2"><a href="#" class="pull-right">
@@ -64,47 +64,22 @@ if (isset($_POST['submit']) && isset($_POST['firstname']) && isset($_POST['lastn
                 </div>
                 </hr><br>
 
-
-                <div class="panel panel-default">
-                    <div class="panel-heading">Website <i class="fa fa-link fa-1x"></i></div>
-                    <div class="panel-body"><a href="http://bootnipets.com">bootnipets.com</a></div>
-                </div>
-
-
-                <ul class="list-group">
-                    <li class="list-group-item text-muted">Activity <i class="fa fa-dashboard fa-1x"></i></li>
-                    <li class="list-group-item text-right"><span class="pull-left"><strong>Shares</strong></span> 125
-                    </li>
-                    <li class="list-group-item text-right"><span class="pull-left"><strong>Likes</strong></span> 13</li>
-                    <li class="list-group-item text-right"><span class="pull-left"><strong>Posts</strong></span> 37</li>
-                    <li class="list-group-item text-right"><span class="pull-left"><strong>Followers</strong></span> 78
-                    </li>
-                </ul>
-
-                <div class="panel panel-default">
-                    <div class="panel-heading">Social Media</div>
-                    <div class="panel-body">
-                        <i class="fa fa-facebook fa-2x"></i> <i class="fa fa-github fa-2x"></i> <i
-                                class="fa fa-twitter fa-2x"></i> <i class="fa fa-pinterest fa-2x"></i> <i
-                                class="fa fa-google-plus fa-2x"></i>
-                    </div>
-                </div>
-
             </div><!--/col-3-->
             <div class="col-sm-9">
                 <ul class="nav nav-tabs">
-                    <li class="active"><a data-toggle="tab" href="#home">Informations</a></li>
+                    <li class="active"><a data-toggle="tab" href="#settings">Informations</a></li>
                     <?php if ($user->isWorker()) { ?>
-                        <li><a data-toggle="tab" href="#messages">Camion</a></li>
-                        <li><a data-toggle="tab" href="#settings">Entrepot</a></li>
+                        <li><a data-toggle="tab" href="#camions">Camion</a></li>
+                        <li><a data-toggle="tab" href="#entrepots">Entrepot</a></li>
                     <?php } ?>
+                       <li><a data-toggle="tab" href="#mdp">Mot de passe</a></li>
                 </ul>
 
 
                 <div class="tab-content">
-                    <div class="tab-pane active" id="home">
+                    <div class="tab-pane active" id="settings">
                         <hr>
-                        <form class="form" action="Compte" method="post"
+                        <form class="form" action="compte" method="post"
                               id="registrationForm">
                             <div class="form-group">
 
@@ -173,7 +148,8 @@ if (isset($_POST['submit']) && isset($_POST['firstname']) && isset($_POST['lastn
 
                     </div><!--/tab-pane-->
 
-                    <div class="tab-pane" id="messages">
+                    <div class="tab-pane" id="camions">
+                        <hr>
                         <?php 
                         if (!isset($truck)) {
                             echo 'pas de camion rattaché';
@@ -201,10 +177,9 @@ if (isset($_POST['submit']) && isset($_POST['firstname']) && isset($_POST['lastn
                         <?php 
                         } 
                         ?>
-
-
                     </div><!--/tab-pane-->
-                    <div class="tab-pane" id="settings">
+                    <div class="tab-pane" id="entrepots">
+                        <hr>
                         <?php if (!isset($warehouse)) {
                             echo 'pas d\'entrepot rattaché';
                         }
@@ -233,13 +208,39 @@ if (isset($_POST['submit']) && isset($_POST['firstname']) && isset($_POST['lastn
                                        value="<?= $warehouse->getStreetNumber(); ?>">
                             </div>
                         </div>
-
-                    </div><!--/tab-pane-->
                     <?php } ?>
-                </div><!--/tab-content-->
+                    </div>
+                    <div class="tab-pane" id="mdp">
+                        <hr>
+                        <form method="post" action="compte" class="form">
+                        <div class="form-group">
+                           <div class="col-xs-6">
+                               <label for="mdp"><h4>Nouveau mot de passe</h4></label>
+                               <input required type="password" class="form-control" name="mdp"
+                           </div>
+                        </div>
+                        <div class="form-group">
+                        <div class="col-xs-6">
+                            <label for="conf_mdp"><h4>Confimer mot de passe</h4></label>
+                            <input required type="password" class="form-control" name="conf_mdp"
+                        </div>
+                        </div>
+                            <div class="form-group">
+                                <div class="col-xs-12">
+                                    <br>
+                        <button class="btn btn-lg btn-success" type="submit" name="submitMdp"><i
+                                    class="glyphicon glyphicon-ok-sign"></i> Save
+                        </button>
+                        </div>
+                        </form>
 
-            </div><!--/col-9-->
-        </div><!--/row-->
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
         <script>
             $(document).ready(function () {
                 var readURL = function (input) {

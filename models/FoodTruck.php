@@ -44,7 +44,7 @@ class FoodTruck
      */
     public function getDateRegister(): string
     {
-        return $this->date_register;
+        return substr($this->date_register,0,10);
     }
 
     /**
@@ -60,7 +60,7 @@ class FoodTruck
      */
     public function getDateCheck(): string
     {
-        return $this->date_check;
+        return substr($this->date_check, 0 , 10);
     }
 
     /**

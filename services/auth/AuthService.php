@@ -100,7 +100,6 @@ class AuthService
 
     public function getUserFromId(int $id): ?User
     {
-        var_dump($id);
         $userData = $this->db->find('SELECT * FROM user WHERE id = ?', [
             $id
         ]);
@@ -141,6 +140,19 @@ class AuthService
             $street_name,
             $street_number,
             $city,
+            $id
+        ]);
+        if ($userData === null) {
+            return null;
+        }
+        return $this->getUserFromId($id);
+    }
+
+    public function updateMdpUser(int $id, string $password): ?User
+    {
+        $hashed = hash('sha256', $password);
+        $userData = $this->db->exec('Update user SET password = ? WHERE id = ?', [
+            $hashed,
             $id
         ]);
         if ($userData === null) {
