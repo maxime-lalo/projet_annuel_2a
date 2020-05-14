@@ -13,7 +13,14 @@ body {
   color: #444444;
   margin-top: 8rem !important;
 }
-
+#page-title{
+  padding-top: 3rem !important;
+  border-bottom: 2px solid rgb(2,5,161);
+  margin-bottom: 2rem;
+}
+.btn-primary{
+  background-color: rgb(2,5,161) !important;
+}
 a {
   color: #1acc8d;
 }
