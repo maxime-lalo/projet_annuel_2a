@@ -37,8 +37,12 @@ class AbstractRepository{
 		$item = $this->dbManager->find("SELECT * FROM " . $this->getDbTable() . " WHERE id = ?" ,[
 			$id
 		]);
-		$strClass = $this->getClassName();
-		return new $strClass($item);
+		if ($item == null){
+            return null;
+        }else{
+            $strClass = $this->getClassName();
+            return new $strClass($item);
+        }
 	}
 
 }
