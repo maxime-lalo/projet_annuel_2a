@@ -13,11 +13,12 @@ if ( isset($_GET['id']) && isset($_GET['type']) ){
     }
 }
 ?>
+<title><?= translate("Gestion des franchisés");?></title>
 <div class="container">
     <h1 id="page-title">
         <?= translate("Gestion des franchisés");?>
         <span class="float-right">
-            <a href="#" class="btn btn-primary mb-2">
+            <a href="viewFranchisee" class="btn btn-primary mb-2">
                 <i class="fa fa-eye"></i>
                 <?= translate("Voir tous les franchisés");?>
             </a>
@@ -26,15 +27,15 @@ if ( isset($_GET['id']) && isset($_GET['type']) ){
     <p class="lead"><?= translate("Liste des franchisés en attente");?></p>
     <table class="table table-bordered">
         <thead>
-        <tr>
-            <th><?= translate("ID");?></th>
-            <th><?= translate("Nom");?></th>
-            <th><?= translate("Email");?></th>
-            <th><?= translate("Téléphone");?></th>
-            <th><?= translate("Ville");?></th>
-            <th><?= translate("CV");?></th>
-            <th><?= translate("Actions");?></th>
-        </tr>
+            <tr>
+                <th><?= translate("ID");?></th>
+                <th><?= translate("Nom");?></th>
+                <th><?= translate("Email");?></th>
+                <th><?= translate("Téléphone");?></th>
+                <th><?= translate("Ville");?></th>
+                <th><?= translate("CV");?></th>
+                <th><?= translate("Actions");?></th>
+            </tr>
         </thead>
         <tbody>
             <?php
@@ -63,10 +64,10 @@ if ( isset($_GET['id']) && isset($_GET['type']) ){
                             ?>
                         </td>
                         <td>
-                            <a class="btn btn-success" href="?id=<?= $user->getId();?>&type=accept">
+                            <a class="btn btn-success" href="?id=<?= $user->getId();?>&type=accept" title="<?= translate("Accepter");?>" data-toggle="tooltip">
                                 <i class="fas fa-check"></i>
                             </a>
-                            <a class="btn btn-danger" href="?id=<?= $user->getId();?>&type=refuse">
+                            <a class="btn btn-danger" href="?id=<?= $user->getId();?>&type=refuse" title="<?= translate("Refuser");?>" data-toggle="tooltip">
                                 <i class="fas fa-times"></i>
                             </a>
                         </td>
