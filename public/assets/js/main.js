@@ -7,6 +7,10 @@
 !(function($) {
   "use strict";
 
+  $(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+  })
+
   // Preloader
   $(window).on('load', function() {
     if ($('#preloader').length) {

@@ -7,10 +7,16 @@ if (isset($_POST['firstname']) && isset($_POST['lastname']) &&
     isset($_POST['password']) && isset($_POST['mail']) && isset($_POST['phone'])
     && isset($_POST['city']) && isset($_POST['address']) && isset($_POST['number']) && isset($_FILES['CvToUpload'])) {
 
-    $target_dir = "uploads/";
-    $cvFileType = strtolower(pathinfo( $_FILES["CvToUpload"]["name"], PATHINFO_EXTENSION));
-    $target_file = __DIR__ . "/../../" . $target_dir . 'CV_' . $_POST['firstname'] . '_' . $_POST['lastname'] . '.' . $cvFileType;
-    $uploadOk = 1;
+    $target_dir =  __DIR__ . "/../../uploads/resumees/" . str_replace("@","_",$_POST['mail']);
+    $createDir = mkdir($target_dir);
+    if (!$createDir){
+        echo "Erreur interne : Le dossier n'a pas pu être créé";
+        $uploadOk = 0;
+    }else{
+        $cvFileType = strtolower(pathinfo( $_FILES["CvToUpload"]["name"], PATHINFO_EXTENSION));
+        $target_file = $target_dir . '/CV.' . $cvFileType;
+        $uploadOk = 1;
+    }
 
 
 // Check if file already exists

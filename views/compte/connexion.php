@@ -8,10 +8,10 @@ if(isset($_POST['mail']) && isset($_POST['password'])){
     if(isset($user)){
         if(isset($_POST['check'])) {
             session_start();
-            setcookie('user_id', $user, time() + 2592000);
+            setcookie('user_id', $user, time() + 2592000,"/");
 
         }else{
-            setcookie('user_id', $user);
+            setcookie('user_id', $user,time() + 3600,"/");
             header('Location: compte');
         }
     }else{
