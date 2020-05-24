@@ -30,13 +30,11 @@ function getMimeType(string $extension):?string{
 		case 'png':
 			return 'image/png';
 			break;
-		case 'jpeg':
+        case 'jpg':
+        case 'jpeg':
 			return 'image/jpeg';
 			break;
-		case 'jpg':
-			return 'image/jpeg';
-			break;
-		default:
+        default:
 			return "text/html";
 			break;
 	}

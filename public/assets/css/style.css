@@ -11,8 +11,19 @@
 body {
   font-family: "Open Sans", sans-serif;
   color: #444444;
+  margin-top: 8rem !important;
 }
-
+.swal2-popup {
+  font-size: 1.6rem !important;
+}
+#page-title{
+  padding-top: 3rem !important;
+  border-bottom: 2px solid rgb(2,5,161);
+  margin-bottom: 2rem;
+}
+.btn-primary{
+  background-color: rgb(2,5,161) !important;
+}
 a {
   color: #1acc8d;
 }
@@ -21,6 +32,7 @@ a:hover {
   color: #34e5a6;
   text-decoration: none;
 }
+
 
 h1, h2, h3, h4, h5, h6 {
   font-family: "Montserrat", sans-serif;
@@ -1607,9 +1619,4 @@ section {
   #footer .footer-top .footer-info {
     margin: -20px 0 30px 0;
   }
-}
-
-
-.txt-container{
-  margin-top: 6rem;
 }

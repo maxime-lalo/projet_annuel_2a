@@ -1,9 +1,31 @@
 <?php 
 
 $translations = array(
-	"Je suis la localisation" => "I'm the location",
-	"Localisation" => "Location",
 	"Page d'accueil" => "Homepage",
 	"Accueil" => "Home",
-	"Langage" => "Language"
+	"Langage" => "Language",
+	"Inscription" => "Register",
+	"Connexion" => "Login",
+	"Inscription Client" => "Client register",
+	"Franchisé" => "Franchisee",
+	"Client" => "Client",
+	"Inscription Franchisé" => "Franchisee register",
+	"Mon Compte" => "My account",
+	"Profil" => "Profile",
+	"Déconnexion" => "Disconnect",
+    "Gestion des franchisés" => "Manage franchisees",
+    "Liste des franchisés en attente" => "List of pending franchisees",
+    "Voir tous les franchisés" => "See every franchisee",
+    "ID" => "ID",
+    "Nom" => "Name",
+    "Email" => "Email",
+    "Téléphone" => "Phone",
+    "Ville" => "City",
+    "CV" => "Resumee",
+    "Actions" => "Actions",
+    "Accepter" => "Accept",
+    "Refuser" => "Refuse",
+    "Tous les franchisés" => "Every franchisee",
+    "Liste des franchisés" => "Franchisee list",
+    "Voir les franchisés en attente" => "Consult pending franchisees"
 );

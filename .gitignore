@@ -1,1 +1,7 @@
 .env
+
+public/uploads/
+
+.idea/
+
+uploads/
