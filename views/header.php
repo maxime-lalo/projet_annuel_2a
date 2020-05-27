@@ -53,7 +53,7 @@ if(isset($_COOKIE['user_id'])){
 		</div>
 	  <nav class="nav-menu d-none d-lg-block">
 		<ul>
-			<li class="active"><a href="/<?= LANG;?>"><?= translate("Accueil");?></a></li>
+			<li class="active"><a href="/<?= LANG;?>"><i class="fas fa-home"></i> <?= translate("Accueil");?></a></li>
             <?php if (!isset($_COOKIE["user_id"])) { ?>
             <li class="drop-down"><a href="#"><?= translate("Inscription");?></a>
                 <ul>
@@ -64,7 +64,20 @@ if(isset($_COOKIE['user_id'])){
 
                 <li><a href="/<?= LANG; ?>/compte/connexion"><?= translate("Connexion"); ?></a></li>
             <?php } else { ?>
-                <li class="drop-down"><a href="#"><?= translate("Mon Compte"); ?></a>
+                <?php
+                if ($user->isWorker()){
+                    ?>
+                    <li class="drop-down"><a href="#"><i class="fas fa-building"></i> <?= translate("Ma franchise");?></a>
+                        <ul>
+                            <li><a href="/<?= LANG; ?>/franchisee/truck"><?= translate("Mon camion");?></a></li>
+                            <li><a href="/<?= LANG; ?>/franchisee/turnover"><?= translate("Chiffre d'affaire");?></a></li>
+                            <li><a href="/<?= LANG; ?>/franchisee/history"><?= translate("Historique");?></a></li>
+                        </ul>
+                    </li>
+                    <?php
+                }
+                ?>
+                <li class="drop-down"><a href="#"><i class="fas fa-user-alt"></i> <?= translate("Mon Compte"); ?></a>
                     <ul>
                         <li><a href="/<?= LANG; ?>/compte/compte"><?= translate("Profil"); ?></a></li>
                         <li><a href="/<?= LANG; ?>/compte/gestionTruck"><?= translate("Gestion Camions"); ?></a></li>
@@ -73,7 +86,7 @@ if(isset($_COOKIE['user_id'])){
                     </ul>
                 </li>
             <?php } ?>
-            <li class="drop-down"><a href="#"><?= translate("Langage");?></a>
+            <li class="drop-down"><a href="#"><i class="fas fa-language"></i> <?= translate("Langage");?></a>
                 <ul>
                     <?php
                     foreach (POSSIBLE_LANGUAGES as $key => $value) {
