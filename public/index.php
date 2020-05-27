@@ -66,7 +66,8 @@ if ($explodedUrl[0] == 'public') {
             echo "Fichier introuvable";
         }
     }
-
+}elseif($explodedUrl[0] == 'api'){
+    require_once __DIR__ . "/../api/header.php";
 }else{
 	if (empty($url)) {
 		DEFINE('LANG',DEFAULT_LANG);

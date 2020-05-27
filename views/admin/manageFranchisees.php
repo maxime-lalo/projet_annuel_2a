@@ -39,7 +39,9 @@ if ( isset($_GET['id']) && isset($_GET['type']) ){
         </thead>
         <tbody>
             <?php
-            foreach ($uRepository->getNotActivatedWorkers() as $user){
+            $users = $uRepository->getNotActivatedWorkers();
+            if ($users != null){
+                foreach ($users as $user){
                     ?>
                     <tr>
                         <td><?= $user->getId();?></td>
@@ -74,8 +76,6 @@ if ( isset($_GET['id']) && isset($_GET['type']) ){
                     </tr>
                     <?php
                 }
-            $users = $uRepository->getNotActivatedWorkers();
-            if ($users != null){
             }else{
                 ?>
                 <tr style="background-color:lightgray">

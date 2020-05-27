@@ -53,15 +53,6 @@ $uRepository = new UserRepository();
             </tr>
             <?php
         }
-        $users = $uRepository->getNotActivatedWorkers();
-        if ($users != null){
-        }else{
-            ?>
-            <tr style="background-color:lightgray">
-                <td colspan="7" class="text-center"><?= translate("Aucun franchisé en attente");?></td>
-            </tr>
-            <?php
-        }
         ?>
         </tbody>
     </table>
