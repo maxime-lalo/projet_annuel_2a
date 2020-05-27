@@ -92,8 +92,10 @@ class AuthService
             $mail,
             $hashed
         ]);
-        if ($userData === null || $userData['activated'] == 0) {
-            return null;
+        if ($userData === null) {
+            return -1;
+        }elseif($userData['activated'] == 0){
+            return -2;
         }
         return $userData['id'];
     }
