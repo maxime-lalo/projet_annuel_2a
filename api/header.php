@@ -14,6 +14,7 @@ switch ($request_type){
         $file_path = __DIR__ . "/" . $folder . "/delete.php";
         break;
     case "POST":
+        require_once(__DIR__ . "/../services/auth/AuthService.php");
         $file_path = __DIR__ . "/" . $folder . "/post.php";
         break;
     default:
