@@ -57,5 +57,9 @@ $translations = array(
     "Gestion franchisés" => "Manage franchisees",
     "Gestion camions" => "Manage trucks",
     "Gestion entrepôts" => "Manage warehouses",
-    "Aucun" => "None"
+    "Aucun" => "None",
+    "Valider" => "Validate",
+    "Succès" => "Success",
+    "Le camion a bien été mis à jour" => "The truck has been successfully updated",
+    "Erreur lors de la mise à jour du camion, les valeurs ne sont pas valables ou n\'ont pas changé" => "Error during truck update"
 );

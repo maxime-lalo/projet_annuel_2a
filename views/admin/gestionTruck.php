@@ -114,6 +114,7 @@ if (isset($_POST['action']) && isset($_POST['truck'])){
     }
 
     function editTruck(truck) {
+        $('[data-toggle="tooltip"]').tooltip('dispose');
         var date = $('.inputDate' + truck);
         var mileage = $('.inputMileage' + truck);
 
@@ -123,14 +124,14 @@ if (isset($_POST['action']) && isset($_POST['truck'])){
         mileage.html("<input type='number' class='form-control' value='" + mileageVal + "'>");
 
         var actionsRow = $('#actions' + truck);
-        var btn =   "<button class='btn btn-success' data-toggle='tooltip' title='Valider' onclick='submitEdit(" + truck + ")'>" +
-                        "<i class='fa fa-check'></i>" +
-                    "</button>\n" +
-                    "<button class='btn btn-danger' data-toggle='tooltip' title'Annuler' onclick='cancelEdit(\"" + dateVal + "\",\"" + mileageVal + "\",\"" + truck + "\")'>" +
-                        "<i class='fas fa-times'></i>" +
-                    "</button>"
-        ;
+        var btn =   '<button class="btn btn-success" data-toggle="tooltip" title="<?= translate("Valider");?>" onclick="submitEdit(' + truck + ')">' +
+                        '<i class="fa fa-check"></i>' +
+                    '</button>\n' +
+                    '<button class="btn btn-danger" data-toggle="tooltip" title="<?= translate("Annuler");?>" onclick="cancelEdit(\'' + dateVal + '\',\'' + mileageVal + '\',' + truck + ')">' +
+                        '<i class="fas fa-times"></i>' +
+                    '</button>';
         actionsRow.html(btn);
+        $('[data-toggle="tooltip"]').tooltip('enable');
     }
 
     function submitEdit(truck){
@@ -161,12 +162,14 @@ if (isset($_POST['action']) && isset($_POST['truck'])){
                     '<i class="fas fa-user"></i>' +
                     '</button>\n'
                 );
-
                 Swal.fire({
                     title: '<?= translate("Succès");?>',
                     text: '<?= translate("Le camion a bien été mis à jour");?>',
                     icon: "success"
                 });
+
+                $('[data-toggle="tooltip"]').tooltip();
+
             }else{
                 Swal.fire({
                     title: '<?= translate("Erreur");?>',
@@ -178,6 +181,7 @@ if (isset($_POST['action']) && isset($_POST['truck'])){
     }
 
     function cancelEdit(date,mileage,truck){
+        $('[data-toggle="tooltip"]').tooltip('dispose');
         var dateTd = $('.inputDate' + truck);
         var mileageTd = $('.inputMileage' + truck);
 
@@ -195,5 +199,7 @@ if (isset($_POST['action']) && isset($_POST['truck'])){
             '<i class="fas fa-user"></i>' +
             '</button>\n'
         );
+
+        $('[data-toggle="tooltip"]').tooltip();
     }
 </script>
