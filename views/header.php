@@ -51,25 +51,38 @@ if(isset($_COOKIE['user_id'])){
 	  <nav class="nav-menu d-none d-lg-block">
 		<ul>
 			<li class="active"><a href="/<?= LANG;?>"><?= translate("Accueil");?></a></li>
-            <?php if (!isset($_COOKIE["user_id"])) { ?>
-            <li class="drop-down"><a href="#"><?= translate("Inscription");?></a>
-                <ul>
-                    <li><a href="/<?= LANG;?>/compte/inscriptionFranchise"><?= translate("Franchisé");?></a></li>
-                    <li><a href="/<?= LANG;?>/compte/inscriptionClient"><?= translate("Client");?></a></li>
-                </ul>
-            </li>
-
+            <?php
+            if (!isset($_COOKIE["user_id"])) {
+                ?>
+                <li class="drop-down"><a href="#"><?= translate("Inscription");?></a>
+                    <ul>
+                        <li><a href="/<?= LANG;?>/compte/inscriptionFranchise"><?= translate("Franchisé");?></a></li>
+                        <li><a href="/<?= LANG;?>/compte/inscriptionClient"><?= translate("Client");?></a></li>
+                    </ul>
+                </li>
                 <li><a href="/<?= LANG; ?>/compte/connexion"><?= translate("Connexion"); ?></a></li>
-            <?php } else { ?>
+                <?php
+            } else {
+                if ($user->isAdmin()){
+                    ?>
+                    <li class="drop-down"><a href="#"><?= translate("Gestion franchisés"); ?></a>
+                        <ul>
+                            <li><a href="/<?= LANG; ?>/admin/gestionTruck"><?= translate("Gestion camions"); ?></a></li>
+                            <li><a href="/<?= LANG; ?>/admin/gestionWarehouse"><?= translate("Gestion entrepôts"); ?></a></li>
+                        </ul>
+                    </li>
+                    <?php
+                }
+                ?>
                 <li class="drop-down"><a href="#"><?= translate("Mon Compte"); ?></a>
                     <ul>
                         <li><a href="/<?= LANG; ?>/compte/compte"><?= translate("Profil"); ?></a></li>
-                        <li><a href="/<?= LANG; ?>/compte/gestionTruck"><?= translate("Gestion Camions"); ?></a></li>
-                        <li><a href="/<?= LANG; ?>/compte/gestionWarehouse"><?= translate("Gestion Entrepots"); ?></a></li>
                         <li><a href="/<?= LANG; ?>/compte/deconnexion"><?= translate("Déconnexion"); ?></a></li>
                     </ul>
                 </li>
-            <?php } ?>
+                <?php
+            }
+            ?>
             <li class="drop-down"><a href="#"><?= translate("Langage");?></a>
                 <ul>
                     <?php

@@ -17,6 +17,7 @@ class User implements JsonSerializable
     private int $is_client;
     private int $is_worker;
     private int $is_employe;
+    private int $is_admin;
 
 
     public function jsonSerialize()
@@ -38,6 +39,7 @@ class User implements JsonSerializable
         $this->is_worker = isset($user['is_worker'])?$user['is_worker']:0;
         $this->is_client = isset($user['is_client'])?$user['is_client']:0;
         $this->is_employe = isset($user['is_employe'])?$user['is_employe']:0;
+        $this->is_admin = isset($user['is_admin'])?$user['is_admin']:0;
     }
 
     /**
@@ -246,6 +248,22 @@ class User implements JsonSerializable
     public function setIsEmploye(int $is_employe): void
     {
         $this->is_employe = $is_employe;
+    }
+
+    /**
+     * @return int
+     */
+    public function isAdmin(): bool
+    {
+        return $this->is_admin;
+    }
+
+    /**
+     * @param int $is_admin
+     */
+    public function setIsAdmin(int $is_admin): void
+    {
+        $this->is_admin = $is_admin;
     }
 
 
