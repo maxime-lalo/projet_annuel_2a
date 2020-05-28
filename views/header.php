@@ -53,41 +53,40 @@ if(isset($_COOKIE['user_id'])){
 		</div>
 	  <nav class="nav-menu d-none d-lg-block">
 		<ul>
-			<li class="active"><a href="/<?= LANG;?>"><i class="fas fa-home"></i> <?= translate("Accueil");?></a></li>
-            <?php if (!isset($_COOKIE["user_id"])) { ?>
-            <li class="drop-down"><a href="#"><?= translate("Inscription");?></a>
-                <ul>
-                    <li><a href="/<?= LANG;?>/compte/inscriptionFranchise"><?= translate("Franchisé");?></a></li>
-                    <li><a href="/<?= LANG;?>/compte/inscriptionClient"><?= translate("Client");?></a></li>
-                </ul>
-            </li>
-
+			<li class="active"><a href="/<?= LANG;?>"><?= translate("Accueil");?></a></li>
+            <?php
+            if (!isset($_COOKIE["user_id"])) {
+                ?>
+                <li class="drop-down"><a href="#"><?= translate("Inscription");?></a>
+                    <ul>
+                        <li><a href="/<?= LANG;?>/compte/inscriptionFranchise"><?= translate("Franchisé");?></a></li>
+                        <li><a href="/<?= LANG;?>/compte/inscriptionClient"><?= translate("Client");?></a></li>
+                    </ul>
+                </li>
                 <li><a href="/<?= LANG; ?>/compte/connexion"><?= translate("Connexion"); ?></a></li>
-            <?php } else { ?>
                 <?php
-                if ($user->isWorker()){
+            } else {
+                if ($user->isAdmin()){
                     ?>
-                    <li class="drop-down"><a href="#"><i class="fas fa-building"></i> <?= translate("Ma franchise");?></a>
+                    <li class="drop-down"><a href="#"><?= translate("Gestion franchisés"); ?></a>
                         <ul>
-                            <li><a href="/<?= LANG; ?>/franchisee/truck"><?= translate("Mon camion");?></a></li>
-                            <li><a href="/<?= LANG; ?>/franchisee/turnover"><?= translate("Chiffre d'affaire");?></a></li>
-                            <li><a href="/<?= LANG; ?>/franchisee/cmd/history"><?= translate("Historique des commandes");?></a></li>
-                            <li><a href="/<?= LANG; ?>/franchisee/cmd/new"><?= translate("Passer une commande");?></a></li>
+                            <li><a href="/<?= LANG; ?>/admin/gestionTruck"><?= translate("Gestion camions"); ?></a></li>
+                            <li><a href="/<?= LANG; ?>/admin/gestionWarehouse"><?= translate("Gestion entrepôts"); ?></a></li>
                         </ul>
                     </li>
                     <?php
                 }
                 ?>
-                <li class="drop-down"><a href="#"><i class="fas fa-user-alt"></i> <?= translate("Mon Compte"); ?></a>
+                <li class="drop-down"><a href="#"><?= translate("Mon Compte"); ?></a>
                     <ul>
                         <li><a href="/<?= LANG; ?>/compte/compte"><?= translate("Profil"); ?></a></li>
-                        <li><a href="/<?= LANG; ?>/compte/gestionTruck"><?= translate("Gestion Camions"); ?></a></li>
-                        <li><a href="/<?= LANG; ?>/compte/gestionWarehouse"><?= translate("Gestion Entrepots"); ?></a></li>
                         <li><a href="/<?= LANG; ?>/compte/deconnexion"><?= translate("Déconnexion"); ?></a></li>
                     </ul>
                 </li>
-            <?php } ?>
-            <li class="drop-down"><a href="#"><i class="fas fa-language"></i> <?= translate("Langage");?></a>
+                <?php
+            }
+            ?>
+            <li class="drop-down"><a href="#"><?= translate("Langage");?></a>
                 <ul>
                     <?php
                     foreach (POSSIBLE_LANGUAGES as $key => $value) {

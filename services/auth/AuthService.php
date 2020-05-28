@@ -120,8 +120,8 @@ class AuthService
             "city" => $userData['city'],
             "is_client" => $userData['is_client'],
             "is_worker" => $userData['is_worker'],
-            "is_employe" => $userData['is_employe'],
             "FOOD_TRUCK_id" => $userData['FOOD_TRUCK_id']
+            "is_admin" => $userData['is_admin']
         ]);
 
     }
