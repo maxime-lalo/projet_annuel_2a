@@ -7,15 +7,15 @@ if (isset($_GET['setBreakdown'])){
     $tRepository->cancelBreakdown($tRepository->getOneById($_GET['cancelBreakdown']));
 }
 ?>
-<title><?= translate("Espace franchisé - Mon camion");?></title>
+<title><?= translate("Espace franchisé");?> - <?= translate("Mon camion");?></title>
 <div class="container">
     <h1 id="page-title">
-        <?= translate("Espace franchisé - Mon camion");?>
+        <?= translate("Espace franchisé");?> - <?= translate("Mon camion");?>
     </h1>
     <?php
     $truck = $user->getTruck();
-    $isOnBreakdown = $tRepository->isOnBreakdown($truck);
     if ($truck != null){
+        $isOnBreakdown = $tRepository->isOnBreakdown($truck);
         if ($isOnBreakdown){
             ?>
             <p class="lead"><?= translate("Votre camion est actuellement marqué comme en panne");?></p>

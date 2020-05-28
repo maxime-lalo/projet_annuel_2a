@@ -28,5 +28,12 @@ $translations = array(
     "Tous les franchisés" => "Every franchisee",
     "Liste des franchisés" => "Franchisee list",
     "Voir les franchisés en attente" => "Consult pending franchisees",
-    "à" => "at"
+    "à" => "at",
+    "Espace franchisé" => "Franchisee area",
+    "Mon camion" => "My truck",
+    "Historique des commandes" => "Order history",
+    "Passer une commande" => "Make a new order",
+    "Ma franchise" => "My franchise",
+    "Chiffre d'affaire" => "Turnover",
+    "Aucun camion ne vous a encore été attribué" => "You have no attributed truck for now",
 );

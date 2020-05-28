@@ -71,7 +71,8 @@ if(isset($_COOKIE['user_id'])){
                         <ul>
                             <li><a href="/<?= LANG; ?>/franchisee/truck"><?= translate("Mon camion");?></a></li>
                             <li><a href="/<?= LANG; ?>/franchisee/turnover"><?= translate("Chiffre d'affaire");?></a></li>
-                            <li><a href="/<?= LANG; ?>/franchisee/history"><?= translate("Historique");?></a></li>
+                            <li><a href="/<?= LANG; ?>/franchisee/cmd/history"><?= translate("Historique des commandes");?></a></li>
+                            <li><a href="/<?= LANG; ?>/franchisee/cmd/new"><?= translate("Passer une commande");?></a></li>
                         </ul>
                     </li>
                     <?php
