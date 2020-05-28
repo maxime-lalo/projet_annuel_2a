@@ -1,6 +1,5 @@
 <?php
-
-
+require_once __DIR__ . "/../repositories/FoodTruckRepository.php";
 class User implements JsonSerializable
 {
 
@@ -17,7 +16,7 @@ class User implements JsonSerializable
     private int $is_client;
     private int $is_worker;
     private int $is_employe;
-
+    private FoodTruck $truck;
 
     public function jsonSerialize()
     {
@@ -38,6 +37,11 @@ class User implements JsonSerializable
         $this->is_worker = isset($user['is_worker'])?$user['is_worker']:0;
         $this->is_client = isset($user['is_client'])?$user['is_client']:0;
         $this->is_employe = isset($user['is_employe'])?$user['is_employe']:0;
+
+        if (isset($user['FOOD_TRUCK_id'])){
+            $tManager = new FoodTruckRepository();
+            $this->truck = $tManager->getOneById($user['FOOD_TRUCK_id']);
+        }
     }
 
     /**
@@ -248,7 +252,13 @@ class User implements JsonSerializable
         $this->is_employe = $is_employe;
     }
 
-
+    public function getTruck():?FoodTruck{
+        if (isset($this->truck)){
+            return $this->truck;
+        }else{
+            return null;
+        }
+    }
 
 
 }

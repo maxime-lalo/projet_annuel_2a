@@ -7,6 +7,8 @@ class FoodTruck
     private string $date_register;
     private string $date_check;
     private int $mileage;
+    private string $brand;
+    private string $model;
 
     /**
      * FoodTruck constructor.
@@ -14,6 +16,8 @@ class FoodTruck
      * @param string $date_register
      * @param string $date_check
      * @param int $mileage
+     * @param string $brand
+     * @param string $model
      */
     public function __construct(array $truck)
     {
@@ -21,6 +25,8 @@ class FoodTruck
         $this->date_register = $truck['date_register'];
         $this->date_check = $truck['date_last_check'];
         $this->mileage = $truck['mileage'];
+        $this->brand = $truck['brand'];
+        $this->model = $truck['model'];
     }
 
     /**
@@ -44,7 +50,7 @@ class FoodTruck
      */
     public function getDateRegister(): string
     {
-        return substr($this->date_register,0,10);
+        return $this->date_register;
     }
 
     /**
@@ -60,7 +66,7 @@ class FoodTruck
      */
     public function getDateCheck(): string
     {
-        return substr($this->date_check, 0 , 10);
+        return $this->date_check;
     }
 
     /**
@@ -86,6 +92,40 @@ class FoodTruck
     {
         $this->mileage = $mileage;
     }
+
+    /**
+     * @return string
+     */
+    public function getBrand(): string
+    {
+        return $this->brand;
+    }
+
+    /**
+     * @param string $brand
+     */
+    public function setBrand(string $brand): void
+    {
+        $this->brand = $brand;
+    }
+
+    /**
+     * @return string
+     */
+    public function getModel(): string
+    {
+        return $this->model;
+    }
+
+    /**
+     * @param string $model
+     */
+    public function setModel(string $model): void
+    {
+        $this->model = $model;
+    }
+
+
 
 
 }
