@@ -27,5 +27,8 @@ $translations = array(
     "Refuser" => "Refuse",
     "Tous les franchisés" => "Every franchisee",
     "Liste des franchisés" => "Franchisee list",
-    "Voir les franchisés en attente" => "Consult pending franchisees"
+    "Voir les franchisés en attente" => "Consult pending franchisees",
+    "Erreur" => "Error",
+    "La page que vous cherchez n'a pas été trouvée" => "Page not found",
+    "Retour à l'accueil" => "Back to home"
 );
