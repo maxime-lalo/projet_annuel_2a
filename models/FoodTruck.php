@@ -1,7 +1,7 @@
 <?php
 
 
-class FoodTruck
+class FoodTruck implements JsonSerializable
 {
     private int $id;
     private string $date_register;
@@ -125,7 +125,9 @@ class FoodTruck
         $this->model = $model;
     }
 
-
-
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
+    }
 
 }

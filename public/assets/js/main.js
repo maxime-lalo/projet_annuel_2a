@@ -181,3 +181,14 @@
   });
 
 })(jQuery);
+
+function formatDate(date, format){
+  splitDate1 = date.split("/");
+  splitDate2 = date.split("-");
+  if (format === "d/m/Y"){
+    dateVal = splitDate2[2] + "/" + splitDate2[1] + "/" + splitDate2[0];
+  }else{
+    dateVal = splitDate1[2] + "-" + splitDate1[1] + "-" + splitDate1[0];
+  }
+  return dateVal;
+}

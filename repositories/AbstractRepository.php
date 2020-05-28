@@ -45,4 +45,9 @@ class AbstractRepository{
         }
 	}
 
+	public function delete(int $id):bool{
+	    $sql = $this->dbManager->exec("DELETE FROM " . $this->getDbTable() . " WHERE id = ?",[$id]);
+        return $sql == 1;
+    }
+
 }
