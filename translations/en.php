@@ -66,5 +66,6 @@ $translations = array(
     "Pas de dernier checkup" => "No last checkup",
     "Le camion a bien été ajouté" => "The truck has been successfully added",
     "Pas de date saisie" => "No date provided",
-    "Franchisé lié à un camion" => "Franchisee linked to a truck"
+    "Franchisé lié à un camion" => "Franchisee linked to a truck",
+    "CV non trouvé" => "Resumee not found"
 );
