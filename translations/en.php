@@ -67,5 +67,6 @@ $translations = array(
     "Le camion a bien été ajouté" => "The truck has been successfully added",
     "Pas de date saisie" => "No date provided",
     "Franchisé lié à un camion" => "Franchisee linked to a truck",
-    "CV non trouvé" => "Resumee not found"
+    "CV non trouvé" => "Resumee not found",
+    "Aucun franchisé en attente" => "No pending franchisee",
 );
