@@ -16,9 +16,9 @@ if(isset($_POST['mail']) && isset($_POST['password'])){
         }
     }else{
         if ($user == -1){
-            new SweetAlert("error","Erreur","E-mail ou mot de passe incorrect");
+            new SweetAlert(SweetAlert::ERROR,"Erreur","E-mail ou mot de passe incorrect");
         }elseif($user == -2){
-            new SweetAlert("error","Erreur","Votre compte n'est pas encore activé");
+            new SweetAlert(SweetAlert::ERROR,"Erreur","Votre compte n'est pas encore activé");
         }
     }
 
