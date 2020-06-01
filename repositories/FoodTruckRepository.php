@@ -44,4 +44,19 @@ class FoodTruckRepository extends AbstractRepository
         ]);
         return $rows == 1;
     }
+
+    public function add(FoodTruck $truck):?int{
+        $rows = $this->dbManager->exec("INSERT INTO food_truck (date_register,mileage,brand,model) VALUES (?,?,?,?)",[
+            $truck->getDateRegister(),
+            $truck->getMileage(),
+            $truck->getBrand(),
+            $truck->getModel()
+        ]);
+
+        if ($rows == 1){
+            return $this->dbManager->getLastInsertId();
+        }else{
+            return null;
+        }
+    }
 }

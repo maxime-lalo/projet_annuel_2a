@@ -5,19 +5,14 @@ class FoodTruck implements JsonSerializable
 {
     private int $id;
     private string $date_register;
-    private string $date_check;
+    private ?string $date_check;
     private int $mileage;
     private string $brand;
     private string $model;
 
     /**
      * FoodTruck constructor.
-     * @param int $id
-     * @param string $date_register
-     * @param string $date_check
-     * @param int $mileage
-     * @param string $brand
-     * @param string $model
+     * @param array $truck
      */
     public function __construct(array $truck)
     {
@@ -64,7 +59,7 @@ class FoodTruck implements JsonSerializable
     /**
      * @return string
      */
-    public function getDateCheck(): string
+    public function getDateCheck(): ?string
     {
         return $this->date_check;
     }
