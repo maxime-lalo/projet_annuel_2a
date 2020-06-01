@@ -32,15 +32,18 @@ if(isset($_COOKIE['user_id'])){
     <link href="/public/assets/vendor/remixicon/remixicon.css" rel="stylesheet">
     <link href="/public/assets/vendor/owl.carousel/assets/owl.carousel.min.css" rel="stylesheet">
     <link href="/public/assets/vendor/aos/aos.css" rel="stylesheet">
-
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.0.0/animate.min.css" rel="stylesheet"/>
     <!-- Template Main CSS File -->
     <link href="/public/assets/css/style.css" rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 
-    <!-- Javascript libraries -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="/public/assets/vendor/jquery/jquery.min.js"></script>
     <script src="https://kit.fontawesome.com/8c58d132fd.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
 </head>
 <body>
 <header id="header" class="fixed-top d-flex align-items-center" style="background: rgba(2, 5, 161, 0.91)">
@@ -70,7 +73,7 @@ if(isset($_COOKIE['user_id'])){
                     ?>
                     <li class="drop-down"><a href="#"><?= translate("Gestion franchisés"); ?></a>
                         <ul>
-                            <li><a href="/<?= LANG; ?>/admin/gestionTruck"><?= translate("Gestion camions"); ?></a></li>
+                            <li><a href="/<?= LANG; ?>/admin/truck/gestionTruck"><?= translate("Gestion camions"); ?></a></li>
                             <li><a href="/<?= LANG; ?>/admin/gestionWarehouse"><?= translate("Gestion entrepôts"); ?></a></li>
                         </ul>
                     </li>
