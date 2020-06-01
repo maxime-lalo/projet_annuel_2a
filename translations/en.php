@@ -61,5 +61,10 @@ $translations = array(
     "Valider" => "Validate",
     "Succès" => "Success",
     "Le camion a bien été mis à jour" => "The truck has been successfully updated",
-    "Erreur lors de la mise à jour du camion, les valeurs ne sont pas valables ou n\'ont pas changé" => "Error during truck update"
+    "Erreur lors de la mise à jour du camion, les valeurs ne sont pas valables ou n\'ont pas changé" => "Error during truck update",
+    "Ajouter" => "Add",
+    "Pas de dernier checkup" => "No last checkup",
+    "Le camion a bien été ajouté" => "The truck has been successfully added",
+    "Pas de date saisie" => "No date provided",
+    "Franchisé lié à un camion" => "Franchisee linked to a truck"
 );
