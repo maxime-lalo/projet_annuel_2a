@@ -1,86 +1,79 @@
 <?php
-require_once __DIR__ . "/../../repositories/FoodTruckRepository.php";
+require_once __DIR__ . "/../../../repositories/FoodTruckRepository.php";
 $tRepo = new FoodTruckRepository();
-if (isset($_POST['action']) && isset($_POST['truck'])){
-
-}else{
-    ?>
-    <title><?= translate("Espace Admin");?> - <?= translate("Gestion des camions");?></title>
-    <div class="container">
-        <h1 id="page-title">
-            <?= translate("Espace Admin");?> - <?= translate("Gestion des camions");?>
-            <span class="float-right">
-            <button type="button" class="mb-2 btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-                <i class="fa fa-plus"></i> <?= translate("Ajouter un camion");?>
-            </button>
-        </span>
-        </h1>
-        <p class="lead">
-
-        </p>
-        <table class="table table-bordered">
-            <thead>
-            <tr>
-                <th><?= translate("ID");?></th>
-                <th><?= translate("Marque");?></th>
-                <th><?= translate("Modèle");?></th>
-                <th><?= translate("Date d'enregistrement");?></th>
-                <th><?= translate("Date du dernier checkup");?></th>
-                <th><?= translate("Kilométrage");?></th>
-                <th><?= translate("Franchisé");?></th>
-                <th><?= translate("Actions");?></th>
-            </tr>
-            </thead>
-            <tbody>
-            <?php
-            $trucks = $tRepo->getAll();
-
-            if ($trucks != null){
-                foreach ($trucks as $truck){
-                    ?>
-                    <tr id="row<?= $truck->getId();?>">
-                        <td><?= $truck->getId();?></td>
-                        <td><?= $truck->getBrand();?></td>
-                        <td><?= $truck->getModel();?></td>
-                        <td><?= date('d/m/Y',strtotime($truck->getDateRegister()));?></td>
-                        <td class="inputDate<?= $truck->getId();?>"><?= date('d/m/Y',strtotime($truck->getDateCheck()));?></td>
-                        <td class="inputMileage<?= $truck->getId();?>"><?= $truck->getMileage();?></td>
-                        <td>
-                            <?php
-                            $franchisee = $tRepo->getUser($truck);
-                            if ($franchisee != null){
-                                $fullName = strtoupper($franchisee->getLastname()) . " " . $franchisee->getFirstname();
-                                ?>
-                                <a href="#" target="blank"><?= $fullName;?></a>
-                                <?php
-                            }else{
-                                echo translate("Aucun");
-                            }
-                            ?>
-                        </td>
-                        <td id="actions<?= $truck->getId();?>">
-                            <button class="btn btn-danger" title="<?= translate("Supprimer");?>" data-toggle="tooltip" onclick="deleteTruck(<?= $truck->getId();?>)">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                            <button class="btn btn-primary" title="<?= translate("Éditer");?>" data-toggle="tooltip" onclick="editTruck(<?= $truck->getId();?>)">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                            <button class="btn btn-primary" title="<?= translate("Franchisé");?>" data-toggle="tooltip" onclick="editTruck(<?= $truck->getId();?>)">
-                                <i class="fas fa-user"></i>
-                            </button>
-                        </td>
-                    </tr>
-                    <?php
-                }
-            }
-            ?>
-            </tbody>
-        </table>
-    </div>
-    <?php
-}
 ?>
+<title><?= translate("Espace Admin");?> - <?= translate("Gestion des camions");?></title>
+<div class="container">
+    <h1 id="page-title">
+        <?= translate("Espace Admin");?> - <?= translate("Gestion des camions");?>
+        <span class="float-right">
+        <a class="mb-2 btn btn-primary" href="addTruck">
+            <i class="fa fa-plus"></i> <?= translate("Ajouter un camion");?>
+        </a>
+    </span>
+    </h1>
+    <p class="lead">
 
+    </p>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th><?= translate("ID");?></th>
+            <th><?= translate("Marque");?></th>
+            <th><?= translate("Modèle");?></th>
+            <th><?= translate("Date d'enregistrement");?></th>
+            <th><?= translate("Date du dernier checkup");?></th>
+            <th><?= translate("Kilométrage");?></th>
+            <th><?= translate("Franchisé");?></th>
+            <th><?= translate("Actions");?></th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php
+        $trucks = $tRepo->getAll();
+
+        if ($trucks != null){
+            foreach ($trucks as $truck){
+                ?>
+                <tr id="row<?= $truck->getId();?>">
+                    <td><?= $truck->getId();?></td>
+                    <td><?= $truck->getBrand();?></td>
+                    <td><?= $truck->getModel();?></td>
+                    <td><?= date('d/m/Y',strtotime($truck->getDateRegister()));?></td>
+                    <td class="inputDate<?= $truck->getId();?>"><?= $truck->getDateCheck() != null ? date('d/m/Y',strtotime($truck->getDateCheck())):translate("Pas de dernier checkup");?></td>
+                    <td class="inputMileage<?= $truck->getId();?>"><?= $truck->getMileage();?></td>
+                    <td>
+                        <?php
+                        $franchisee = $tRepo->getUser($truck);
+                        if ($franchisee != null){
+                            $fullName = strtoupper($franchisee->getLastname()) . " " . $franchisee->getFirstname();
+                            ?>
+                            <a href="#" target="blank"><?= $fullName;?></a>
+                            <?php
+                        }else{
+                            echo translate("Aucun");
+                        }
+                        ?>
+                    </td>
+                    <td id="actions<?= $truck->getId();?>">
+                        <button class="btn btn-danger" title="<?= translate("Supprimer");?>" data-toggle="tooltip" onclick="deleteTruck(<?= $truck->getId();?>)">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                        <button class="btn btn-primary" title="<?= translate("Éditer");?>" data-toggle="tooltip" onclick="editTruck(<?= $truck->getId();?>)">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <a class="btn btn-primary" title="<?= translate("Franchisé");?>" data-toggle="tooltip" href="manageFranchisee?id=<?= $truck->getId();?>">
+                            <i class="fas fa-user"></i>
+                        </a>
+                    </td>
+                </tr>
+                <?php
+            }
+        }
+        ?>
+        </tbody>
+    </table>
+</div>
 
 <script type="text/javascript">
     function deleteTruck(truck){
@@ -89,10 +82,10 @@ if (isset($_POST['action']) && isset($_POST['truck'])){
             text: '<?= translate("Vous ne pourrez pas revenir en arrière");?>',
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#0205a1',
-            cancelButtonColor: '#d33',
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#0205a1',
             confirmButtonText: "<?= translate('Supprimer');?>",
-            cancelButtonText: "<?= translate('Annuler');?>"
+            cancelButtonText: "<?= translate('Annuler');?>",
         }).then((result) => {
             if (result.value) {
                 $.ajax({
@@ -158,16 +151,16 @@ if (isset($_POST['action']) && isset($_POST['truck'])){
                     '<button class="btn btn-primary" title="<?= translate("Éditer");?>" data-toggle="tooltip" onclick="editTruck(' + truck + ')">' +
                     '<i class="fas fa-edit"></i>' +
                     '</button>\n' +
-                    '<button class="btn btn-primary" title="<?= translate("Franchisé");?>" data-toggle="tooltip" onclick="editTruck(' + truck + ')">' +
+                    '<a class="btn btn-primary" title="<?= translate("Franchisé");?>" data-toggle="tooltip" href="manageFranchisee?id=' + truck + '">' +
                     '<i class="fas fa-user"></i>' +
-                    '</button>\n'
+                    '</a>\n'
                 );
                 Swal.fire({
                     title: '<?= translate("Succès");?>',
                     text: '<?= translate("Le camion a bien été mis à jour");?>',
                     icon: "success"
                 });
-
+                $('.tooltip').remove();
                 $('[data-toggle="tooltip"]').tooltip();
 
             }else{
@@ -195,9 +188,9 @@ if (isset($_POST['action']) && isset($_POST['truck'])){
             '<button class="btn btn-primary" title="<?= translate("Éditer");?>" data-toggle="tooltip" onclick="editTruck(' + truck + ')">' +
             '<i class="fas fa-edit"></i>' +
             '</button>\n' +
-            '<button class="btn btn-primary" title="<?= translate("Franchisé");?>" data-toggle="tooltip" onclick="editTruck(' + truck + ')">' +
+            '<a class="btn btn-primary" title="<?= translate("Franchisé");?>" data-toggle="tooltip" href="manageFranchisee?id=' + truck + '">' +
             '<i class="fas fa-user"></i>' +
-            '</button>\n'
+            '</a>\n'
         );
 
         $('[data-toggle="tooltip"]').tooltip();
