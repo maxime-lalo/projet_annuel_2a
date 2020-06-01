@@ -16,7 +16,7 @@ class User implements JsonSerializable
     private int $is_client;
     private int $is_worker;
     private int $is_employe;
-    private FoodTruck $truck;
+    private ?FoodTruck $truck;
     private int $is_admin;
 
     public function jsonSerialize()
