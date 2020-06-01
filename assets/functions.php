@@ -40,6 +40,10 @@ function getMimeType(string $extension):?string{
 	}
 }
 
-function timestampFormat(string $timestamp):string{
-    return date('d/m/Y H:i',strtotime($timestamp));
+function timestampFormat(?string $timestamp):string{
+    if ($timestamp == null){
+        return translate("Pas de date saisie");
+    }else{
+        return date('d/m/Y H:i',strtotime($timestamp));
+    }
 }
