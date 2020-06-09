@@ -84,6 +84,7 @@ if(isset($_COOKIE['user_id'])){
                     <li class="drop-down"><a href="#"><?= translate("Espace franchisés"); ?></a>
                         <ul>
                             <li><a href="/<?= LANG; ?>/franchisee/truck"><?= translate("Gestion camion"); ?></a></li>
+                            <li><a href="/<?= LANG; ?>/franchisee/order/new"><?= translate("Faire une commande"); ?></a></li>
                         </ul>
                     </li>
                     <?php
