@@ -79,6 +79,14 @@ if(isset($_COOKIE['user_id'])){
                         </ul>
                     </li>
                     <?php
+                }elseif($user->isWorker()){
+                    ?>
+                    <li class="drop-down"><a href="#"><?= translate("Espace franchisés"); ?></a>
+                        <ul>
+                            <li><a href="/<?= LANG; ?>/franchisee/truck"><?= translate("Gestion camion"); ?></a></li>
+                        </ul>
+                    </li>
+                    <?php
                 }
                 ?>
                 <li class="drop-down"><a href="#"><?= translate("Mon Compte"); ?></a>
