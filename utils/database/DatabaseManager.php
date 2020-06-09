@@ -12,7 +12,7 @@ class DatabaseManager {
         'dbname=' . DB_NAME,
         'port=' . DB_PORT
     ];
-    $pdo = new PDO(DB_DRIVER . ':' . join(';', $options), DB_USER, DB_PASSWORD);
+    $pdo = new PDO(DB_DRIVER . ':' . join(';', $options), DB_USER, DB_PASSWORD,array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"));
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
     $this->pdo = $pdo;
