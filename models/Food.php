@@ -1,14 +1,14 @@
 <?php
 
 
-class Food
+class Food implements JsonSerializable
 {
     private int $id;
     private string $name;
     private float $weight;
     private string $type;
 
-    private ?int $quantity;
+    private ?string $quantity;
 
     /**
      * Food constructor.
@@ -89,7 +89,7 @@ class Food
     }
 
     /**
-     * @return int|mixed|null
+     * @return mixed|string|null
      */
     public function getQuantity()
     {
@@ -97,12 +97,15 @@ class Food
     }
 
     /**
-     * @param int|mixed|null $quantity
+     * @param mixed|string|null $quantity
      */
     public function setQuantity($quantity): void
     {
         $this->quantity = $quantity;
     }
 
-
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
+    }
 }

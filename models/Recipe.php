@@ -1,7 +1,7 @@
 <?php
 
 
-class Recipe
+class Recipe implements JsonSerializable
 {
     private int $id;
     private string $name;
@@ -68,5 +68,8 @@ class Recipe
     }
 
 
-
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
+    }
 }
