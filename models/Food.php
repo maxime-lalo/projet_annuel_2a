@@ -7,6 +7,7 @@ class Food implements JsonSerializable
     private string $name;
     private float $weight;
     private string $type;
+    private string $unity;
 
     private ?string $quantity;
 
@@ -20,6 +21,7 @@ class Food implements JsonSerializable
         $this->name = $parameters['name'];
         $this->weight = $parameters['weight'];
         $this->type = $parameters['type'];
+        $this->unity = $parameters['unity'];
 
         $this->quantity = isset($parameters['quantity'])? $parameters['quantity']:null;
     }
@@ -103,6 +105,23 @@ class Food implements JsonSerializable
     {
         $this->quantity = $quantity;
     }
+
+    /**
+     * @return mixed|string
+     */
+    public function getUnity()
+    {
+        return $this->unity;
+    }
+
+    /**
+     * @param mixed|string $unity
+     */
+    public function setUnity($unity): void
+    {
+        $this->unity = $unity;
+    }
+
 
     public function jsonSerialize()
     {

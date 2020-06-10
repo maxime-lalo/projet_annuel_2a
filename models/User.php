@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . "/../repositories/FoodTruckRepository.php";
+require_once __DIR__ . "/../repositories/WarehouseRepository.php";
 class User implements JsonSerializable
 {
 
@@ -18,6 +19,7 @@ class User implements JsonSerializable
     private int $is_employe;
     private ?FoodTruck $truck;
     private int $is_admin;
+    private ?Warehouse $warehouse;
 
     public function jsonSerialize()
     {
@@ -40,9 +42,14 @@ class User implements JsonSerializable
         $this->is_employe = isset($user['is_employe'])?$user['is_employe']:0;
         $this->is_admin = isset($user['is_admin'])?$user['is_admin']:0;
 
-        if (isset($user['FOOD_TRUCK_id'])){
+        if (isset($user['warehouse_id'])){
+            $wManager = new WarehouseRepository();
+            $this->warehouse = $wManager->getOneById($user['warehouse_id']);
+        }
+
+        if (isset($user['food_truck_id'])){
             $tManager = new FoodTruckRepository();
-            $this->truck = $tManager->getOneById($user['FOOD_TRUCK_id']);
+            $this->truck = $tManager->getOneById($user['food_truck_id']);
         }
     }
 
@@ -277,4 +284,22 @@ class User implements JsonSerializable
     {
         $this->is_admin = $is_admin;
     }
+
+    /**
+     * @return mixed|Warehouse|null
+     */
+    public function getWarehouse()
+    {
+        return $this->warehouse;
+    }
+
+    /**
+     * @param mixed|Warehouse|null $warehouse
+     */
+    public function setWarehouse($warehouse): void
+    {
+        $this->warehouse = $warehouse;
+    }
+
+
 }
