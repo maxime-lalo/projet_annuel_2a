@@ -1620,3 +1620,7 @@ section {
     margin: -20px 0 30px 0;
   }
 }
+
+.text-center thead tr th {
+  text-align: center;
+}

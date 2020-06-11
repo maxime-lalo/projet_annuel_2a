@@ -1,23 +1,43 @@
 <?php
 require_once __DIR__ . "/../../../repositories/RecipeRepository.php";
 require_once __DIR__ . "/../../../repositories/UserRepository.php";
+require_once __DIR__ . "/../../../repositories/FranchiseeOrderRepository.php";
 $rRepo = new RecipeRepository();
 $uRepo = new UserRepository();
+$fORepo = new FranchiseeOrderRepository();
 
+// On récupère l'utilisateur courant
+$user = $uRepo->getOneById($_COOKIE['user_id']);
+
+// Si on valide le panier
+if (isset($_GET['validateBasket'])){
+    $fORepo->createOrder();
+}
+
+// Si on supprime un article du panier
 if(isset($_GET['removeBasket'])){
+    // On vérifie que l'article est bien présent dans le panier
     if (isset($_SESSION['basket'][$_GET['removeBasket']])){
+        // On le supprime du panier
         unset($_SESSION['basket'][$_GET['removeBasket']]);
+
+        // Si le panier est vide, on supprime la variable du panier entier
         if (empty($_SESSION['basket'])){
             unset($_SESSION['basket']);
         }
+
+        // On lance une SweetAlert de succès de suppression
         new SweetAlert(SweetAlert::SUCCESS,"Succès","L'article a bien été retiré du panier");
     }
 }
 
+// Après validation de l'utilisateur, on ajoute le produit au panier
 if (isset($_POST['addToBasket']) && isset($_POST['recipeToAdd']) && isset($_POST['quantity'])){
+    // Si le produit est déjà dans le panier, on ajoute simplement la quantité saisie à la quantité déjà présente
     if (isset($_SESSION['basket'][$_POST['recipeToAdd']])){
         $_SESSION['basket'][$_POST['recipeToAdd']]['quantity'] += $_POST['quantity'];
     }else{
+        // Sinon on rajoute l'article dans le panier
         $recipe = $rRepo->getOneById($_POST['recipeToAdd']);
         $_SESSION['basket'][$_POST['recipeToAdd']]['recipe']['id'] = $recipe->getId();
         $_SESSION['basket'][$_POST['recipeToAdd']]['recipe']['name'] = $recipe->getName();
@@ -25,19 +45,20 @@ if (isset($_POST['addToBasket']) && isset($_POST['recipeToAdd']) && isset($_POST
     }
 }
 
+// Si on souhaite ajouter un article à son panier
 if (isset($_POST['recipe']) && isset($_POST['quantity'])){
-    $user = $uRepo->getOneById($_COOKIE['user_id']);
+    // On récupère la recette, et on vérifie si l'on a le stock disponible pour tous les ingrédients associés
     $recipe = $rRepo->getOneById($_POST['recipe']);
-    $stockAvailable = $rRepo->checkStock($recipe,$user->getWarehouse(),$_POST['quantity']);
+    $stockAvailable = $rRepo->checkRecipeStock($recipe,$user->getWarehouse(),$_POST['quantity']);
 
+    // Si tout est en stock, on ajoute directement l'article au panier
     if (empty($stockAvailable)){
-        // TODO passer la commande
-        // Ajouter au panier
         $_SESSION['basket'][$_POST['recipe']]['recipe']['id'] = $recipe->getId();
         $_SESSION['basket'][$_POST['recipe']]['recipe']['name'] = $recipe->getName();
         $_SESSION['basket'][$_POST['recipe']]['quantity'] = $recipe;
         new SweetAlert(SweetAlert::SUCCESS,"Succès","Le plat a bien été ajouté à votre panier");
     }else{
+        // Sinon on affiche un tableau des articles manquants, et on demande à l'utilisateur s'il souhaite commander quand même
         $html = "<table class='table table-bordered'>";
         $html .= "<thead>";
         $html .= "<tr>";
@@ -100,7 +121,7 @@ if (isset($_POST['recipe']) && isset($_POST['quantity'])){
     </p>
     <div class="row">
         <div class="col-lg-8">
-            <table class="table table-bordered">
+            <table class="table table-bordered text-center">
                 <thead>
                 <tr>
                     <th><?= translate("Nom de la recette");?></th>
@@ -140,7 +161,7 @@ if (isset($_POST['recipe']) && isset($_POST['quantity'])){
             </table>
         </div>
         <div class="col-lg-4">
-            <table class="table table-bordered">
+            <table class="table table-bordered text-center">
                 <thead>
                     <tr>
                         <th colspan="3"><i class="fas fa-shopping-basket"></i> Mon panier</th>
@@ -170,9 +191,9 @@ if (isset($_POST['recipe']) && isset($_POST['quantity'])){
                         ?>
                         <tr>
                             <td colspan="3" class="text-center">
-                                <button class="btn btn-success">
+                                <a class="btn btn-success" href="?validateBasket=true">
                                     Passer la commande
-                                </button>
+                                </a>
                             </td>
                         </tr>
                         <?php

@@ -55,7 +55,7 @@ class RecipeRepository extends AbstractRepository
         }
     }
 
-    public function checkStock(Recipe $recipe,Warehouse $warehouse,int $quantityOrdered = 1):array{
+    public function checkRecipeStock(Recipe $recipe,Warehouse $warehouse,int $quantityOrdered = 1):array{
         $missing = array();
         foreach ($recipe->getIngredients() as $ingredient){
             $getStock = $this->dbManager->find("SELECT * FROM stock WHERE id_food = ? AND id_warehouse = ?",[
@@ -80,5 +80,17 @@ class RecipeRepository extends AbstractRepository
         }
 
         return $missing;
+    }
+
+    public function checkFoodStock(Food $food, Warehouse $warehouse):?int{
+        $res = $this->dbManager->find("SELECT * FROM stock WHERE id_food = ? AND id_warehouse = ?",[
+            $food->getId(),
+            $warehouse->getId()
+        ]);
+        if (empty($res)){
+            return null;
+        }else{
+            return $res['quantity'];
+        }
     }
 }
