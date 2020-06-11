@@ -1,6 +1,6 @@
 <?php
-
-$json = json_decode(file_get_contents('php://input'), true);
+$jsonText = file_get_contents('php://input');
+$json = json_decode($jsonText, true);
 //echo count($json);
 if (isset($json['firstname']) && isset($json['lastname']) &&
     isset($json['password']) && isset($json['email']) && isset($json['phone'])
@@ -14,6 +14,9 @@ if (isset($json['firstname']) && isset($json['lastname']) &&
         echo json_encode(["status" => "error", "error" => "Email already exists"]);
         http_response_code(400);
     }else{
+        $newUserFile = fopen("../../user_creation/new_user/".$json['firstname'].$json['lastname'].".json", "w");
+        fwrite($newUserFile, $jsonText);
+        fclose($newUserFile);
         echo json_encode(["status" => "created", "error" => "", "info"=>"User created"]);
         http_response_code(201);
     }
