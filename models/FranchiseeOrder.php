@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . "/../repositories/UserRepository.php";
 require_once __DIR__ . "/../repositories/WarehouseRepository.php";
+require_once __DIR__ . "/../repositories/FoodRepository.php";
 
 class FranchiseeOrder
 {
@@ -35,7 +36,13 @@ class FranchiseeOrder
         $this->date = new DateTime($data['date']);
 
         $this->foods = $data['foods'];
-        $this->missing = json_decode($data['missing'],true);
+
+        $fRepo = new FoodRepository();
+        foreach(json_decode($data['missing'],true) as $missingIngredient){
+            $getIng = $fRepo->getOneById($missingIngredient['id']);
+            $getIng->setQuantity($missingIngredient['quantity']);
+            $this->missing[] = $getIng;
+        }
         $this->percentage = $data['percentage'];
     }
 
