@@ -21,7 +21,7 @@ $user = $uRepo->getOneById($_COOKIE['user_id']);
         ?>
         <div class="row justify-content-center mb-2">
             <a href="history" class="btn btn-primary mr-2"><?= translate("Retour à l'historique");?></a>
-            <a href="history" class="btn btn-primary"><i class="fas fa-print"></i> <?= translate("Imprimer le bon de commande");?></a>
+            <a href="generatePdf?pdf=true&id=<?= $order->getId();?>" class="btn btn-primary" target="blank"><i class="fas fa-print"></i> <?= translate("Imprimer le bon de commande");?></a>
         </div>
         <table class="table table-bordered text-center">
             <thead>

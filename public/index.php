@@ -33,6 +33,7 @@ if ($explodedUrl[0] == 'public') {
     }else{
         $fileName = $_GET['file'];
         $file = __DIR__ . '/../uploads/' . $fileName;
+        var_dump($file);
         if (file_exists($file)){
             if (isset($_GET['type'])){
                 if ($_GET['type'] == "download"){
