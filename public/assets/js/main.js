@@ -180,6 +180,18 @@
     mirror: false
   });
 
+
+  // Activation des lignes clickables dans les tableaux
+  $(".clickable-row").click(function() {
+    window.location = $(this).data("href");
+  });
+
+  // Ligne clickable qui ouvre dans un nouvel onglet
+  $(".clickable-row-new-tab").click(function() {
+    var win = window.open($(this).data("href"),'_blank');
+    win.focus();
+  });
+
 })(jQuery);
 
 function formatDate(date, format){

@@ -1,6 +1,8 @@
 <?php
 require_once __DIR__ . "/RecipeRepository.php";
 require_once __DIR__ . "/UserRepository.php";
+require_once __DIR__ . "/FoodRepository.php";
+require_once __DIR__ . "/../models/FranchiseeOrder.php";
 
 class FranchiseeOrderRepository extends AbstractRepository
 {
@@ -106,5 +108,37 @@ class FranchiseeOrderRepository extends AbstractRepository
 
             unset($_SESSION['basket']);
         }
+    }
+
+    public function getAllOrders(User $user){
+        $orders = $this->dbManager->getAll("SELECT * FROM franchisee_order WHERE id_user = ? ORDER BY date DESC",[
+            $user->getId()
+        ]);
+
+        $fRepo = new FoodRepository();
+
+        if ($orders){
+            $returnVal = array();
+            foreach($orders as $order){
+                $foods = $this->dbManager->getAll("SELECT * FROM franchisee_order_content WHERE id_order = ?",[
+                    $order['id']
+                ]);
+
+                $orderFoods = array();
+                foreach ($foods as $food){
+                    $foodObj = $fRepo->getOneById($food['id_food']);
+                    $foodObj->setQuantity($food['quantity']);
+                    $orderFoods[] = $foodObj;
+                }
+
+                $order['foods'] = $orderFoods;
+                $returnVal[] = new FranchiseeOrder($order);
+            }
+
+            return $returnVal;
+        }else{
+            return null;
+        }
+        return $orders;
     }
 }

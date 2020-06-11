@@ -1624,3 +1624,8 @@ section {
 .text-center thead tr th {
   text-align: center;
 }
+
+.clickable-row:hover, .clickable-row-new-tab:hover{
+  color: blue !important;
+  text-decoration: underline;
+}

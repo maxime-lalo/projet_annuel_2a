@@ -112,6 +112,9 @@ if (isset($_POST['recipe']) && isset($_POST['quantity'])){
 <div class="container">
     <h1 id="page-title">
         <?= translate("Espace franchisé");?> - <?= translate("Nouvelle commande");?>
+        <span class="float-right">
+            <a href="history" class="btn btn-primary mb-2"><i class="fas fa-history"></i> <?= translate("Historique des commandes");?></a>
+        </span>
     </h1>
     <p class="lead">
         <?= translate("Pour vous simplifier la vie, il suffit de commander une recette pour commander tous les produits qui y sont associés !");?>
