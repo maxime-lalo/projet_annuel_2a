@@ -5,7 +5,7 @@ require_once __DIR__ . "/AbstractRepository.php";
 class FoodTruckRepository extends AbstractRepository
 {
     public function getFromUserId(int $userId){
-    	$truck = $this->dbManager->find("SELECT * FROM user a INNER JOIN FOOD_TRUCK b ON a.food_truck_id = b.id WHERE a.id = ?",[ $userId ]);
+    	$truck = $this->dbManager->find("SELECT * FROM user a INNER JOIN food_truck b ON a.food_truck_id = b.id WHERE a.id = ?",[ $userId ]);
     	return $truck == null ? null: new FoodTruck($truck);
     }
 
@@ -18,7 +18,7 @@ class FoodTruckRepository extends AbstractRepository
     }
 
     public function getUser(FoodTruck $truck):?User{
-        $user = $this->dbManager->find("SELECT * FROM user WHERE FOOD_TRUCK_id = ?",[$truck->getId()]);
+        $user = $this->dbManager->find("SELECT * FROM user WHERE food_truck_id = ?",[$truck->getId()]);
         return isset($user)? new User($user):null;
     }
 
