@@ -1,7 +1,7 @@
 <?php
 session_start();
 require_once __DIR__ . '/../.env';
-require_once __DIR__ . '/../assets/functions.php';
+require_once __DIR__ . '/../utils/functions.php';
 require_once __DIR__ . '/../utils/database/DatabaseManager.php';
 
 $url = $_SERVER['REQUEST_URI'];
@@ -33,6 +33,7 @@ if ($explodedUrl[0] == 'public') {
     }else{
         $fileName = $_GET['file'];
         $file = __DIR__ . '/../uploads/' . $fileName;
+        var_dump($file);
         if (file_exists($file)){
             if (isset($_GET['type'])){
                 if ($_GET['type'] == "download"){
@@ -49,7 +50,8 @@ if ($explodedUrl[0] == 'public') {
                     readfile($file);
                     exit;
                 }elseif($_GET['type'] == "view"){
-                    header('Content-Type: application/pdf');
+                    $explodeName = explode(".",$fileName);
+                    header(getMimeType($explodeName[count($explodeName)-1]));
                     $fp = fopen($file,"r");
                     while($data = fread($fp, 1024)){
                         echo $data;

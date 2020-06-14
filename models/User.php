@@ -1,6 +1,6 @@
 <?php
-
-
+require_once __DIR__ . "/../repositories/FoodTruckRepository.php";
+require_once __DIR__ . "/../repositories/WarehouseRepository.php";
 class User implements JsonSerializable
 {
 
@@ -17,7 +17,9 @@ class User implements JsonSerializable
     private int $is_client;
     private int $is_worker;
     private int $is_employe;
-
+    private ?FoodTruck $truck;
+    private int $is_admin;
+    private ?Warehouse $warehouse;
 
     public function jsonSerialize()
     {
@@ -38,6 +40,17 @@ class User implements JsonSerializable
         $this->is_worker = isset($user['is_worker'])?$user['is_worker']:0;
         $this->is_client = isset($user['is_client'])?$user['is_client']:0;
         $this->is_employe = isset($user['is_employe'])?$user['is_employe']:0;
+        $this->is_admin = isset($user['is_admin'])?$user['is_admin']:0;
+
+        if (isset($user['warehouse_id'])){
+            $wManager = new WarehouseRepository();
+            $this->warehouse = $wManager->getOneById($user['warehouse_id']);
+        }
+
+        if (isset($user['food_truck_id'])){
+            $tManager = new FoodTruckRepository();
+            $this->truck = $tManager->getOneById($user['food_truck_id']);
+        }
     }
 
     /**
@@ -248,7 +261,45 @@ class User implements JsonSerializable
         $this->is_employe = $is_employe;
     }
 
+    /**
+     * @return int
+     */
+    public function isAdmin(): bool
+    {
+        return $this->is_admin;
+    }
+    
+    public function getTruck():?FoodTruck{
+        if (isset($this->truck)){
+            return $this->truck;
+        }else{
+            return null;
+        }
+    }
 
+    /**
+     * @param int $is_admin
+     */
+    public function setIsAdmin(int $is_admin): void
+    {
+        $this->is_admin = $is_admin;
+    }
+
+    /**
+     * @return mixed|Warehouse|null
+     */
+    public function getWarehouse()
+    {
+        return $this->warehouse;
+    }
+
+    /**
+     * @param mixed|Warehouse|null $warehouse
+     */
+    public function setWarehouse($warehouse): void
+    {
+        $this->warehouse = $warehouse;
+    }
 
 
 }

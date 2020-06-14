@@ -7,7 +7,7 @@ function translate(string $toTranslate):?string{
 		if (isset($translations[$toTranslate])) {
 			return $translations[$toTranslate];
 		}else{
-			return '<span style="color:red">Missing translation in lang <b>'.strtoupper(LANG).'</b>  =>  <b>'.$toTranslate.'</b></span>';
+			return '<span style="color:#ff0000">Missing translation in lang <b>' .strtoupper(LANG).'</b>  =>  <b>'.$toTranslate.'</b></span>';
 		}
 	}
 }
@@ -38,4 +38,12 @@ function getMimeType(string $extension):?string{
 			return "text/html";
 			break;
 	}
+}
+
+function timestampFormat(?string $timestamp):string{
+    if ($timestamp == null){
+        return translate("Pas de date saisie");
+    }else{
+        return date('d/m/Y H:i',strtotime($timestamp));
+    }
 }

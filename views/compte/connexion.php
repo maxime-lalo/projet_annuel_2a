@@ -5,17 +5,20 @@ if(isset($_POST['mail']) && isset($_POST['password'])){
     $manager = new DatabaseManager();
     $authService = new AuthService($manager);
     $user = $authService->log($_POST['mail'],$_POST['password']);
-    if(isset($user)){
+    if($user >= 0){
         if(isset($_POST['check'])) {
-            session_start();
             setcookie('user_id', $user, time() + 2592000,"/");
-
+            header('Location: compte');
         }else{
             setcookie('user_id', $user,time() + 3600,"/");
             header('Location: compte');
         }
     }else{
-        echo "Erreur de connexion";
+        if ($user == -1){
+            new SweetAlert(SweetAlert::ERROR,"Erreur","E-mail ou mot de passe incorrect");
+        }elseif($user == -2){
+            new SweetAlert(SweetAlert::ERROR,"Erreur","Votre compte n'est pas encore activé");
+        }
     }
 
 

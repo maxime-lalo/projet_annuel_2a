@@ -1,3 +1,11 @@
+<?php
+require_once __DIR__ . "/../repositories/RecipeRepository.php";
+$rRepo = new RecipeRepository();
+
+foreach ($rRepo->getAll() as $recipe){
+    var_dump($recipe);
+}
+?>
 <title><?= translate("Accueil");?></title>
   <!-- ======= Hero Section ======= -->
   <section id="hero">

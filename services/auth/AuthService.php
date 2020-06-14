@@ -92,8 +92,10 @@ class AuthService
             $mail,
             $hashed
         ]);
-        if ($userData === null || $userData['activated'] == 0) {
-            return null;
+        if ($userData === null) {
+            return -1;
+        }elseif($userData['activated'] == 0){
+            return -2;
         }
         return $userData['id'];
     }
@@ -118,7 +120,8 @@ class AuthService
             "city" => $userData['city'],
             "is_client" => $userData['is_client'],
             "is_worker" => $userData['is_worker'],
-            "is_employe" => $userData['is_employe']
+            "FOOD_TRUCK_id" => $userData['food_truck_id'],
+            "is_admin" => $userData['is_admin'],
         ]);
 
     }

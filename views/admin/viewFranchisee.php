@@ -38,27 +38,23 @@ $uRepository = new UserRepository();
                 <td>
                     <?php
 
-                    $fileName = array_diff(scandir(__DIR__ . "/../../uploads/resumees/" . str_replace("@","_",$user->getEmail())), array('.', '..'));
-                    if (isset($fileName[2])){
-                        ?>
-                        <a class="btn btn-primary" href="/file?type=download&file=resumees/<?= str_replace("@","_",$user->getEmail())."/".$fileName[2];?>" target="blank_">
-                            <i class="fa fa-eye"></i>
-                        </a>
-                        <?php
+                    $resumeePath = __DIR__ . "/../../uploads/resumees/" . str_replace("@","_",$user->getEmail());
+                    if (file_exists($resumeePath)){
+                        $fileName = array_diff(scandir($resumeePath), array('.', '..'));
+                        if (isset($fileName[2])){
+                            ?>
+                            <a class="btn btn-primary" href="/file?type=download&file=resumees/<?= str_replace("@","_",$user->getEmail())."/".$fileName[2];?>" target="blank_">
+                                <i class="fa fa-eye"></i>
+                            </a>
+                            <?php
+                        }else{
+                            echo translate("CV non trouvé");
+                        }
                     }else{
-                        echo "CV non trouvé";
+                        echo translate("CV non trouvé");
                     }
                     ?>
                 </td>
-            </tr>
-            <?php
-        }
-        $users = $uRepository->getNotActivatedWorkers();
-        if ($users != null){
-        }else{
-            ?>
-            <tr style="background-color:lightgray">
-                <td colspan="7" class="text-center"><?= translate("Aucun franchisé en attente");?></td>
             </tr>
             <?php
         }

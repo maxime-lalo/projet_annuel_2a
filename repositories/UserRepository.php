@@ -46,4 +46,21 @@ class UserRepository extends AbstractRepository
         }
         return $u > 0;
     }
+
+    public function setTruckFromUser(int $userId , int $truckId){
+        $user = $this->dbManager->exec("UPDATE user SET food_truck_id = ?  WHERE id = ?",[ $truckId , $userId ]);
+        return null;
+    }
+
+    public function getOneByEmail(string $email):?User
+    {
+        $user = $this->dbManager->find("SELECT * FROM " . $this->getDbTable() . " WHERE email = ?" ,[
+            $email
+        ]);
+        if ($user == null){
+            return null;
+        }else{
+            return new User($user);
+        }
+    }
 }
