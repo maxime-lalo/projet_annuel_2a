@@ -1,13 +1,14 @@
 <?php
 
 
-class Warehouse
+class Warehouse implements JsonSerializable
 {
     private int $id;
     private string $name;
     private string $street_name	;
     private int $street_number;
     private string $city;
+    private string $zipcode;
 
     /**
      * Warehouse constructor.
@@ -16,6 +17,7 @@ class Warehouse
      * @param string $street_name
      * @param int $street_number
      * @param string $city
+     * @param string $zipcode
      */
     public function __construct(array $warehouse)
     {
@@ -24,6 +26,7 @@ class Warehouse
         $this->street_name = $warehouse['street_name'];
         $this->street_number = $warehouse['street_number'];
         $this->city = $warehouse['city'];
+        $this->zipcode = $warehouse['zipcode'];
     }
 
     /**
@@ -106,5 +109,25 @@ class Warehouse
         $this->city = $city;
     }
 
+    /**
+     * @return string
+     */
+    public function getZipcode(): string
+    {
+        return $this->zipcode;
+    }
+
+    /**
+     * @param string $zipcode
+     */
+    public function setZipcode(string $zipcode): void
+    {
+        $this->zipcode = $zipcode;
+    }
+
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
+    }
 
 }

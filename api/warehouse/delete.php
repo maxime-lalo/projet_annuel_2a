@@ -1,7 +1,7 @@
 <?php
 if ($p->get('id') != null){
-    $tRepo = new FoodTruckRepository();
-    $delete = $tRepo->delete($p->get('id'));
+    $wRepo = new WarehouseRepository();
+    $delete = $wRepo->delete($p->get('id'));
     if ($delete){
         echo json_encode(["status" => "success", "msg" => "Successfully deleted"]);
     }else{

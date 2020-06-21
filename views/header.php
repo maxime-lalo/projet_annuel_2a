@@ -73,10 +73,10 @@ if (isset($_GET['pdf'])){
                     } else {
                         if ($user->isAdmin()){
                             ?>
-                            <li class="drop-down"><a href="#"><?= translate("Gestion franchisés"); ?></a>
+                            <li class="drop-down"><a href="#"><?= translate("Gestion"); ?></a>
                                 <ul>
                                     <li><a href="/<?= LANG; ?>/admin/truck/gestionTruck"><?= translate("Gestion camions"); ?></a></li>
-                                    <li><a href="/<?= LANG; ?>/admin/gestionWarehouse"><?= translate("Gestion entrepôts"); ?></a></li>
+                                    <li><a href="/<?= LANG; ?>/admin/warehouse/gestionWarehouse"><?= translate("Gestion entrepôts"); ?></a></li>
                                     <li><a href="/<?= LANG; ?>/admin/manageFranchisees"><?= translate("Gestion des franchisés"); ?></a></li>
                                 </ul>
                             </li>
