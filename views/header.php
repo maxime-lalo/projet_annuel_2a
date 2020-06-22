@@ -77,7 +77,7 @@ if (isset($_GET['pdf'])){
                                 <ul>
                                     <li><a href="/<?= LANG; ?>/admin/truck/gestionTruck"><?= translate("Gestion camions"); ?></a></li>
                                     <li><a href="/<?= LANG; ?>/admin/warehouse/gestionWarehouse"><?= translate("Gestion entrepôts"); ?></a></li>
-                                    <li><a href="/<?= LANG; ?>/admin/manageFranchisees"><?= translate("Gestion des franchisés"); ?></a></li>
+                                    <li><a href="/<?= LANG; ?>/admin/manageNewFranchisee"><?= translate("Gestion des franchisés"); ?></a></li>
                                 </ul>
                             </li>
                             <?php

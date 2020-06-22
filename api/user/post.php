@@ -21,6 +21,5 @@ if (isset($json['firstname']) && isset($json['lastname']) &&
         http_response_code(201);
     }
 }else{
-    echo json_encode(["status" => "error", "error" => "Missing fields"]);
-    http_response_code(400);
+    new JsonReturn(JsonReturn::ERROR,"Missing arguments",400);
 }

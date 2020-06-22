@@ -48,7 +48,7 @@ $tRepo = new FoodTruckRepository();
                         if ($franchisee != null){
                             $fullName = strtoupper($franchisee->getLastname()) . " " . $franchisee->getFirstname();
                             ?>
-                            <a href="#" target="blank"><?= $fullName;?></a>
+                            <a href="../manageFranchisee?id=<?= $franchisee->getId()?>" target="blank"><?= $fullName;?></a>
                             <?php
                         }else{
                             echo translate("Aucun");

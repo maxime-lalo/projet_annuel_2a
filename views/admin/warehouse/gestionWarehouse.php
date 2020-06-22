@@ -48,8 +48,8 @@ $wRepo = new WarehouseRepository();
                         <button class="btn btn-primary" title="<?= translate("Éditer");?>" data-toggle="tooltip" onclick="editWarehouse(<?= $warehouse->getId();?>)">
                             <i class="fas fa-edit"></i>
                         </button>
-                        <a class="btn btn-primary" title="<?= translate("Commande");?>" data-toggle="tooltip" href="#">
-                            <i class="fas fa-shopping-cart"></i>
+                        <a class="btn btn-primary" title="<?= translate("Stock");?>" data-toggle="tooltip" href="#">
+                            <i class="fas fa-tasks"></i>
                         </a>
                     </td>
                 </tr>
@@ -132,8 +132,8 @@ $wRepo = new WarehouseRepository();
                     '<button class="btn btn-primary" title="<?= translate("Éditer");?>" data-toggle="tooltip" onclick="editWarehouse(' + warehouse + ')">' +
                     '<i class="fas fa-edit"></i>' +
                     '</button>\n' +
-                    '<a class="btn btn-primary" title="<?= translate("Franchisé");?>" data-toggle="tooltip" href="#">' +
-                    '<i class="fas fa-user"></i>' +
+                    '<a class="btn btn-primary" title="<?= translate("Stock");?>" data-toggle="tooltip" href="#">' +
+                    '<i class="fas fa-tasks"></i>' +
                     '</a>\n'
                 );
                 Swal.fire({
@@ -167,8 +167,8 @@ $wRepo = new WarehouseRepository();
             '<button class="btn btn-primary" title="<?= translate("Éditer");?>" data-toggle="tooltip" onclick="editWarehouse(' + warehouse + ')">' +
             '<i class="fas fa-edit"></i>' +
             '</button>\n' +
-            '<a class="btn btn-primary" title="<?= translate("Franchisé");?>" data-toggle="tooltip" href="#">' +
-            '<i class="fas fa-user"></i>' +
+            '<a class="btn btn-primary" title="<?= translate("Stock");?>" data-toggle="tooltip" href="#">' +
+            '<i class="fas fa-tasks"></i>' +
             '</a>\n'
         );
 

@@ -269,12 +269,23 @@ class User implements JsonSerializable
         return $this->is_admin;
     }
     
-    public function getTruck():?FoodTruck{
+    /**
+     * @return mixed|FoodTruck|null
+     */
+    public function getTruck():?object{
         if (isset($this->truck)){
             return $this->truck;
         }else{
-            return null;
+            return new stdClass();
         }
+    }
+
+    /**
+     * @param mixed|object|null $truck
+     */
+    public function setTruck(object $truck): void
+    {
+        if($truck instanceof FoodTruck)$this->truck = $truck;
     }
 
     /**
@@ -288,17 +299,21 @@ class User implements JsonSerializable
     /**
      * @return mixed|Warehouse|null
      */
-    public function getWarehouse()
+    public function getWarehouse():object
     {
-        return $this->warehouse;
+        if (isset($this->warehouse)){
+            return $this->warehouse;
+        }else{
+            return new stdClass();
+        }
     }
 
     /**
-     * @param mixed|Warehouse|null $warehouse
+     * @param mixed|object|null $warehouse
      */
-    public function setWarehouse($warehouse): void
-    {
-        $this->warehouse = $warehouse;
+    public function setWarehouse(object $warehouse): void
+    {   
+        if($warehouse instanceof Warehouse)$this->warehouse = $warehouse;
     }
 
 
