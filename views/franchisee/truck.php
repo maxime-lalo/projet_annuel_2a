@@ -14,7 +14,7 @@ if (isset($_GET['setBreakdown'])){
     </h1>
     <?php
     $truck = $user->getTruck();
-    if ($truck != null){
+    if ($truck instanceof FoodTruck){
         $isOnBreakdown = $tRepository->isOnBreakdown($truck);
         if ($isOnBreakdown){
             ?>

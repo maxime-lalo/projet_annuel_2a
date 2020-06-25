@@ -195,7 +195,7 @@ if (isset($_POST['recipe']) && isset($_POST['quantity'])){
                         <tr>
                             <td colspan="3" class="text-center">
                                 <a class="btn btn-success" href="?validateBasket=true">
-                                    Passer la commande
+                                    <?= translate('Passer la commande')?>
                                 </a>
                             </td>
                         </tr>
@@ -203,7 +203,7 @@ if (isset($_POST['recipe']) && isset($_POST['quantity'])){
                     }else{
                         ?>
                         <tr>
-                            <td colspan="3">Votre panier est vide</td>
+                            <td colspan="3"><?= translate('Votre panier est vide')?></td>
                         </tr>
                         <?php
                     }

@@ -10,6 +10,31 @@ if (isset($_GET['pdf'])){
     if(isset($_COOKIE['user_id'])){
         $user = $authService->getUserFromId($_COOKIE["user_id"]);
     }
+    $uri = $_SERVER['REQUEST_URI'];
+    $page = "";
+    
+    if( strpos($uri,"/compte/inscriptionFranchise") != false || strpos($uri,"/compte/inscriptionClient") != false  ){
+        $page = "signup";
+    }
+    if( strpos($uri,"/compte/connexion") != false ){
+        $page = "signin";
+    }
+    if( strpos($uri,"/admin/truck/gestionTruck") != false || 
+        strpos($uri,"/admin/warehouse/gestionWarehouse") != false || strpos($uri,"/admin/manageNewFranchisee") != false ){
+        $page = "admin";
+    }
+    if( strpos($uri,"/franchisee/truck") != false || strpos($uri,"/franchisee/order/new") != false){
+        $page = "worker";
+    }
+    if( strpos($uri,"/client/order") != false || strpos($uri,"/client/history") != false || strpos($uri,"/client/trucksMap") != false ){
+        $page = "client";
+    }
+    if( strpos($uri,"/compte/compte") != false || strpos($uri,"/compte/deconnexion") != false){
+        $page = "account";
+    }
+    if( $page == ""){
+        $page = "home";
+    }
     ?>
     <!DOCTYPE html>
     <html>
@@ -52,28 +77,28 @@ if (isset($_GET['pdf'])){
         <div class="container d-flex align-items-center">
 
             <div class="logo mr-auto">
-                <h1 class="text-light"><a href="/<?= LANG;?>"><span>Projet annuel</span></a></h1>
+                <h1 class="text-light"><a href="/<?= LANG;?>"><span>Drive n' Cook</span></a></h1>
                 <!-- Uncomment below if you prefer to use an image logo -->
                 <!-- <a href="index.html"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
             </div>
             <nav class="nav-menu d-none d-lg-block">
                 <ul>
-                    <li class="active"><a href="/<?= LANG;?>"><?= translate("Accueil");?></a></li>
+                    <li <?= ($page == "home")?'class="active"': "" ?>><a href="/<?= LANG;?>"><?= translate("Accueil");?></a></li>
                     <?php
                     if (!isset($_COOKIE["user_id"])) {
                         ?>
-                        <li class="drop-down"><a href="#"><?= translate("Inscription");?></a>
+                        <li class="drop-down <?= ($page == "signup")? 'active': "" ?>"><a href="#"><?= translate("Inscription");?></a>
                             <ul>
                                 <li><a href="/<?= LANG;?>/compte/inscriptionFranchise"><?= translate("Franchisé");?></a></li>
                                 <li><a href="/<?= LANG;?>/compte/inscriptionClient"><?= translate("Client");?></a></li>
                             </ul>
                         </li>
-                        <li><a href="/<?= LANG; ?>/compte/connexion"><?= translate("Connexion"); ?></a></li>
+                        <li <?= ($page == "signin")?'class="active"': "" ?>><a href="/<?= LANG; ?>/compte/connexion"><?= translate("Connexion"); ?></a></li>
                         <?php
                     } else {
                         if ($user->isAdmin()){
                             ?>
-                            <li class="drop-down"><a href="#"><?= translate("Gestion"); ?></a>
+                            <li class="drop-down <?= ($page == "admin")? 'active': "" ?>"><a href="#"><?= translate("Gestion"); ?></a>
                                 <ul>
                                     <li><a href="/<?= LANG; ?>/admin/truck/gestionTruck"><?= translate("Gestion camions"); ?></a></li>
                                     <li><a href="/<?= LANG; ?>/admin/warehouse/gestionWarehouse"><?= translate("Gestion entrepôts"); ?></a></li>
@@ -83,16 +108,26 @@ if (isset($_GET['pdf'])){
                             <?php
                         }elseif($user->isWorker()){
                             ?>
-                            <li class="drop-down"><a href="#"><?= translate("Espace franchisés"); ?></a>
+                            <li class="drop-down <?= ($page == "worker")? 'active': "" ?>"><a href="#"><?= translate("Espace franchisés"); ?></a>
                                 <ul>
                                     <li><a href="/<?= LANG; ?>/franchisee/truck"><?= translate("Gestion camion"); ?></a></li>
                                     <li><a href="/<?= LANG; ?>/franchisee/order/new"><?= translate("Faire une commande"); ?></a></li>
                                 </ul>
                             </li>
                             <?php
+                        }elseif($user->isClient()){
+                            ?>
+                            <li class="drop-down <?= ($page == "client")? 'active': "" ?>"><a href="#"><?= translate("Espace client"); ?></a>
+                                <ul>
+                                    <li><a href="/<?= LANG; ?>/client/order"><?= translate("Une petite faim ?"); ?></a></li>
+                                    <li><a href="/<?= LANG; ?>/client/history"><?= translate("Historique commandes"); ?></a></li>
+                                    <li><a href="/<?= LANG; ?>/client/trucksMap"><?= translate("Tous nos FoodTruck"); ?></a></li>
+                                </ul>
+                            </li>
+                            <?php
                         }
                         ?>
-                        <li class="drop-down"><a href="#"><?= translate("Mon Compte"); ?></a>
+                        <li class="drop-down <?= ($page == "account")? 'active': "" ?>"><a href="#"><?= translate("Mon Compte"); ?></a>
                             <ul>
                                 <li><a href="/<?= LANG; ?>/compte/compte"><?= translate("Profil"); ?></a></li>
                                 <li><a href="/<?= LANG; ?>/compte/deconnexion"><?= translate("Déconnexion"); ?></a></li>

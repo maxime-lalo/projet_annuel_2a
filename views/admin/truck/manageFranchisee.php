@@ -4,11 +4,6 @@ require_once __DIR__ . "/../../../repositories/UserRepository.php";
 $tRepo = new FoodTruckRepository();
 $uRepo = new UserRepository();
 
-if (isset($_POST['email']) && isset($_POST['truck'])){
-    $user = $uRepo->getOneByEmail($_POST['email']);
-    $uRepo->setTruckFromUser($user->getId(),$_POST['truck']);
-    new SweetAlert(SweetAlert::SUCCESS,"Succès","Le franchisé a bien été lié au camion");
-}
 ?>
 <title><?= translate("Espace Admin");?> - <?= translate("Franchisé lié à un camion");?></title>
 <div class="container">
@@ -71,18 +66,19 @@ if (isset($_POST['email']) && isset($_POST['truck'])){
                         ?>
                         <p id="franchiseeName" class="mt-2 text-center"><?= $u->getLastname()." ".$u->getFirstname();?></p>
                         
+                        
+                        <input type="email" name="email" id="email" class="form-control" placeholder="<?= translate('Rentrez l\'email d\'un franchisé');?>"  onkeyup="showUsers()" value="<?= $u->getEmail();?>">
+                        <div id="resetDiv">
+                            <a class="btn btn-danger"  data-toggle="tooltip" onclick="resetUser()">
+                                <i class="fas fa-user"></i>
+                            </a>
+                        </div>
                         <div id="resultsDiv" class="dropdown" hidden="hidden">
                             <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                                 <?= translate("Franchisés")?>
                             </button>
                             <div id="results" class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                             </div>
-                        </div>
-                        <input type="email" name="email" id="email" class="form-control" placeholder="<?= translate('Rentrez l\'email d\'un franchisé');?>"  onkeyup="showUsers()" value="<?= $u->getEmail();?>">
-                        <div id="resetDiv">
-                            <a class="btn btn-primary"  data-toggle="tooltip" onclick="resetUser()">
-                                <i class="fas fa-user"></i>
-                            </a>
                         </div>
                         <?php
                     }
@@ -134,7 +130,7 @@ var currentUser = '<?=($u != null)? $u->getId(): "null";?>';
         if(currentUser != 'null'){
             resetUser(currentUser)
         }else{
-            var resetDiv = '<a class="btn btn-primary" title="<?= translate("Franchisé");?>" data-toggle="tooltip" onclick="resetUser()"><i class="fas fa-user"></i></a>'
+            var resetDiv = '<a class="btn btn-danger" title="<?= translate("Franchisé");?>" data-toggle="tooltip" onclick="resetUser()"><i class="fas fa-user"></i></a>'
             $('#resetDiv').html(resetDiv);
         }
         getUser(id)
@@ -220,7 +216,7 @@ var currentUser = '<?=($u != null)? $u->getId(): "null";?>';
                             icon: "error"
                         });
                     }
-                    if(data.status == "success"){
+                    if(data.status == "success" ){
                         $('#resetDiv').html('');
                         $('#results').html('')
                         $('#franchiseeName').html('<?= translate("Aucun franchisé lié");?>');
