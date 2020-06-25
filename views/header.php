@@ -2,7 +2,8 @@
 require_once __DIR__ . "/../services/auth/AuthService.php";
 require_once __DIR__ . "/../utils/database/DatabaseManager.php";
 require_once __DIR__ . "/../services/SweetAlert.php";
-if (isset($_GET['pdf'])){
+$url = explode("/",$_SERVER['REQUEST_URI']);
+if (isset($_GET['pdf']) OR $url[count($url) - 1] == "deconnexion"){
 
 }else{
     $manager = new DatabaseManager();
