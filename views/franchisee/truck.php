@@ -1,6 +1,8 @@
 <?php
 require_once __DIR__ . "/../../repositories/FoodTruckRepository.php";
+require_once __DIR__ . "/../../repositories/UserRepository.php";
 $tRepository = new FoodTruckRepository();
+$uRepository = new UserRepository();
 if (isset($_GET['setBreakdown'])){
     $tRepository->setBreakdown($tRepository->getOneById($_GET['setBreakdown']));
 }elseif(isset($_GET['cancelBreakdown'])){
@@ -13,7 +15,7 @@ if (isset($_GET['setBreakdown'])){
         <?= translate("Espace franchisé");?> - <?= translate("Mon camion");?>
     </h1>
     <?php
-    $truck = $user->getTruck();
+    $truck = $tRepository->getFromUserId($user->getId());
     if ($truck != null){
         $isOnBreakdown = $tRepository->isOnBreakdown($truck);
         if ($isOnBreakdown){
