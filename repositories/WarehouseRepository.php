@@ -17,7 +17,7 @@ class WarehouseRepository extends AbstractRepository
             $warehouse->getZipcode(),
             $warehouse->getcity()
         ]);
-
+        
         if ($rows == 1){
             return $this->dbManager->getLastInsertId();
         }else{

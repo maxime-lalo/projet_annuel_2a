@@ -26,7 +26,7 @@ if (isset($_GET['pdf'])){
     if( strpos($uri,"/franchisee/truck") != false || strpos($uri,"/franchisee/order/new") != false){
         $page = "worker";
     }
-    if( strpos($uri,"/client/order") != false || strpos($uri,"/client/history") != false || strpos($uri,"/client/trucksMap") != false ){
+    if( strpos($uri,"/client/order/order") != false || strpos($uri,"/client/history") != false || strpos($uri,"/client/trucksMap") != false ){
         $page = "client";
     }
     if( strpos($uri,"/compte/compte") != false || strpos($uri,"/compte/deconnexion") != false){
@@ -119,7 +119,7 @@ if (isset($_GET['pdf'])){
                             ?>
                             <li class="drop-down <?= ($page == "client")? 'active': "" ?>"><a href="#"><?= translate("Espace client"); ?></a>
                                 <ul>
-                                    <li><a href="/<?= LANG; ?>/client/order"><?= translate("Une petite faim ?"); ?></a></li>
+                                    <li><a href="/<?= LANG; ?>/client/order/order"><?= translate("Une petite faim ?"); ?></a></li>
                                     <li><a href="/<?= LANG; ?>/client/history"><?= translate("Historique commandes"); ?></a></li>
                                     <li><a href="/<?= LANG; ?>/client/trucksMap"><?= translate("Tous nos FoodTruck"); ?></a></li>
                                 </ul>

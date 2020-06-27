@@ -23,7 +23,6 @@ else if(isset($_POST['conf_mdp']) && isset($_POST['submitMdp']) && isset($_POST[
     $user = $authService->updateMdpUser($user_id , $_POST['mdp']);
     else {
         $error = "Les mot de passe ne correspondent pas";
-
     }
 
 }
