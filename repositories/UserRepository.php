@@ -80,12 +80,13 @@ class UserRepository extends AbstractRepository
     }
 
     public function update(User $user):bool{
-        $rows = $this->dbManager->exec('UPDATE user SET firstname =?, lastname =? , email =?, password =? , phone =?, street_name =?,street_number =? , city =?, is_client =?, is_worker =?, is_employe =?, is_admin =?, food_truck_id =?, warehouse_id =?  WHERE id = ?', [
+        $rows = $this->dbManager->exec('UPDATE user SET firstname =?, lastname =? , email =?, password =? , phone =?, points =?, street_name =?,street_number =? , city =?, is_client =?, is_worker =?, is_employe =?, is_admin =?, food_truck_id =?, warehouse_id =?  WHERE id = ?', [
             $user->getFirstname(),
             $user->getLastname(),
             $user->getEmail(),
             $user->getPassword(),
             $user->getPhone(),
+            $user->getPoints(),
             $user->getStreetName(),
             $user->getStreetNumber(),
             $user->getCity(),

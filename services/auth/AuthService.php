@@ -115,6 +115,7 @@ class AuthService
             "password" => $userData['password'],
             "email" => $userData['email'],
             "phone" => $userData['phone'],
+            "points" => $userData['points'],
             "street_name" => $userData['street_name'],
             "street_number" => $userData['street_number'],
             "city" => $userData['city'],

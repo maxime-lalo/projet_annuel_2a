@@ -7,7 +7,8 @@ if(isset($json['id']) && isset($json['firstname']) &&
    isset($json['email']) && isset($json['phone']) && 
    isset($json['street_name']) && isset($json['street_number']) && 
    isset($json['city']) && isset($json['is_client']) && 
-   isset($json['is_worker']) && isset($json['street_number']) && isset($json['is_admin'])){
+   isset($json['is_worker']) && isset($json['street_number']) && 
+   isset($json['is_admin']) && isset($json['points'])){
     $userTest = $uRepo->getOneById($json['id']);
     if($userTest != null){
         if(isset($json['truck'])){

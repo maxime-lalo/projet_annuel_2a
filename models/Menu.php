@@ -42,7 +42,7 @@ class Menu
      * Set the value of name
      *
      */ 
-    public function setName($name):void
+    public function setName(string $name):void
     {
         $this->name = $name;
     }
@@ -59,7 +59,7 @@ class Menu
      * Set the value of recipes
      *
      */ 
-    public function setRecipes($recipes):void
+    public function setRecipes(array $recipes):void
     {
         $this->recipes = $recipes;
     }
@@ -76,7 +76,7 @@ class Menu
      * Set the value of ingredients
      *
      */ 
-    public function setIngredients($ingredients):void
+    public function setIngredients(array $ingredients):void
     {
         $this->ingredients = $ingredients;
     }
@@ -93,7 +93,7 @@ class Menu
      * Set the value of price
      *
      */ 
-    public function setPrice($price):void
+    public function setPrice(float $price):void
     {
         $this->price = $price;
     }

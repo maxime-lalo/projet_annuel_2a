@@ -3,7 +3,7 @@ $jsonText = file_get_contents('php://input');
 $json = json_decode($jsonText, true);
 //echo count($json);
 if (isset($json['firstname']) && isset($json['lastname']) &&
-    isset($json['password']) && isset($json['email']) && isset($json['phone'])
+    isset($json['password']) && isset($json['email']) && isset($json['phone']) && isset($json['points'])
     && isset($json['city']) && isset($json['street_name']) && isset($json['street_number'])) {
 
     $manager = new DatabaseManager();

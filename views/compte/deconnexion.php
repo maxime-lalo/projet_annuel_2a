@@ -1,7 +1,9 @@
 <?php
+session_start();
 
-setcookie('user_id', "", time() - 3600, '/');
-unset($_COOKIE['user_id']);
+if (isset($_COOKIE['user_id'])){
+    unset($_COOKIE['user_id']);
+    setcookie('user_id',null, -1, '/');
+}
 session_destroy();
-
-header('Location: connexion');
+header("Location: connexion");

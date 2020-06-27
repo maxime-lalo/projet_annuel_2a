@@ -10,6 +10,7 @@ class User implements JsonSerializable
     private string $password;
     private string $email;
     private string $phone;
+    private ?int $points;
     private string $street_name;
     private int $street_number;
     private string $city;
@@ -31,6 +32,7 @@ class User implements JsonSerializable
         $this->firstname = $user['firstname'];
         $this->lastname = $user['lastname'];
         $this->password = $user['password'];
+        $this->points = $user['points'];
         $this->email = $user['email'];
         $this->phone = $user['phone'];
         $this->street_name = $user['street_name'];
@@ -147,6 +149,22 @@ class User implements JsonSerializable
     public function setPhone(string $phone): void
     {
         $this->phone = $phone;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPoints(): int
+    {
+        return $this->points;
+    }
+
+    /**
+     * @param int $points
+     */
+    public function setPoints(int $points): void
+    {
+        $this->points = $points;
     }
 
     /**
