@@ -13,6 +13,11 @@ if (isset($_GET['setBreakdown'])){
 <div class="container">
     <h1 id="page-title">
         <?= translate("Espace franchisé");?> - <?= translate("Mon camion");?>
+        <span class="float-right">
+            <a href="truckHistory" class="btn btn-primary mb-2">
+                <i class="fa fa-history"></i> <?= translate("Historique des pannes");?>
+            </a>
+        </span>
     </h1>
     <?php
     $truck = $tRepository->getFromUserId($user->getId());
@@ -20,7 +25,7 @@ if (isset($_GET['setBreakdown'])){
         $isOnBreakdown = $tRepository->isOnBreakdown($truck);
         if ($isOnBreakdown){
             ?>
-            <p class="lead"><?= translate("Votre camion est actuellement marqué comme en panne");?></p>
+            <p class="lead" style="color:red"><?= translate("Votre camion est actuellement marqué comme en panne");?></p>
             <?php
         }else{
             ?>
@@ -39,23 +44,19 @@ if (isset($_GET['setBreakdown'])){
             </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td><?= $truck->getBrand();?></td>
-                    <td><?= $truck->getModel();?></td>
-                    <td><?= timestampFormat($truck->getDateRegister());?></td>
-                    <td><?= timestampFormat($truck->getDateCheck());?></td>
-                    <td><?= $truck->getMileage();?></td>
-                </tr>
+            <tr>
+                <td><?= $truck->getBrand();?></td>
+                <td><?= $truck->getModel();?></td>
+                <td><?= timestampFormat($truck->getDateRegister());?></td>
+                <td><?= timestampFormat($truck->getDateCheck());?></td>
+                <td><?= $truck->getMileage();?></td>
+            </tr>
             </tbody>
         </table>
         <?php
         if (!$isOnBreakdown){
             ?>
             <a class="btn btn-danger" href="?setBreakdown=<?= $truck->getId();?>"><?= translate("Déclarer une panne");?></a>
-            <?php
-        }else{
-            ?>
-            <a class="btn btn-success" href="?cancelBreakdown=<?= $truck->getId();?>"><?= translate("Marquer le camion comme réparé");?></a>
             <?php
         }
     }else{
