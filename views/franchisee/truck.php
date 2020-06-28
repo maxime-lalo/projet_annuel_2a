@@ -3,8 +3,13 @@ require_once __DIR__ . "/../../repositories/FoodTruckRepository.php";
 require_once __DIR__ . "/../../repositories/UserRepository.php";
 $tRepository = new FoodTruckRepository();
 $uRepository = new UserRepository();
+$truck = $tRepository->getFromUserId($user->getId());
+$isOnBreakdown = $tRepository->isOnBreakdown($truck);
+
 if (isset($_GET['setBreakdown'])){
-    $tRepository->setBreakdown($tRepository->getOneById($_GET['setBreakdown']));
+    if (!$isOnBreakdown){
+        $tRepository->setBreakdown($tRepository->getOneById($_GET['setBreakdown']));
+    }
 }elseif(isset($_GET['cancelBreakdown'])){
     $tRepository->cancelBreakdown($tRepository->getOneById($_GET['cancelBreakdown']));
 }
@@ -13,16 +18,21 @@ if (isset($_GET['setBreakdown'])){
 <div class="container">
     <h1 id="page-title">
         <?= translate("Espace franchisé");?> - <?= translate("Mon camion");?>
-        <span class="float-right">
-            <a href="truckHistory" class="btn btn-primary mb-2">
-                <i class="fa fa-history"></i> <?= translate("Historique des pannes");?>
-            </a>
-        </span>
+        <?php
+        if ($truck != null){
+            ?>
+            <span class="float-right">
+                <a href="truckHistory" class="btn btn-primary mb-2">
+                    <i class="fa fa-history"></i> <?= translate("Historique des pannes");?>
+                </a>
+            </span>
+            <?php
+        }
+        ?>
     </h1>
     <?php
-    $truck = $tRepository->getFromUserId($user->getId());
+
     if ($truck != null){
-        $isOnBreakdown = $tRepository->isOnBreakdown($truck);
         if ($isOnBreakdown){
             ?>
             <p class="lead" style="color:red"><?= translate("Votre camion est actuellement marqué comme en panne");?></p>
