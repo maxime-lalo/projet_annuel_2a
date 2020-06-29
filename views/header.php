@@ -2,6 +2,22 @@
 require_once __DIR__ . "/../services/auth/AuthService.php";
 require_once __DIR__ . "/../utils/database/DatabaseManager.php";
 require_once __DIR__ . "/../services/SweetAlert.php";
+require_once __DIR__ . "/../repositories/UserRepository.php";
+
+$uRepo = new UserRepository();
+if (!isset($_SESSION['user']) && isset($_COOKIE['user_id'])){
+    $_SESSION['user'] = serialize($uRepo->getOneById($_COOKIE['user_id']));
+}
+
+if (isset($_SESSION['user'])){
+    $user = unserialize($_SESSION['user']);
+    if ($user->isWorker() && !$uRepo->hasLicense($user)){
+        $path = $path = "/".implode("/", $explodedUrl).".php";
+        if ($path != "/franchisee/payLicense.php"){
+            header("Location: /franchisee/payLicense");
+        }
+    }
+}
 $url = explode("/",$_SERVER['REQUEST_URI']);
 if (isset($_GET['pdf']) OR $url[count($url) - 1] == "deconnexion"){
 

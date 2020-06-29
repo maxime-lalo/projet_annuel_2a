@@ -63,4 +63,34 @@ class UserRepository extends AbstractRepository
             return new User($user);
         }
     }
+
+    public function hasLicense(User $user):bool{
+        $rows = $this->dbManager->find("SELECT * FROM franchisee_license WHERE id_user = ?",[
+            $user->getId()
+        ]);
+        return $rows != null;
+    }
+
+    public function payLicense(User $user):?string{
+        do{
+            $licenseId = rand(0,9) . rand(0,9) . rand(0,9) . rand(0,9) . rand(0,9) . rand(0,9) . rand(0,9) . rand(0,9) . rand(0,9) . rand(0,9);
+            $res = $this->dbManager->find("SELECT * FROM franchisee_license WHERE license_id = ?",[
+                $licenseId
+            ]);
+        }while($res);
+
+        $rows = $this->dbManager->exec("INSERT INTO franchisee_license (id_user, license_id) VALUES (?,?)",[
+            $user->getId(),
+            $licenseId
+        ]);
+        return $rows != null ? $licenseId:null;
+    }
+
+    public function getLicense(User $user):?string{
+        $rows = $this->dbManager->find("SELECT license_id FROM franchisee_license WHERE id_user = ?",[
+            $user->getId()
+        ]);
+
+        return $rows != null ? $rows['license_id']:null;
+    }
 }
