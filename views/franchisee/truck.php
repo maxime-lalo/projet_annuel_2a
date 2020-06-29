@@ -4,7 +4,9 @@ require_once __DIR__ . "/../../repositories/UserRepository.php";
 $tRepository = new FoodTruckRepository();
 $uRepository = new UserRepository();
 $truck = $tRepository->getFromUserId($user->getId());
-$isOnBreakdown = $tRepository->isOnBreakdown($truck);
+if ($truck != null){
+    $isOnBreakdown = $tRepository->isOnBreakdown($truck);
+}
 
 if (isset($_GET['setBreakdown'])){
     if (!$isOnBreakdown){
