@@ -2,6 +2,7 @@
 require_once __DIR__ . "/../services/auth/AuthService.php";
 require_once __DIR__ . "/../utils/database/DatabaseManager.php";
 require_once __DIR__ . "/../services/SweetAlert.php";
+
 $url = explode("/",$_SERVER['REQUEST_URI']);
 if (isset($_GET['pdf']) OR $url[count($url) - 1] == "deconnexion"){
 
@@ -12,7 +13,7 @@ if (isset($_GET['pdf']) OR $url[count($url) - 1] == "deconnexion"){
         $user = $authService->getUserFromId($_COOKIE["user_id"]);
     }
     $uri = $_SERVER['REQUEST_URI'];
-    $page = "";
+    $page = "home";
     
     if( strpos($uri,"/compte/inscriptionFranchise") != false || strpos($uri,"/compte/inscriptionClient") != false  ){
         $page = "signup";
@@ -27,14 +28,11 @@ if (isset($_GET['pdf']) OR $url[count($url) - 1] == "deconnexion"){
     if( strpos($uri,"/franchisee/truck") != false || strpos($uri,"/franchisee/order/new") != false){
         $page = "worker";
     }
-    if( strpos($uri,"/client/order/order") != false || strpos($uri,"/client/history") != false || strpos($uri,"/client/trucksMap") != false ){
+    if( strpos($uri,"/client/order/order") != false || strpos($uri,"/client/history") != false || strpos($uri,"/client/trucksMap") != false ||strpos($uri,"client/order/new")){
         $page = "client";
     }
     if( strpos($uri,"/compte/compte") != false || strpos($uri,"/compte/deconnexion") != false){
         $page = "account";
-    }
-    if( $page == ""){
-        $page = "home";
     }
     ?>
     <!DOCTYPE html>

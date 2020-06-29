@@ -32,12 +32,13 @@ class User implements JsonSerializable
         $this->firstname = $user['firstname'];
         $this->lastname = $user['lastname'];
         $this->password = $user['password'];
-        $this->points = $user['points'];
+        $this->points = isset($user['points'])?$user['points']:0;
         $this->email = $user['email'];
         $this->phone = $user['phone'];
         $this->street_name = $user['street_name'];
         $this->street_number = $user['street_number'];
         $this->city = $user['city'];
+        
 
         $this->is_worker = isset($user['is_worker'])?$user['is_worker']:0;
         $this->is_client = isset($user['is_client'])?$user['is_client']:0;

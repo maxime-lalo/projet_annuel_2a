@@ -72,9 +72,9 @@ $directions_url = 'https://www.google.com/maps/dir/?api=1&travelmode=walking&ori
                         <a class="btn btn-success" title="<?= translate("Ouvrir dans maps");?>" data-toggle="tooltip" href="<?= $directions_url.urlencode($foodTruck->getFullAddress())?>">
                             <i class="fas fa-map-pin"></i>
                         </a>
-                        <button class="btn btn-primary" title="<?= translate("Commander en ligne");?>" data-toggle="tooltip" >
+                        <a class="btn btn-primary" title="<?= translate("Commander en ligne");?>" data-toggle="tooltip" href="new?truck_id=<?= $foodTruck->getId()?>" >
                             <i class="fas fa-shopping-basket"></i>
-                        </button>
+                        </a>
                     </td>
                 </tr>
                 <?php

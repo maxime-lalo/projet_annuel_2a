@@ -65,20 +65,30 @@ class MenuRepository extends AbstractRepository
 
     public function getAllFromTruck(int $truckId):array{
         $rRepo = new RecipeRepository();
-		$menus = $this->dbManager->getAll("SELECT * FROM foodtruck_has_menu WHERE id_foodtruck = ?",[
+		$menus = $this->dbManager->getAll("SELECT * FROM food_truck_has_menus WHERE id_foodtruck = ?",[
             $truckId
         ]);
         $return = array();
-		foreach ($menus as $menu) {
-            $recipes = $this->getAllRecipesFromMenu($menu["id"]);
-            $ingredients = $this->getAllIngredientsFromMenu($menu["id"]);
-            $keys = array("recipes", "ingredients");
-            $values = array($recipes, $ingredients);
-            $a = array_combine($keys, $values);
-            $menu += $a;
-			$return[] = new Menu($menu);
-		}
+        foreach ($menus as $menuId) {
+            $return[] = $this->getOneById($menuId["id_menu"]);
+        }
 		return $return;
     }
+    /*
+    public function getAllAvailableFromTruck(int $truckId):array{
+        $menus = $this->getAllFromTruck($truckId);
+        $rRepo = new RecipeRepository();
+        foreach($menus){
+
+        }
+		$menus = $this->dbManager->getAll("SELECT * FROM foodtruck_has_menus WHERE id_foodtruck = ?",[
+            $truckId
+        ]);
+        $return = array();
+        foreach ($menus as $menuId) {
+            $return[] = $this->getOneById($menuId["id_menu"]);
+        }
+		return $return;
+    }*/
     
 }

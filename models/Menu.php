@@ -1,12 +1,14 @@
 <?php
 
-class Menu
+class Menu implements JsonSerializable
 {
     private int $id;
     private string $name;
     private ?array $recipes;
     private ?array $ingredients;
     private float $price;
+    private int $recipes_num;
+    private int $ingredients_num;
 
     /**
      * Recipe constructor.
@@ -19,7 +21,8 @@ class Menu
         $this->ingredients = $parameters['ingredients'];
         $this->recipes = $parameters['recipes'];
         $this->price = $parameters['price'];
-
+        $this->recipes_num = $parameters['recipes_num'];
+        $this->ingredients_num = $parameters['ingredients_num'];
     }
 
     /**
@@ -96,5 +99,44 @@ class Menu
     public function setPrice(float $price):void
     {
         $this->price = $price;
+    }
+
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
+    }
+
+    /**
+     * Get the value of recipes_num
+     */ 
+    public function getRecipesNum():int
+    {
+        return $this->recipes_num;
+    }
+
+    /**
+     * Set the value of recipes_num
+     *
+     */ 
+    public function setRecipesNum(int $recipes_num):void
+    {
+        $this->recipes_num = $recipes_num;
+    }
+
+    /**
+     * Get the value of ingredients_num
+     */ 
+    public function getIngredientsNum():int
+    {
+        return $this->ingredients_num;
+    }
+
+    /**
+     * Set the value of ingredients_num
+     *
+     */ 
+    public function setIngredientsNum(int $ingredients_num):void
+    {
+        $this->ingredients_num = $ingredients_num;
     }
 }
