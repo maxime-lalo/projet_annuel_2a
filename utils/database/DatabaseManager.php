@@ -53,7 +53,7 @@ class DatabaseManager {
       echo $e->getMessage();
     }
 
-    if($statement === false) {
+    if(!isset($statement) OR $statement === false) {
       return null;
     }
     $res = $statement->execute($params);
