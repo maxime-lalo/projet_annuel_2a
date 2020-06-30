@@ -10,7 +10,6 @@ if (substr($url,-1) == '/') {
 	$url = substr($url, 0,strlen($url)-1);
 }
 $explodedUrl = explode("/", explode("?",$url)[0]);
-
 if ($explodedUrl[0] == 'public') {
 	$explode = explode('.',$url);
 	if (isset($explode[1])) {
@@ -97,12 +96,13 @@ if ($explodedUrl[0] == 'public') {
 				require_once __DIR__ . '/../views/errors/400.php';
 			}
 		}else{
-			if (empty($explodedUrl)) {
+			if (empty($explodedUrl) OR (isset($explodedUrl[0]) && $explodedUrl[0] == "")) {
 				http_response_code(200);
 				require_once __DIR__ . '/../views/index.php';
 			}else{
-				http_response_code(404);	
-				require_once __DIR__ . '/../views/errors/404.php';
+
+                http_response_code(404);
+                require_once __DIR__ . '/../views/errors/404.php';
 			}
 		}
 	}

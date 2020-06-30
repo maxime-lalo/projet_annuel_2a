@@ -2,9 +2,22 @@
 require_once __DIR__ . "/../services/auth/AuthService.php";
 require_once __DIR__ . "/../utils/database/DatabaseManager.php";
 require_once __DIR__ . "/../services/SweetAlert.php";
+require_once __DIR__ . "/../repositories/UserRepository.php";
 
+$uRepo = new UserRepository();
+if (!isset($_SESSION['user']) && isset($_COOKIE['user_id'])){
+    $_SESSION['user'] = serialize($uRepo->getOneById($_COOKIE['user_id']));
+}
 
-
+if (isset($_SESSION['user'])){
+    $user = unserialize($_SESSION['user']);
+    if ($user->isWorker() && !$uRepo->hasLicense($user)){
+        $path = $path = "/".implode("/", $explodedUrl).".php";
+        if ($path != "/franchisee/payLicense.php"){
+            header("Location: /franchisee/payLicense");
+        }
+    }
+}
 $url = explode("/",$_SERVER['REQUEST_URI']);
 if (isset($_GET['pdf']) OR $url[count($url) - 1] == "deconnexion"){
 
@@ -79,7 +92,7 @@ if (isset($_GET['pdf']) OR $url[count($url) - 1] == "deconnexion"){
         <div class="container d-flex align-items-center">
 
             <div class="logo mr-auto">
-                <h1 class="text-light"><a href="/<?= LANG;?>"><span>Drive n' Cook</span></a></h1>
+                <h1 class="text-light"><a href="/<?= LANG;?>"><span>Driv'N'Cook</span></a></h1>
                 <!-- Uncomment below if you prefer to use an image logo -->
                 <!-- <a href="index.html"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
             </div>
@@ -103,8 +116,10 @@ if (isset($_GET['pdf']) OR $url[count($url) - 1] == "deconnexion"){
                             <li class="drop-down <?= ($page == "admin")? 'active': "" ?>"><a href="#"><?= translate("Gestion"); ?></a>
                                 <ul>
                                     <li><a href="/<?= LANG; ?>/admin/truck/gestionTruck"><?= translate("Gestion camions"); ?></a></li>
-                                    <li><a href="/<?= LANG; ?>/admin/warehouse/gestionWarehouse"><?= translate("Gestion entrepôts"); ?></a></li>
-                                    <li><a href="/<?= LANG; ?>/admin/manageNewFranchisee"><?= translate("Gestion des franchisés"); ?></a></li>
+                                    <li><a href="/<?= LANG; ?>/admin/gestionWarehouse"><?= translate("Gestion entrepôts"); ?></a></li>
+                                    <li><a href="/<?= LANG; ?>/admin/manageFranchisees"><?= translate("Gestion des franchisés"); ?></a></li>
+                                    <li><a href="/<?= LANG; ?>/admin/truck/manageBreakdowns"><?= translate("Gestion des pannes"); ?></a></li>
+                                    <li><a href="/<?= LANG; ?>/admin/menu/listofMenu"><?= translate("Gestion des menus"); ?></a></li>
                                 </ul>
                             </li>
                             <?php
@@ -119,8 +134,9 @@ if (isset($_GET['pdf']) OR $url[count($url) - 1] == "deconnexion"){
                             <?php
                         }elseif($user->isClient()){
                             ?>
-                            <li class="drop-down <?= ($page == "client")? 'active': "" ?>"><a href="#"><?= translate("Espace client"); ?></a>
+                            <li class="drop-down"><a href="#"><?= translate("Espace client");?></a>
                                 <ul>
+                                    <li><a href="/<?= LANG;?>/client/degustation"><?= translate("Mes dégustations");?></a></li>
                                     <li><a href="/<?= LANG; ?>/client/order/order"><?= translate("Une petite faim ?"); ?></a></li>
                                     <li><a href="/<?= LANG; ?>/client/order/history"><?= translate("Historique commandes"); ?></a></li>
                                     <li><a href="/<?= LANG; ?>/client/trucksMap"><?= translate("Tous nos FoodTruck"); ?></a></li>

@@ -23,7 +23,7 @@ class FoodTruckRepository extends AbstractRepository
     }
 
     public function isOnBreakdown(FoodTruck $truck):bool{
-        $breakdown = $this->dbManager->find('SELECT * FROM food_truck_breakdown WHERE food_truck_id = ? AND state = 0',[
+        $breakdown = $this->dbManager->find('SELECT * FROM food_truck_breakdown WHERE food_truck_id = ? AND state < 2',[
             $truck->getId()
         ]);
         return $breakdown ? true:false;
@@ -63,6 +63,54 @@ class FoodTruckRepository extends AbstractRepository
         }else{
             return null;
         }
+    }
+
+    public function getBreakdownHistory(FoodTruck $truck):?array{
+        $rows = $this->dbManager->getAll("SELECT * FROM food_truck_breakdown WHERE food_truck_id = ? ORDER BY date DESC",[
+            $truck->getId()
+        ]);
+
+        if ($rows > 0){
+            return $rows;
+        }else{
+            return null;
+        }
+    }
+
+    public function getAllBreakdowns():?array
+    {
+        $rows = $this->dbManager->getAll('SELECT * FROM food_truck_breakdown WHERE state != 3 ORDER BY date DESC');
+
+        return $rows > 0 ? $rows:null;
+    }
+
+    public function payBreakdownBill(int $idBreakdown):bool{
+        return $this->changeBreakdownState($idBreakdown,3);
+    }
+
+    public function processBreakdown(int $idBreakdown)
+    {
+        return $this->changeBreakdownState($idBreakdown,1);
+    }
+
+    private function changeBreakdownState(int $idBreakdown,int $state):?bool{
+        $rows = $this->dbManager->exec("UPDATE food_truck_breakdown SET state = ? WHERE id = ?",[
+            $state,
+            $idBreakdown
+        ]);
+
+        return $rows == 1;
+    }
+
+    public function sendBreakdownBill(int $price,string $description,int $idBreakdown)
+    {
+        $rows = $this->dbManager->exec("UPDATE food_truck_breakdown SET price = ?, description = ? WHERE id = ?",[
+            intval($price),
+            $description,
+            $idBreakdown
+        ]);
+
+        return $rows == 1 ? $this->changeBreakdownState($idBreakdown,2):null;
     }
 
     public function getTrucksByDistance(array $foodTrucks, string $address):array{

@@ -97,65 +97,6 @@ if (isset($_GET['id'])){
     }
 
     $pdf->Br();
-/*
-    $vins = fetchAll("SELECT * FROM primeurs_lignes WHERE id_cmd = ?",[
-        $cmd['id']
-    ]);
-    $prixTotal = 0;
-    for ($i=0; $i < count($vins); $i++) {
-        $totalTtc = ($vins[$i]['qte_par_caisse'] * $vins[$i]['quantite_commande']) * $vins[$i]['prix_ttc'];
-        $pdf->Cell(20,10,$pdf->convertText($vins[$i]['ref']),1,0,'C');
-        $pdf->Cell(82,10,$pdf->convertText($vins[$i]['designation']),1,0,'C');
-        $pdf->Cell(15,10,$pdf->convertText($vins[$i]['quantite_commande']),1,0,'C');
-        $pdf->Cell(20,10,$pdf->convertText(($vins[$i]['prix_ttc'] * $vins[$i]['qte_par_caisse'])." €"),1,0,'C');
-        $pdf->Cell(15,10,$pdf->convertText($vins[$i]['qte_par_caisse']),1,0,'C');
-        $pdf->Cell(18,10,$pdf->convertText($vins[$i]['centilisation']." L"),1,0,'C');
-        $pdf->Cell(20,10,$pdf->convertText(numberFormat($totalTtc,'Y')." €"),1,1,'C');
-
-        $prixTotal += $totalTtc;
-    }
-
-
-    $pdf->SetFont('Times','B',8);
-    $pdf->Cell(170,10,$pdf->convertText("Total TTC"),1,0,'R');
-    $pdf->Cell(20,10,$pdf->convertText(numberFormat($prixTotal,'Y')." €"),1,1,'C');
-
-    $pdf->Cell(0,5,"",0,1);
-
-    $pdf->Cell(47,10,$pdf->convertText("Gérant"),1,0,'C');
-    $pdf->SetFont('Times','',8);
-    $pdf->Cell(48,10,$pdf->convertText($cmd['n_gerant']),1,0,'C');
-    $pdf->SetFont('Times','B',8);
-    $pdf->Cell(47,10,$pdf->convertText("Succursale"),1,0,'C');
-    $pdf->SetFont('Times','',8);
-    $pdf->Cell(48,10,$pdf->convertText($cmd['n_succursale']),1,1,'C');
-
-    $pdf->SetFont('Times','B',8);
-    $pdf->Cell(47,10,$pdf->convertText("N° Ordre"),1,0,'C');
-    $pdf->SetFont('Times','',8);
-    $pdf->Cell(48,10,$pdf->convertText($cmd['n_ordre']),1,0,'C');
-    $pdf->SetFont('Times','B',8);
-    $pdf->Cell(47,10,$pdf->convertText("N° Ticket"),1,0,'C');
-    $pdf->SetFont('Times','',8);
-    $pdf->Cell(48,10,$pdf->convertText($cmd['n_ticket']),1,1,'C');
-
-    $pdf->Cell(0,5,"",0,1);
-
-    $x = $pdf->getX();
-    $y = $pdf->getY();
-
-    $pdf->Image('../image/checkbox.png',$x+3,$y+3);
-    $pdf->setX($x);
-    $pdf->setY($y);
-    $pdf->Cell(0,10,$pdf->convertText("            Le client déclare avoir pris connaissance des CGV et déclare les accepter dans leur intégralités."),1,1,'L');
-    $pdf->Cell(47,10,$pdf->convertText("Date"),1,0);
-    $pdf->Cell(48,10,$pdf->convertText(date('d/m/Y')),1,0);
-    $pdf->Cell(47,10,$pdf->convertText("Signature"),1,0);
-    $pdf->Cell(48,10,$pdf->convertText(""),1,1);
-
-    $pdf->Cell(0,5,"",0,1);
-    $pdf->SetFont('Times','',6);
-*/
     $pdf->Output();
 }else{
     echo translate("Aucun id renseigné");

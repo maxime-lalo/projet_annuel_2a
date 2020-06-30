@@ -1,15 +1,24 @@
 <?php
 require_once __DIR__ . '/../../services/auth/AuthService.php';
 require_once __DIR__ . '/../../utils/database/DatabaseManager.php';
+require_once __DIR__ . '/../../repositories/UserRepository.php';
+
 if(isset($_POST['mail']) && isset($_POST['password'])){
     $manager = new DatabaseManager();
     $authService = new AuthService($manager);
     $user = $authService->log($_POST['mail'],$_POST['password']);
+
+    $uRepo = new UserRepository();
+
     if($user >= 0){
         if(isset($_POST['check'])) {
             setcookie('user_id', $user, time() + 2592000,"/");
+
+
+            $_SESSION['user'] = serialize($uRepo->getOneById($user));
             header('Location: compte');
         }else{
+            $_SESSION['user'] = serialize($uRepo->getOneById($user));
             setcookie('user_id', $user,time() + 3600,"/");
             header('Location: compte');
         }
