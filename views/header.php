@@ -69,7 +69,7 @@ if (isset($_GET['pdf']) OR $url[count($url) - 1] == "deconnexion"){
         <div class="container d-flex align-items-center">
 
             <div class="logo mr-auto">
-                <h1 class="text-light"><a href="/<?= LANG;?>"><span>Projet annuel</span></a></h1>
+                <h1 class="text-light"><a href="/<?= LANG;?>"><span>Driv'N'Cook</span></a></h1>
                 <!-- Uncomment below if you prefer to use an image logo -->
                 <!-- <a href="index.html"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
             </div>
@@ -105,6 +105,14 @@ if (isset($_GET['pdf']) OR $url[count($url) - 1] == "deconnexion"){
                                 <ul>
                                     <li><a href="/<?= LANG; ?>/franchisee/truck"><?= translate("Gestion camion"); ?></a></li>
                                     <li><a href="/<?= LANG; ?>/franchisee/order/new"><?= translate("Faire une commande"); ?></a></li>
+                                </ul>
+                            </li>
+                            <?php
+                        }elseif($user->isClient()){
+                            ?>
+                            <li class="drop-down"><a href="#"><?= translate("Espace client");?></a>
+                                <ul>
+                                    <li><a href="/<?= LANG;?>/client/degustation"><?= translate("Mes dégustations");?></a></li>
                                 </ul>
                             </li>
                             <?php
