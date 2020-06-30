@@ -24,7 +24,6 @@ else if(isset($_POST['conf_mdp']) && isset($_POST['submitMdp']) && isset($_POST[
     else {
         $error = "Les mot de passe ne correspondent pas";
     }
-
 }
 else {
     if ($user->isWorker()) {

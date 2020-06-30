@@ -86,15 +86,14 @@ class FoodTruckRepository extends AbstractRepository
                             array_push($temp_array, $trucks_ordered[$i]);
                         }
                     }
-                    
                     if(!$truck_set)array_push($temp_array, $foodTruck);
-
                     $trucks_ordered = $temp_array;
                 }else{
                     array_push($trucks_ordered, $foodTruck);
                 }
             }
         }
+        $trucks_ordered = array_unique($trucks_ordered, SORT_REGULAR);
         return $trucks_ordered;
     }
 }

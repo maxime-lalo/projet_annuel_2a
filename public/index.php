@@ -88,7 +88,7 @@ if ($explodedUrl[0] == 'public') {
 		require_once __DIR__ . '/../views/index.php';
 	}else{
 		$path = "/".implode("/", $explodedUrl).".php";
-		if (file_exists(__DIR__ . '/../views/' . $path)) {
+		if (file_exists(__DIR__ . '/../views/' . $path) ) {
 			if (in_array(LANG,POSSIBLE_LANGUAGES)) {
 				http_response_code(200);
 				require_once __DIR__ . '/../views/' . $path;

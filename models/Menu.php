@@ -9,6 +9,8 @@ class Menu implements JsonSerializable
     private float $price;
     private int $recipes_num;
     private int $ingredients_num;
+    private int $quantity;
+    private string $uuid;
 
     /**
      * Recipe constructor.
@@ -23,6 +25,8 @@ class Menu implements JsonSerializable
         $this->price = $parameters['price'];
         $this->recipes_num = $parameters['recipes_num'];
         $this->ingredients_num = $parameters['ingredients_num'];
+        $this->quantity = (isset($parameters['quantity']))?$parameters['quantity'] : 1;
+        $this->uuid = (isset($parameters['uuid']))?$parameters['uuid'] : 'none';
     }
 
     /**
@@ -138,5 +142,39 @@ class Menu implements JsonSerializable
     public function setIngredientsNum(int $ingredients_num):void
     {
         $this->ingredients_num = $ingredients_num;
+    }
+
+    /**
+     * Get the value of quantity
+     */ 
+    public function getQuantity(): int
+    {
+        return $this->quantity;
+    }
+
+    /**
+     * Set the value of quantity
+     *
+     */ 
+    public function setQuantity(int $quantity)
+    {
+        $this->quantity = $quantity;
+    }
+
+    /**
+     * Get the value of uuid
+     */ 
+    public function getUuid(): string
+    {
+        return $this->uuid;
+    }
+
+    /**
+     * Set the value of uuid
+     *
+     */ 
+    public function setUuid(string $uuid)
+    {
+        $this->uuid = $uuid;
     }
 }

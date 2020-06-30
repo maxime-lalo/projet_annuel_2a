@@ -109,7 +109,7 @@ $user = $uRepo->getOneById($_COOKIE['user_id']);
 </div>
 <script type="text/javascript">
     var basket = [];
-    var validateOrderButton = '<tr id="validateOrder"><td colspan="3" class="text-center"><a class="btn btn-success" onclick(createOrder(<?= $user->getId()?>))><?= translate('Passer la commande')?></a></td></tr>'; 
+    var validateOrderButton = '<tr id="validateOrder"><td colspan="3" class="text-center"><a class="btn btn-success" onclick="createOrder(<?= $user->getId().','.$_GET['truck_id']?>)"><?= translate('Passer la commande')?></a></td></tr>'; 
     $(window).bind('beforeunload', function(){
         return '<?= translate("Si vous quittez ou recharger cette page votre panier sera perdu !")?>';
     });
@@ -160,10 +160,9 @@ $user = $uRepo->getOneById($_COOKIE['user_id']);
         uniqueId += menu.ingredients[j].id;
         
         uniqueId = window.btoa(unescape(encodeURIComponent( menu.id+''+uniqueId ))).replace("=","");
-        console.log(uniqueId);
         html = '<tr id="'+uniqueId+'"><td >'+ noHash;
         html += `</td><td id="`+uniqueId+`quantity">1</td><td><button class="btn btn-danger" title="<?= translate("Supprimer");?>"data-toggle="tooltip" onclick="deleteItem('`+uniqueId+`')"><i class="fas fa-trash"></i></button></td></tr>`;
-        menu.unique_id = uniqueId;
+        menu.uuid = uniqueId;
         if($('#basket').html().indexOf('style="background-color:lightgray"') >= 0){
             $('#basket').html(html+validateOrderButton);
             basket.push(menu);
@@ -171,7 +170,7 @@ $user = $uRepo->getOneById($_COOKIE['user_id']);
             if($('#'+uniqueId).length != 0){
                 var num = $('#'+uniqueId+'quantity').html();
                 $('#'+uniqueId+'quantity').html(parseInt(num)+1);
-                basket.find(x => x.unique_id === uniqueId).quantity += 1;
+                basket.find(x => x.uuid === uniqueId).quantity += 1;
             }else{
                 $('#validateOrder').remove();
                 basketHtml = $('#basket').html();
@@ -179,7 +178,6 @@ $user = $uRepo->getOneById($_COOKIE['user_id']);
                 basket.push(menu);
             }
         }
-        
     }
 
     function deleteItem(idItem){
@@ -187,7 +185,7 @@ $user = $uRepo->getOneById($_COOKIE['user_id']);
             var num = $('#'+idItem+'quantity').html();
             if(num > 1){
                 $('#'+idItem+'quantity').html(parseInt(num)-1);
-                basket.find(x => x.unique_id === idItem).quantity -= 1;
+                basket.find(x => x.uuid === idItem).quantity -= 1;
             }else{
                 if($('#basket').children().length <= 2){
                     $('#'+idItem).remove();
@@ -196,31 +194,82 @@ $user = $uRepo->getOneById($_COOKIE['user_id']);
                 }else{
                     $('#'+idItem).remove();
                 }
-                delete basket.find(x => x.unique_id === idItem);
+                delete basket.find(x => x.uuid === idItem);
             }
         }
     }
 
-    async function createOrder(idMenu) {
-        const {value: quantity} = await Swal.fire({
-            title: 'Combien voulez-vous en commander ?',
-            input: 'number',
-            showCancelButton: true,
-            confirmButtonText: '<i class="fa fa-plus"></i> Ajouter au panier',
-            showLoaderOnConfirm: true,
-            cancelButtonText: '<i class="fa fa-times"></i> Annuler',
-            inputValidator: (quantity) => {
-                if (!quantity || quantity <= 0) {
-                    return "Vous devez saisir une quantité valide"
-                }
-            }
+    async function createOrder(idUser, idTruck) {
+        var totalPrice = 0;
+        orderReview = '';
+        $.each(basket, function (index, menu){
+            orderReview +=
+            '<tr>'+
+                '<td>'+menu.name+'</td>'+
+                '<td>';
+                    $.each(menu.recipes, function (index, recipe){
+                        orderReview += recipe.name+' + ';
+                    })
+                    for(var i = 0; i < menu.ingredients.length - 1; i++){
+                        orderReview += menu.ingredients[i].name+' + ';
+                    }
+                    orderReview += menu.ingredients[i].name+
+                '</td>';
+                orderReview +=
+                '<td>'+menu.quantity+'</td>'+
+                '<td>'+parseInt(menu.price)*parseInt(menu.quantity)+' €</td>'+
+            '</tr>';
+            totalPrice += parseInt(menu.price)*parseInt(menu.quantity);
         })
-
-        if (quantity){
-            redirectPost("",{
-                quantity: quantity,
-                recipe: idMenu
-            });
-        }
+        orderReview += 
+        '<tr style="background-color:lightgray">'+
+            '<td colspan="4">Prix Total: '+totalPrice+' €</td>'+
+        '</tr>';
+        Swal.fire({
+            title: '<?= translate("Tout est bon pour vous ?")?>',
+            html:
+                    '<table class="table table-bordered text-center"> ' +
+                        '<thead>' +
+                            '<tr>' +
+                                '<th><?= translate("Menu")?></th>' +
+                                '<th><?= translate("Contient")?></th>' +
+                                '<th><?= translate("Quantité")?></th>' +
+                                '<th><?= translate("Prix")?> </th>' +
+                            '</tr>' +
+                        '</thead>' +
+                        '<tbody>' +
+                            orderReview +
+                        '</tbody>' +
+                    '</table>',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#4AD710',
+            cancelButtonColor: '#d33',
+            cancelButtonText: '<?= translate("Annuler")?>',
+            confirmButtonText: '<?= translate("Je valide ma commande !")?>'
+            }).then((result) => {
+                if (result.value) {
+                    order = {id_user: idUser, id_food_truck: idTruck, menus: basket}
+                    console.log(JSON.stringify(order));
+                    $.ajax({
+                        url : '/api/order',
+                        type: 'POST',
+                        data: JSON.stringify(order)
+                    }).done(function(data){
+                        if(data.status == "success"){
+                            basket = [];
+                            $('#validateOrder').remove();
+                            $('#basket').html('<tr style="background-color:lightgray"><td colspan="3"><?= translate("Votre panier est vide");?></td></tr>')
+                            Swal.fire({
+                                position: 'top-end',
+                                icon: 'success',
+                                title: '<?=translate('Votre commande a été transmise avec succès !')?>',
+                                showConfirmButton: false,
+                                timer: 2000
+                            })
+                        }
+                    });
+                }
+        })
     }
 </script>

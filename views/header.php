@@ -3,6 +3,8 @@ require_once __DIR__ . "/../services/auth/AuthService.php";
 require_once __DIR__ . "/../utils/database/DatabaseManager.php";
 require_once __DIR__ . "/../services/SweetAlert.php";
 
+
+
 $url = explode("/",$_SERVER['REQUEST_URI']);
 if (isset($_GET['pdf']) OR $url[count($url) - 1] == "deconnexion"){
 
@@ -22,13 +24,14 @@ if (isset($_GET['pdf']) OR $url[count($url) - 1] == "deconnexion"){
         $page = "signin";
     }
     if( strpos($uri,"/admin/truck/gestionTruck") != false || 
-        strpos($uri,"/admin/warehouse/gestionWarehouse") != false || strpos($uri,"/admin/manageNewFranchisee") != false ){
+        strpos($uri,"/admin/warehouse/gestionWarehouse") != false || strpos($uri,"/admin/manageNewFranchisee") != false || 
+        strpos($uri,"/admin/manageFranchisee") != false){
         $page = "admin";
     }
     if( strpos($uri,"/franchisee/truck") != false || strpos($uri,"/franchisee/order/new") != false){
         $page = "worker";
     }
-    if( strpos($uri,"/client/order/order") != false || strpos($uri,"/client/history") != false || strpos($uri,"/client/trucksMap") != false ||strpos($uri,"client/order/new")){
+    if( strpos($uri,"/client/order/order") != false || strpos($uri,"/client/order/history") != false || strpos($uri,"/client/trucksMap") != false ||strpos($uri,"client/order/new")){
         $page = "client";
     }
     if( strpos($uri,"/compte/compte") != false || strpos($uri,"/compte/deconnexion") != false){
@@ -119,7 +122,7 @@ if (isset($_GET['pdf']) OR $url[count($url) - 1] == "deconnexion"){
                             <li class="drop-down <?= ($page == "client")? 'active': "" ?>"><a href="#"><?= translate("Espace client"); ?></a>
                                 <ul>
                                     <li><a href="/<?= LANG; ?>/client/order/order"><?= translate("Une petite faim ?"); ?></a></li>
-                                    <li><a href="/<?= LANG; ?>/client/history"><?= translate("Historique commandes"); ?></a></li>
+                                    <li><a href="/<?= LANG; ?>/client/order/history"><?= translate("Historique commandes"); ?></a></li>
                                     <li><a href="/<?= LANG; ?>/client/trucksMap"><?= translate("Tous nos FoodTruck"); ?></a></li>
                                 </ul>
                             </li>

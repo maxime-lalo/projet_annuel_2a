@@ -74,6 +74,8 @@ class MenuRepository extends AbstractRepository
         }
 		return $return;
     }
+
+    
     /*
     public function getAllAvailableFromTruck(int $truckId):array{
         $menus = $this->getAllFromTruck($truckId);
