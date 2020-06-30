@@ -5,6 +5,8 @@ class Event implements JsonSerializable
     private string $name;
     private DateTime $date;
     private int $type;
+    private string $place;
+    private User $franchisee;
 
     /**
      * Event constructor.
@@ -17,6 +19,10 @@ class Event implements JsonSerializable
         $this->name = $parameters['name'];
         $this->date = new DateTime($parameters['date']);
         $this->type = $parameters['type'];
+        $this->place = $parameters['place'];
+
+        $uRepo = new UserRepository();
+        $this->franchisee = $uRepo->getOneById($parameters['franchisee']);
     }
 
     /**
@@ -82,6 +88,39 @@ class Event implements JsonSerializable
     {
         $this->type = $type;
     }
+
+    /**
+     * @return mixed|string
+     */
+    public function getPlace()
+    {
+        return $this->place;
+    }
+
+    /**
+     * @param mixed|string $place
+     */
+    public function setPlace($place): void
+    {
+        $this->place = $place;
+    }
+
+    /**
+     * @return User
+     */
+    public function getFranchisee(): User
+    {
+        return $this->franchisee;
+    }
+
+    /**
+     * @param User $franchisee
+     */
+    public function setFranchisee(User $franchisee): void
+    {
+        $this->franchisee = $franchisee;
+    }
+
 
     public function jsonSerialize()
     {
