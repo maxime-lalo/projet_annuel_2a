@@ -107,6 +107,7 @@ class MenuRepository extends AbstractRepository
                     $recipe->getId()
                 ]);
             }
+            return 1;
         }
         else{
             return null;
