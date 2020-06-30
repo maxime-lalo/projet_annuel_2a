@@ -130,7 +130,6 @@ class MenuRepository extends AbstractRepository
             if($menu->getIngredients() != null){
             $ingredients = $menu->getIngredients();
             foreach($ingredients as $ingredient) {
-                var_dump($ingredient);
                 $rows = $this->dbManager->exec("INSERT INTO menu_content (id_menu,id_ingredient,id_recipe) VALUES (?,?,?)", [
                     $idMenu,
                     $ingredient->getId(),
