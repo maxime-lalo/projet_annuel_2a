@@ -23,9 +23,7 @@ else if(isset($_POST['conf_mdp']) && isset($_POST['submitMdp']) && isset($_POST[
     $user = $authService->updateMdpUser($user_id , $_POST['mdp']);
     else {
         $error = "Les mot de passe ne correspondent pas";
-
     }
-
 }
 else {
     if ($user->isWorker()) {
@@ -54,7 +52,7 @@ else {
                 <div class="text-center">
                     <img src="http://ssl.gstatic.com/accounts/ui/avatar_2x.png" class="avatar img-circle img-thumbnail"
                          alt="avatar">
-                    <h6>Upload a different photo...</h6>
+                    <h6><?= translate("Changé de photo de profil")?></h6>
                     <input type="file" class="text-center center-block file-upload">
                 </div>
                 </hr><br>
@@ -62,12 +60,12 @@ else {
             </div><!--/col-3-->
             <div class="col-sm-9">
                 <ul class="nav nav-tabs">
-                    <li class="active"><a data-toggle="tab" href="#settings">Informations</a></li>
+                    <li class="active"><a data-toggle="tab" href="#settings"><?= translate("Informations")?></a></li>
                     <?php if ($user->isWorker()) { ?>
-                        <li><a data-toggle="tab" href="#camions">Camion</a></li>
-                        <li><a data-toggle="tab" href="#entrepots">Entrepot</a></li>
+                        <li><a data-toggle="tab" href="#camions"><?= translate("Camion")?></a></li>
+                        <li><a data-toggle="tab" href="#entrepots"><?= translate("Entrepot")?></a></li>
                     <?php } ?>
-                       <li><a data-toggle="tab" href="#mdp">Mot de passe</a></li>
+                       <li><a data-toggle="tab" href="#mdp"><?= translate("Mot de passe")?></a></li>
                 </ul>
 
 
@@ -79,7 +77,7 @@ else {
                             <div class="form-group">
 
                                 <div class="col-xs-6">
-                                    <label for="firstname"><h4>First name</h4></label>
+                                    <label for="firstname"><h4><?= translate("Prénom")?></h4></label>
                                     <input required type="text" class="form-control" name="firstname"
                                            value="<?= $user->getFirstname(); ?>">
                                 </div>
@@ -87,7 +85,7 @@ else {
                             <div class="form-group">
 
                                 <div class="col-xs-6">
-                                    <label for="lastname"><h4>Last name</h4></label>
+                                    <label for="lastname"><h4><?= translate("Nom")?></h4></label>
                                     <input required type="text" class="form-control" name="lastname"
                                            value="<?= $user->getLastname(); ?>">
                                 </div>
@@ -96,7 +94,7 @@ else {
                             <div class="form-group">
 
                                 <div class="col-xs-6">
-                                    <label for="phone"><h4>Phone</h4></label>
+                                    <label for="phone"><h4><?= translate("Téléphone")?></h4></label>
                                     <input required type="tel" class="form-control" name="phone"
                                            pattern="^((\+\d{1,3}(-| )?\(?\d\)?(-| )?\d{1,5})|(\(?\d{2,6}\)?))(-| )?(\d{3,4})(-| )?(\d{4})(( x| ext)\d{1,5}){0,1}$"
                                            value="<?= $user->getPhone(); ?>">
@@ -104,24 +102,24 @@ else {
                             </div>
 
                             <div class="col-xs-6">
-                                <label for="email"><h4>Email</h4></label>
+                                <label for="email"><h4><?= translate("Email")?></h4></label>
                                 <input required type="email" class="form-control" name="email"
                                        value="<?= $user->getEmail(); ?>">
                             </div>
 
                             <div class="col-xs-6">
-                                <label for="address"><h4>Rue</h4></label>
+                                <label for="address"><h4><?= translate("Rue")?></h4></label>
                                 <input required type="text" class="form-control" name="address"
                                        value="<?= $user->getStreetName(); ?>">
                             </div>
                             <div class="col-xs-6">
-                                <label for="number"><h4>Numéro</h4></label>
+                                <label for="number"><h4><?= translate("Numéro")?></h4></label>
                                 <input required type="number" class="form-control" name="number"
                                        value="<?= $user->getStreetNumber(); ?>">
                             </div>
                             <div class="form-group">
                                 <div class="col-xs-6">
-                                    <label for="city"><h4>Ville</h4></label>
+                                    <label for="city"><h4><?= translate("Ville")?></h4></label>
                                     <input required type="text" class="form-control" name="city"
                                            value="<?= $user->getCity(); ?>">
                                 </div>
@@ -130,10 +128,10 @@ else {
                                 <div class="col-xs-12">
                                     <br>
                                     <button class="btn btn-lg btn-success" type="submit" name="submit"><i
-                                                class="glyphicon glyphicon-ok-sign"></i> Save
+                                                class="glyphicon glyphicon-ok-sign"></i> <?= translate("Enregistrer modifications")?>
                                     </button>
                                     <button class="btn btn-lg" type="reset"><i class="glyphicon glyphicon-repeat"></i>
-                                        Reset
+                                    <?= translate("Annulé modifications")?>
                                     </button>
                                 </div>
                             </div>
@@ -153,18 +151,18 @@ else {
                             <div class="form-group">
 
                                 <div class="col-xs-6">
-                                    <label for="mileage"><h4>Mileage</h4></label>
+                                    <label for="mileage"><h4><?= translate("Kilométrage")?></h4></label>
                                     <input required disabled type="text" class="form-control" name="mileage"
                                            value="<?= $truck->getMileage(); ?>">
                                 </div>
                                 <div class="col-xs-6">
-                                    <label for="register"><h4>Date Register</h4></label>
+                                    <label for="register"><h4><?= translate("Date d'enregistrement'")?></h4></label>
                                     <input required disabled type="text" class="form-control" name="register"
                                            value="<?= $truck->getDateRegister(); ?>">
                                 </div>
 
                                 <div class="col-xs-6">
-                                    <label for="lastcheck"><h4>Date last check</h4></label>
+                                    <label for="lastcheck"><h4><?= translate("Date du dernier checkup")?></h4></label>
                                     <input required disabled type="text" class="form-control" name="lastcheck"
                                            value="<?= $truck->getDateCheck(); ?>">
                                 </div>
@@ -182,23 +180,23 @@ else {
                         <div class="form-group">
 
                             <div class="col-xs-6">
-                                <label for="name"><h4>Nom</h4></label>
+                                <label for="name"><h4><?= translate("Nom")?></h4></label>
                                 <input required disabled type="text" class="form-control" name="name"
                                        value="<?= $warehouse->getName(); ?>">
                             </div>
                             <div class="col-xs-6">
-                                <label for="city"><h4>Ville</h4></label>
+                                <label for="city"><h4><?= translate("Ville")?></h4></label>
                                 <input required disabled type="text" class="form-control" name="city"
                                        value="<?= $warehouse->getCity(); ?>">
                             </div>
 
                             <div class="col-xs-6">
-                                <label for="street_name"><h4>Rue</h4></label>
+                                <label for="street_name"><h4><?= translate("Rue")?></h4></label>
                                 <input required disabled type="text" class="form-control" name="street_name"
                                        value="<?= $warehouse->getStreetName(); ?>">
                             </div>
                             <div class="col-xs-6">
-                                <label for="street_number"><h4>Numéro</h4></label>
+                                <label for="street_number"><h4><?= translate("Numéro")?></h4></label>
                                 <input required disabled type="text" class="form-control" name="street_number"
                                        value="<?= $warehouse->getStreetNumber(); ?>">
                             </div>
@@ -210,21 +208,21 @@ else {
                         <form method="post" action="compte" class="form">
                         <div class="form-group">
                            <div class="col-xs-6">
-                               <label for="mdp"><h4>Nouveau mot de passe</h4></label>
-                               <input required type="password" class="form-control" name="mdp"
+                               <label for="mdp"><h4><?= translate("Nouveau mot de passe")?></h4></label>
+                               <input required type="password" class="form-control" name="mdp">
                            </div>
                         </div>
                         <div class="form-group">
                         <div class="col-xs-6">
-                            <label for="conf_mdp"><h4>Confimer mot de passe</h4></label>
-                            <input required type="password" class="form-control" name="conf_mdp"
+                            <label for="conf_mdp"><h4><?= translate("Confirmer mot de passe")?></h4></label>
+                            <input required type="password" class="form-control" name="conf_mdp">
                         </div>
                         </div>
                             <div class="form-group">
                                 <div class="col-xs-12">
                                     <br>
                         <button class="btn btn-lg btn-success" type="submit" name="submitMdp"><i
-                                    class="glyphicon glyphicon-ok-sign"></i> Save
+                                    class="glyphicon glyphicon-ok-sign"></i> <?= translate("Enregistrer")?>
                         </button>
                         </div>
                         </form>

@@ -7,15 +7,16 @@ $truck = $tRepo->getOneById($json['id']);
 
 $truck->setDateCheck($json['date']);
 $truck->setMileage($json['mileage']);
+$truck->setName($json['name']);
+$truck->setCity($json['city']);
+$truck->setZipcode($json['zipcode']);
+$truck->setStreetNumber($json['street_number']);
+$truck->setStreetName($json['street_name']);
 
 $update = $tRepo->update($truck);
 
 if ($update){
-    $encodedTruck = json_encode($truck);
-    $decode = json_decode($encodedTruck,true);
-    $decode["status"] = "success";
-    $decode["msg"] = "truck successfully updated";
-    echo json_encode($decode);
+    new JsonReturn(JsonReturn::SUCCESS,"Truck succesfully updated",200,$truck);
 }else{
-    echo json_encode(["status" => "error","msg" => "error updating"]);
+    new JsonReturn(JsonReturn::ERROR,"Error updating Truck",400);
 }

@@ -4,11 +4,17 @@
 class FoodTruck implements JsonSerializable
 {
     private int $id;
+    private string $name;
     private string $date_register;
     private ?string $date_check;
     private int $mileage;
     private string $brand;
     private string $model;
+    private string $city;
+    private string $zipcode;
+    private string $street_name;
+    private int $street_number;
+    private ?int $distance_to_client;
 
     /**
      * FoodTruck constructor.
@@ -17,11 +23,16 @@ class FoodTruck implements JsonSerializable
     public function __construct(array $truck)
     {
         $this->id = $truck['id'];
+        $this->name = $truck['name'];
         $this->date_register = $truck['date_register'];
         $this->date_check = $truck['date_last_check'];
         $this->mileage = $truck['mileage'];
         $this->brand = $truck['brand'];
         $this->model = $truck['model'];
+        $this->city = $truck['city'];
+        $this->zipcode = $truck['zipcode'];
+        $this->street_name = $truck['street_name'];
+        $this->street_number = $truck['street_number'];
     }
 
     /**
@@ -38,6 +49,22 @@ class FoodTruck implements JsonSerializable
     public function setId(int $id): void
     {
         $this->id = $id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param string $name
+     */
+    public function setName(string $name): void
+    {
+        $this->name = $name;
     }
 
     /**
@@ -118,6 +145,91 @@ class FoodTruck implements JsonSerializable
     public function setModel(string $model): void
     {
         $this->model = $model;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCity(): string
+    {
+        return $this->city;
+    }
+
+    /**
+     * @param string $city
+     */
+    public function setCity(string $city): void
+    {
+        $this->city = $city;
+    }
+
+    /**
+     * @return string
+     */
+    public function getZipcode(): string
+    {
+        return $this->zipcode;
+    }
+
+    /**
+     * @param string $zipcode
+     */
+    public function setZipcode(string $zipcode): void
+    {
+        $this->zipcode = $zipcode;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStreetName(): string
+    {
+        return $this->street_name;
+    }
+
+    /**
+     * @param string $street_name
+     */
+    public function setStreetName(string $street_name): void
+    {
+        $this->street_name = $street_name;
+    }
+
+    /**
+     * @return int
+     */
+    public function getStreetNumber(): int
+    {
+        return $this->street_number;
+    }
+
+    /**
+     * @param int $street_number
+     */
+    public function setStreetNumber(int $street_number): void
+    {
+        $this->street_number = $street_number;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDistanceToClient(): int
+    {
+        return $this->distance_to_client;
+    }
+
+    /**
+     * @param int $distance_to_client
+     */
+    public function setDistanceToClient(int $distance_to_client): void
+    {
+        $this->distance_to_client = $distance_to_client;
+    }
+
+    public function getFullAddress():string
+    {
+        return $this->getStreetNumber().' '.$this->getStreetName().', '.$this->getZipcode().' '.$this->getCity();
     }
 
     public function jsonSerialize()

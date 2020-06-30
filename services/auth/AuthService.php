@@ -115,12 +115,13 @@ class AuthService
             "password" => $userData['password'],
             "email" => $userData['email'],
             "phone" => $userData['phone'],
+            "points" => $userData['points'],
             "street_name" => $userData['street_name'],
             "street_number" => $userData['street_number'],
             "city" => $userData['city'],
             "is_client" => $userData['is_client'],
             "is_worker" => $userData['is_worker'],
-            "FOOD_TRUCK_id" => $userData['food_truck_id'],
+            "food_truck_id" => $userData['food_truck_id'],
             "is_admin" => $userData['is_admin'],
         ]);
 

@@ -18,7 +18,7 @@ if ( isset($_GET['id']) && isset($_GET['type']) ){
     <h1 id="page-title">
         <?= translate("Gestion des franchisés");?>
         <span class="float-right">
-            <a href="viewFranchisee" class="btn btn-primary mb-2">
+            <a href="manageFranchisee" class="btn btn-primary mb-2">
                 <i class="fa fa-eye"></i>
                 <?= translate("Voir tous les franchisés");?>
             </a>

@@ -10,6 +10,7 @@ class User implements JsonSerializable
     private string $password;
     private string $email;
     private string $phone;
+    private ?int $points;
     private string $street_name;
     private int $street_number;
     private string $city;
@@ -31,11 +32,13 @@ class User implements JsonSerializable
         $this->firstname = $user['firstname'];
         $this->lastname = $user['lastname'];
         $this->password = $user['password'];
+        $this->points = isset($user['points'])?$user['points']:0;
         $this->email = $user['email'];
         $this->phone = $user['phone'];
         $this->street_name = $user['street_name'];
         $this->street_number = $user['street_number'];
         $this->city = $user['city'];
+        
 
         $this->is_worker = isset($user['is_worker'])?$user['is_worker']:0;
         $this->is_client = isset($user['is_client'])?$user['is_client']:0;
@@ -147,6 +150,22 @@ class User implements JsonSerializable
     public function setPhone(string $phone): void
     {
         $this->phone = $phone;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPoints(): int
+    {
+        return $this->points;
+    }
+
+    /**
+     * @param int $points
+     */
+    public function setPoints(int $points): void
+    {
+        $this->points = $points;
     }
 
     /**
@@ -269,12 +288,23 @@ class User implements JsonSerializable
         return $this->is_admin;
     }
     
-    public function getTruck():?FoodTruck{
+    /**
+     * @return mixed|FoodTruck|null
+     */
+    public function getTruck():?object{
         if (isset($this->truck)){
             return $this->truck;
         }else{
-            return null;
+            return new stdClass();
         }
+    }
+
+    /**
+     * @param mixed|object|null $truck
+     */
+    public function setTruck(object $truck): void
+    {
+        if($truck instanceof FoodTruck)$this->truck = $truck;
     }
 
     /**
@@ -288,17 +318,21 @@ class User implements JsonSerializable
     /**
      * @return mixed|Warehouse|null
      */
-    public function getWarehouse()
+    public function getWarehouse():object
     {
-        return $this->warehouse;
+        if (isset($this->warehouse)){
+            return $this->warehouse;
+        }else{
+            return new stdClass();
+        }
     }
 
     /**
-     * @param mixed|Warehouse|null $warehouse
+     * @param mixed|object|null $warehouse
      */
-    public function setWarehouse($warehouse): void
-    {
-        $this->warehouse = $warehouse;
+    public function setWarehouse(object $warehouse): void
+    {   
+        if($warehouse instanceof Warehouse)$this->warehouse = $warehouse;
     }
 
 

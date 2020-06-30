@@ -25,6 +25,11 @@ $tRepo = new FoodTruckRepository();
             <th><?= translate("Date du dernier checkup");?></th>
             <th><?= translate("Kilométrage");?></th>
             <th><?= translate("Franchisé");?></th>
+            <th><?= translate("Nom");?></th>
+            <th><?= translate("Ville");?></th>
+            <th><?= translate("Code postale");?></th>
+            <th><?= translate("N°");?></th>
+            <th><?= translate("Rue");?></th>
             <th><?= translate("Actions");?></th>
         </tr>
         </thead>
@@ -48,13 +53,18 @@ $tRepo = new FoodTruckRepository();
                         if ($franchisee != null){
                             $fullName = strtoupper($franchisee->getLastname()) . " " . $franchisee->getFirstname();
                             ?>
-                            <a href="#" target="blank"><?= $fullName;?></a>
+                            <a href="../manageFranchisee?id=<?= $franchisee->getId()?>" target="blank"><?= $fullName;?></a>
                             <?php
                         }else{
                             echo translate("Aucun");
                         }
                         ?>
                     </td>
+                    <td class="inputName<?= $truck->getId();?>"><?= $truck->getName();?></td>
+                    <td class="inputCity<?= $truck->getId();?>"><?= $truck->getCity();?></td>
+                    <td class="inputZipcode<?= $truck->getId();?>"><?= $truck->getZipcode();?></td>
+                    <td class="inputStreetNumber<?= $truck->getId();?>"><?= $truck->getStreetNumber();?></td>
+                    <td class="inputStreetName<?= $truck->getId();?>"><?= $truck->getStreetName();?></td>
                     <td id="actions<?= $truck->getId();?>">
                         <button class="btn btn-danger" title="<?= translate("Supprimer");?>" data-toggle="tooltip" onclick="deleteTruck(<?= $truck->getId();?>)">
                             <i class="fas fa-trash"></i>
@@ -110,17 +120,33 @@ $tRepo = new FoodTruckRepository();
         $('[data-toggle="tooltip"]').tooltip('dispose');
         var date = $('.inputDate' + truck);
         var mileage = $('.inputMileage' + truck);
+        var name = $('.inputName' + truck);
+        var city = $('.inputCity' + truck);
+        var zipcode = $('.inputZipcode' + truck);
+        var streetNumber = $('.inputStreetNumber' + truck);
+        var streetName = $('.inputStreetName' + truck);
 
         var dateVal = date.html();
         var mileageVal = mileage.html();
+        var nameVal = name.html();
+        var cityVal = city.html();
+        var zipcodeVal = zipcode.html();
+        var streetNumerVal = streetNumber.html();
+        var streetNameVal = streetName.html();
+
         date.html("<input type='date' class='form-control' value='" + formatDate(dateVal,"Y-m-d") + "'>");
         mileage.html("<input type='number' class='form-control' value='" + mileageVal + "'>");
+        name.html("<input type='text' class='form-control' value='" + nameVal + "'>");
+        city.html("<input type='text' class='form-control' value='" + cityVal + "'>");
+        zipcode.html("<input type='text' class='form-control' value='" + zipcodeVal + "'>");
+        streetNumber.html("<input type='number' class='form-control' value='" + streetNumerVal + "'>");
+        streetName.html("<input type='text' class='form-control' value='" + streetNameVal + "'>");
 
         var actionsRow = $('#actions' + truck);
         var btn =   '<button class="btn btn-success" data-toggle="tooltip" title="<?= translate("Valider");?>" onclick="submitEdit(' + truck + ')">' +
                         '<i class="fa fa-check"></i>' +
                     '</button>\n' +
-                    '<button class="btn btn-danger" data-toggle="tooltip" title="<?= translate("Annuler");?>" onclick="cancelEdit(\'' + dateVal + '\',\'' + mileageVal + '\',' + truck + ')">' +
+                    '<button class="btn btn-danger" data-toggle="tooltip" title="<?= translate("Annuler");?>" onclick="cancelEdit(\'' + dateVal + '\',\'' + mileageVal +  '\',\'' + nameVal + '\',\'' + cityVal + '\',\'' + zipcodeVal + '\',\'' + streetNumerVal + '\',\'' + streetNameVal + '\',' + truck +')">' +
                         '<i class="fas fa-times"></i>' +
                     '</button>';
         actionsRow.html(btn);
@@ -130,8 +156,13 @@ $tRepo = new FoodTruckRepository();
     function submitEdit(truck){
         var date = $('.inputDate' + truck);
         var mileage = $('.inputMileage' + truck);
+        var name = $('.inputName' + truck);
+        var city = $('.inputCity' + truck);
+        var zipcode = $('.inputZipcode' + truck);
+        var streetNumber = $('.inputStreetNumber' + truck);
+        var streetName = $('.inputStreetName' + truck);
 
-        var Truck = {id: truck,date: date.find('input').val(), mileage: mileage.find('input').val()}
+        var Truck = {id: truck,date: date.find('input').val(), mileage: mileage.find('input').val(), name: name.find('input').val(), city: city.find('input').val(), zipcode: zipcode.find('input').val(), street_number: streetNumber.find('input').val(), street_name: streetName.find('input').val()}
 
         $.ajax({
             url : '/api/truck',
@@ -143,6 +174,11 @@ $tRepo = new FoodTruckRepository();
             if(data.status === "success"){
                 date.html(formatDate(Truck.date,'d/m/Y'));
                 mileage.html(Truck.mileage);
+                name.html(Truck.name);
+                city.html(Truck.city);
+                zipcode.html(Truck.zipcode);
+                streetNumber.html(Truck.street_number);
+                streetName.html(Truck.street_name);
 
                 var actionsRow = $('#actions' + truck);
                 actionsRow.html('<button class="btn btn-danger" title="<?= translate("Supprimer");?>" data-toggle="tooltip" onclick="deleteTruck(' + truck + ')">' +
@@ -173,13 +209,23 @@ $tRepo = new FoodTruckRepository();
         });
     }
 
-    function cancelEdit(date,mileage,truck){
+    function cancelEdit(date, mileage, name, city, zipcode, streetNumber, streetName, truck){
         $('[data-toggle="tooltip"]').tooltip('dispose');
         var dateTd = $('.inputDate' + truck);
         var mileageTd = $('.inputMileage' + truck);
+        var nameTd = $('.inputName' + truck);
+        var cityTd = $('.inputCity' + truck);
+        var zipcodeTd = $('.inputZipcode' + truck);
+        var streetNumberTd = $('.inputStreetNumber' + truck);
+        var streetNameTd = $('.inputStreetName' + truck);
 
         dateTd.html(date);
         mileageTd.html(mileage);
+        nameTd.html(name);
+        cityTd.html(city);
+        zipcodeTd.html(zipcode);
+        streetNumberTd.html(streetNumber);
+        streetNameTd.html(streetName);
 
         var actionsRow = $('#actions' + truck);
         actionsRow.html('<button class="btn btn-danger" title="<?= translate("Supprimer");?>" data-toggle="tooltip" onclick="deleteTruck(' + truck + ')">' +

@@ -7,7 +7,25 @@ $uRepository = new UserRepository();
     <h1 id="page-title">
         <?= translate("Tous les franchisés");?>
         <span class="float-right">
-            <a href="manageFranchisees" class="btn btn-primary mb-2">
+        <?php
+            if(isset($_GET['id'])){
+                $users = array();
+                $users[] = $uRepository->getOneById($_GET['id']);
+                if($users[0] != null && $users[0]->isWorker()){
+                    ?>
+                        <a href="manageFranchisee" class="btn btn-primary mb-2">
+                            <i class="fa fa-eye"></i>
+                            <?= translate("Afficher le reste des franchisés");?>
+                        </a>
+                    <?php
+                }else{
+                    $users = $uRepository->getAllWorkers();
+                }
+            }else{
+                $users = $uRepository->getAllWorkers();
+            }
+        ?>
+            <a href="manageNewFranchisee" class="btn btn-primary mb-2">
                 <i class="fa fa-eye"></i>
                 <?= translate("Voir les franchisés en attente");?>
             </a>
@@ -23,11 +41,12 @@ $uRepository = new UserRepository();
             <th><?= translate("Téléphone");?></th>
             <th><?= translate("Ville");?></th>
             <th><?= translate("CV");?></th>
+            <th><?=translate("Actions");?></th>
         </tr>
         </thead>
         <tbody>
         <?php
-        foreach ($uRepository->getAllWorkers() as $user){
+        foreach ( $users as $user){
             ?>
             <tr>
                 <td><?= $user->getId();?></td>
@@ -54,6 +73,17 @@ $uRepository = new UserRepository();
                         echo translate("CV non trouvé");
                     }
                     ?>
+                </td>
+                <td id="actions<?= $user->getId();?>">
+                    <button class="btn btn-danger" title="<?= translate("Supprimer");?>" data-toggle="tooltip" onclick="deleteUser(<?= $user->getId();?>)">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                    <button class="btn btn-primary" title="<?= translate("Éditer");?>" data-toggle="tooltip" onclick="editUser(<?= $user->getId();?>)">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <a class="btn btn-primary" title="<?= translate("Commande");?>" data-toggle="tooltip" href="#">
+                        <i class="fas fa-shopping-cart"></i>
+                    </a>
                 </td>
             </tr>
             <?php
