@@ -1,12 +1,16 @@
 <?php
 
-class Menu
+class Menu implements JsonSerializable
 {
     private int $id;
     private string $name;
     private ?array $recipes;
     private ?array $ingredients;
     private float $price;
+    private int $recipes_num;
+    private int $ingredients_num;
+    private int $quantity;
+    private string $uuid;
 
     /**
      * Recipe constructor.
@@ -19,7 +23,10 @@ class Menu
         $this->ingredients = $parameters['ingredients'];
         $this->recipes = $parameters['recipes'];
         $this->price = $parameters['price'];
-
+        $this->recipes_num = $parameters['recipes_num'];
+        $this->ingredients_num = $parameters['ingredients_num'];
+        $this->quantity = (isset($parameters['quantity']))?$parameters['quantity'] : 1;
+        $this->uuid = (isset($parameters['uuid']))?$parameters['uuid'] : 'none';
     }
 
     /**
@@ -96,5 +103,78 @@ class Menu
     public function setPrice(float $price):void
     {
         $this->price = $price;
+    }
+
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
+    }
+
+    /**
+     * Get the value of recipes_num
+     */ 
+    public function getRecipesNum():int
+    {
+        return $this->recipes_num;
+    }
+
+    /**
+     * Set the value of recipes_num
+     *
+     */ 
+    public function setRecipesNum(int $recipes_num):void
+    {
+        $this->recipes_num = $recipes_num;
+    }
+
+    /**
+     * Get the value of ingredients_num
+     */ 
+    public function getIngredientsNum():int
+    {
+        return $this->ingredients_num;
+    }
+
+    /**
+     * Set the value of ingredients_num
+     *
+     */ 
+    public function setIngredientsNum(int $ingredients_num):void
+    {
+        $this->ingredients_num = $ingredients_num;
+    }
+
+    /**
+     * Get the value of quantity
+     */ 
+    public function getQuantity(): int
+    {
+        return $this->quantity;
+    }
+
+    /**
+     * Set the value of quantity
+     *
+     */ 
+    public function setQuantity(int $quantity)
+    {
+        $this->quantity = $quantity;
+    }
+
+    /**
+     * Get the value of uuid
+     */ 
+    public function getUuid(): string
+    {
+        return $this->uuid;
+    }
+
+    /**
+     * Set the value of uuid
+     *
+     */ 
+    public function setUuid(string $uuid)
+    {
+        $this->uuid = $uuid;
     }
 }

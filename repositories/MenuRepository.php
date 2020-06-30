@@ -80,5 +80,101 @@ class MenuRepository extends AbstractRepository
 		}
 		return $return;
     }
+
+    public function add(Menu $menu):?int{
+        $rows = $this->dbManager->exec("INSERT INTO menu (name,price,recipes_num,ingredients_num) VALUES (?,?,?,?)",[
+            $menu->getName(),
+            $menu->getPrice(),
+            $menu->getRecipesNum(),
+            $menu->getIngredientsNum()
+        ]);
+
+        if ($rows == 1){
+            $idMenu = $this->dbManager->getLastInsertId();
+            if($menu->getIngredients() != null)
+            foreach($menu->getIngredients() as $ingredient) {
+                $rows = $this->dbManager->exec("INSERT INTO menu_content (id_menu,id_ingredient,id_recipe) VALUES (?,?,?)", [
+                    $idMenu,
+                    $ingredient->getId(),
+                    null
+                ]);
+            }
+            if($menu->getRecipes() != null)
+            foreach($menu->getRecipes() as $recipe) {
+                $rows = $this->dbManager->exec("INSERT INTO menu_content (id_menu,id_ingredient,id_recipe) VALUES (?,?,?)", [
+                    $idMenu,
+                    null,
+                    $recipe->getId()
+                ]);
+            }
+        }
+        else{
+            return null;
+        }
+    }
     
+
+
+    public function update(Menu $menu):?int{
+
+        $rows = $this->dbManager->exec("DELETE FROM menu_content WHERE id_menu = ?",[
+            $menu->getId()
+        ]);
+
+        
+        $rows = $this->dbManager->exec("UPDATE menu SET name =?, price =?, recipes_num =?, ingredients_num =? WHERE id = ?",[
+            $menu->getName(),
+            $menu->getPrice(),
+            $menu->getRecipesNum(),
+            $menu->getIngredientsNum(),
+            $menu->getId()
+        ]);
+
+      
+            $idMenu = $menu->getId();
+            if($menu->getIngredients() != null){
+            $ingredients = $menu->getIngredients();
+            foreach($ingredients as $ingredient) {
+                var_dump($ingredient);
+                $rows = $this->dbManager->exec("INSERT INTO menu_content (id_menu,id_ingredient,id_recipe) VALUES (?,?,?)", [
+                    $idMenu,
+                    $ingredient->getId(),
+                    null
+                ]);
+            }
+        }
+            if($menu->getRecipes() != null){
+            foreach($menu->getRecipes() as $recipe) {
+                $rows = $this->dbManager->exec("INSERT INTO menu_content (id_menu,id_ingredient,id_recipe) VALUES (?,?,?)", [
+                    $idMenu,
+                    null,
+                    $recipe->getId()
+                ]);
+            }
+        }
+
+            return 1;
+
+        
+    
+    
+    }
+
+    public function deletebyId(int $id):?int {
+        $rows = $this->dbManager->exec("DELETE FROM menu_content WHERE id_menu = ?",[
+            $id
+        ]);
+        $rows = $this->dbManager->exec("DELETE FROM food_truck_has_menus WHERE id_menu = ?",[
+            $id
+        ]);
+            $rows = $this->dbManager->exec("DELETE FROM menu WHERE id = ?",[
+                $id
+            ]);
+            if ($rows == 1){
+                return 1;
+            }
+            else return null;
+        }
+
 }
+
