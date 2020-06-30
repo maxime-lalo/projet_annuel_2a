@@ -53,7 +53,7 @@ class ClientOrderRepository extends AbstractRepository
         }
     }
 
-    public function add(array $menus, int $id_user, int $id_food_truck){
+    public function add(array $menus, int $id_user, int $id_food_truck):ClientOrder{
         $uRepo = new UserRepository();
         $rows = $this->dbManager->exec("INSERT INTO client_order (id_user,id_food_truck,status) VALUES (?,?,?)",[
             $id_user,
@@ -95,5 +95,27 @@ class ClientOrderRepository extends AbstractRepository
         }  
         
         return $order;
+    }
+
+    public function getAllFromUser(User $client):array{
+        $clientOrders = array();
+        $orders = $this->dbManager->getAll("SELECT * FROM client_order WHERE id_user = ? ORDER BY date DESC",[
+            $client->getId()
+        ]);
+
+        if($orders){
+            foreach($orders as $order){
+                $clientOrders[] = $this->getOneById($order['id']);
+            }
+        }
+        return $clientOrders;
+    }
+
+    public function update(ClientOrder $order){
+        $rows = $this->dbManager->exec('UPDATE client_order SET status =? WHERE id = ?', [
+            $order->getStatus(),
+            $order->getId()
+        ]);
+        return $rows == 1;
     }
 }
