@@ -6,8 +6,15 @@ if (isset($json['id']) && isset($json['user_type'])){
     if($json['user_type'] == 'client'){
         $coRepo = new ClientOrderRepository();
         $order = $coRepo->getOneById($json['id']);
-        if($order->getStatus() == 0){
+        if($order->getStatus() == 0 || $order->getStatus() == 4){
             $order->setStatus(2);
+            if($order->getUsePoints() == 1){
+                $uRepo = new UserRepository();
+                $user = $order->getUser();
+                $userPoints = $user->getPoints();
+                $user->setPoints($userPoints+($order->getTotalPrice()*2));
+                $uRepo->update($user);
+            }
             $coRepo->update($order);
             new JsonReturn(JsonReturn::SUCCESS,"Order cancelled",200,$order);
         }else{

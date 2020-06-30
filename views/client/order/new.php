@@ -271,7 +271,8 @@ $user = $uRepo->getOneById($_COOKIE['user_id']);
             confirmButtonText: '<?= translate("Je valide ma commande !")?>'
             }).then((result) => {
                 if (result.value) {
-                    order = {id_user: idUser, id_food_truck: idTruck, menus: basket, points: $("input[name='pointsUse']:checked").val()}
+                    order = {id_user: idUser, id_food_truck: idTruck, menus: basket, use_points: $("input[name='pointsUse']:checked").val()}
+                    console.log(JSON.stringify(order));
                     $.ajax({
                         url : '/api/order',
                         type: 'POST',

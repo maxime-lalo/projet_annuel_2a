@@ -138,7 +138,7 @@ $user = $uRepo->getOneById($_COOKIE['user_id']);
                 };
                 echo '"'.translate(ORDER_STATUS[$i]).'"';
                 ?>];
-        if(order.status != 0){
+        if(order.status != 0 && order.status != 4){
             Swal.fire({
                 title: '<?= translate("Commande n°")?>'+order.id,
                 html:
@@ -151,7 +151,7 @@ $user = $uRepo->getOneById($_COOKIE['user_id']);
                                 '</tr>' +
                             '</thead>' +
                             '<tbody>' +
-                                '<td>' + order.totalPrice + ' €</td>' +
+                                '<td>' + order.total_price + ' €</td>' +
                                 '<td>' + order.date.getDay()+'/'+order.date.getMonth()+'/'+order.date.getFullYear()+' '+order.date.getHours() +':'+order.date.getMinutes()+'</td>' +
                                 '<td>' + status[order.status] + '</td>' +
                             '</tbody>' +
@@ -170,7 +170,7 @@ $user = $uRepo->getOneById($_COOKIE['user_id']);
                                 '</tr>' +
                             '</thead>' +
                             '<tbody>' +
-                                '<td>' + order.totalPrice + ' €</td>' +
+                                '<td>' + order.total_price + ' €</td>' +
                                 '<td>' + order.date.getDay()+'/'+order.date.getMonth()+'/'+order.date.getFullYear()+' '+order.date.getHours() +':'+order.date.getMinutes()+'</td>' +
                                 '<td>' + status[order.status] + '</td>' +
                             '</tbody>' +
@@ -194,7 +194,13 @@ $user = $uRepo->getOneById($_COOKIE['user_id']);
                                 showConfirmButton: false,
                                 timer: 2000
                             })
-                            
+                        }
+                        if(data.status == "error"){
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: data.info
+                            })
                         }
 
                     });
