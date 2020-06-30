@@ -36,7 +36,7 @@ if (
             "recipes_num" => $_POST['recipes_num'],
             "ingredients_num" => $_POST['ingredients_num']        
         ]);  
-    var_dump($menu);
+
     $res = $mRepo->update($menu);
         
 }
