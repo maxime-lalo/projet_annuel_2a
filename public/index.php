@@ -83,7 +83,7 @@ if ($explodedUrl[0] == 'public') {
 
 	require_once __DIR__ . '/../views/header.php';
 
-	if (empty($urlg)) {
+	if (empty($url)) {
 		require_once __DIR__ . '/../views/index.php';
 	}else{
 		$path = "/".implode("/", $explodedUrl).".php";
