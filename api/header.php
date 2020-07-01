@@ -1,5 +1,5 @@
 <?php
-//header("Content-Type: application/json");
+header("Content-Type: application/json");
 require_once __DIR__ . "/Parameters.php";
 require_once __DIR__ . "/JsonReturn.php";
 $p = new Parameters();
