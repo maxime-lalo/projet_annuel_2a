@@ -48,7 +48,7 @@ $wRepo = new WarehouseRepository();
                         <button class="btn btn-primary" title="<?= translate("Éditer");?>" data-toggle="tooltip" onclick="editWarehouse(<?= $warehouse->getId();?>)">
                             <i class="fas fa-edit"></i>
                         </button>
-                        <a class="btn btn-primary" title="<?= translate("Stock");?>" data-toggle="tooltip" href="#">
+                        <a class="btn btn-primary" title="<?= translate("Stock");?>" data-toggle="tooltip" href="manageStock?id=<?= $warehouse->getId();?>">
                             <i class="fas fa-tasks"></i>
                         </a>
                     </td>
