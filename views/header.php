@@ -116,8 +116,8 @@ if (isset($_GET['pdf']) OR $url[count($url) - 1] == "deconnexion"){
                             <li class="drop-down <?= ($page == "admin")? 'active': "" ?>"><a href="#"><?= translate("Gestion"); ?></a>
                                 <ul>
                                     <li><a href="/<?= LANG; ?>/admin/truck/gestionTruck"><?= translate("Gestion camions"); ?></a></li>
-                                    <li><a href="/<?= LANG; ?>/admin/warehouse/gestionWarehouse"><?= translate("Gestion entrepôts"); ?></a></li>
-                                    <li><a href="/<?= LANG; ?>/admin/manageFranchisee"><?= translate("Gestion des franchisés"); ?></a></li>
+                                    <li><a href="/<?= LANG; ?>/admin/warehouse/manageWarehouses"><?= translate("Gestion entrepôts"); ?></a></li>
+                                    <li><a href="/<?= LANG; ?>/admin/manageFranchisees"><?= translate("Gestion des franchisés"); ?></a></li>
                                     <li><a href="/<?= LANG; ?>/admin/truck/manageBreakdowns"><?= translate("Gestion des pannes"); ?></a></li>
                                     <li><a href="/<?= LANG; ?>/admin/menu/listofMenu"><?= translate("Gestion des menus"); ?></a></li>
                                 </ul>
@@ -130,6 +130,7 @@ if (isset($_GET['pdf']) OR $url[count($url) - 1] == "deconnexion"){
                                     <li><a href="/<?= LANG; ?>/franchisee/clientOrder/today"><?= translate("Commandes du jour"); ?></a></li>
                                     <li><a href="/<?= LANG; ?>/franchisee/truck"><?= translate("Gestion camion"); ?></a></li>
                                     <li><a href="/<?= LANG; ?>/franchisee/order/new"><?= translate("Faire une commande"); ?></a></li>
+                                    <li><a href="/<?= LANG; ?>/franchisee/events/index"><?= translate("Gérer mes évènements"); ?></a></li>
                                 </ul>
                             </li>
                             <?php

@@ -8,6 +8,9 @@ class Event implements JsonSerializable
     private string $place;
     private User $franchisee;
 
+    private array $participants;
+    private array $invited;
+
     /**
      * Event constructor.
      * @param array $parameters
@@ -23,6 +26,22 @@ class Event implements JsonSerializable
 
         $uRepo = new UserRepository();
         $this->franchisee = $uRepo->getOneById($parameters['franchisee']);
+
+        if (isset($parameters['participants'])){
+            $participants = [];
+            foreach($parameters['participants'] as $participant){
+                $participants[] = $uRepo->getOneById($participant['id_user']);
+            }
+            $this->participants = $participants;
+        }
+
+        if (isset($parameters['invited'])){
+            $inviteds = [];
+            foreach($parameters['invited'] as $invited){
+                $inviteds[] = $uRepo->getOneById($invited['id_user']);
+            }
+            $this->invited = $inviteds;
+        }
     }
 
     /**
@@ -121,6 +140,37 @@ class Event implements JsonSerializable
         $this->franchisee = $franchisee;
     }
 
+    /**
+     * @return array
+     */
+    public function getParticipants(): array
+    {
+        return $this->participants;
+    }
+
+    /**
+     * @param array $participants
+     */
+    public function setParticipants(array $participants): void
+    {
+        $this->participants = $participants;
+    }
+
+    /**
+     * @return array|mixed
+     */
+    public function getInvited()
+    {
+        return $this->invited;
+    }
+
+    /**
+     * @param array|mixed $invited
+     */
+    public function setInvited($invited): void
+    {
+        $this->invited = $invited;
+    }
 
     public function jsonSerialize()
     {
