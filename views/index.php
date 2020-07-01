@@ -35,3 +35,6 @@
     </svg>
 
   </section><!-- End Hero -->
+  <script src="Webgl/lib/three.js"></script>
+	<script src="Webgl/lib/ColladaLoader.js"></script>
+	<script src="Webgl/initThreejs.js"></script> 
