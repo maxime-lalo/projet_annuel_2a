@@ -57,7 +57,7 @@ class ClientOrder implements JsonSerializable
 
                 $this->menus[$i]->setQuantity($data['menus'][$i]['quantity']);
                 $this->menus[$i]->setUuid($data['menus'][$i]['uuid']);
-                $this->total_price += $this->menus[$i]->getPrice();
+                $this->total_price += $this->menus[$i]->getPrice()*$this->menus[$i]->getQuantity();
             }
         }
         

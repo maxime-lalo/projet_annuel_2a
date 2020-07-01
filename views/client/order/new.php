@@ -73,9 +73,6 @@ $user = $uRepo->getOneById($_COOKIE['user_id']);
                             </td>
                             <td><?= $menu->getPrice()." €";?></td>
                             <td>
-                                <button class="btn btn-primary" data-toggle="tooltip" title="<?= translate("Voir les ingrédients");?>" onclick="getMenu(<?= $menu->getId();?>)">
-                                    <i class="fa fa-eye"></i>
-                                </button>
                                 <button class="btn btn-success" data-toggle="tooltip" title="<?= translate("Ajouter au panier");?>" onclick="getMenu(<?= $menu->getId();?>)">
                                     <i class="fa fa-box"></i>
                                 </button>

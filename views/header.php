@@ -44,7 +44,7 @@ if (isset($_GET['pdf']) OR $url[count($url) - 1] == "deconnexion"){
     if( strpos($uri,"/franchisee/truck") != false || strpos($uri,"/franchisee/order/new") != false){
         $page = "worker";
     }
-    if( strpos($uri,"/client/order/order") != false || strpos($uri,"/client/order/history") != false || strpos($uri,"/client/trucksMap") != false || strpos($uri,"client/order/new") != false || strpos($uri,"/client/degustation") != false){
+    if( strpos($uri,"/client/order/trucks") != false || strpos($uri,"/client/order/history") != false || strpos($uri,"/client/trucksMap") != false || strpos($uri,"client/order/new") != false || strpos($uri,"/client/degustation") != false){
         $page = "client";
     }
     if( strpos($uri,"/compte/compte") != false || strpos($uri,"/compte/deconnexion") != false){
@@ -137,7 +137,7 @@ if (isset($_GET['pdf']) OR $url[count($url) - 1] == "deconnexion"){
                             <li class="drop-down <?= ($page == "client")? 'active': "" ?>"><a href="#"><?= translate("Espace client");?></a>
                                 <ul>
                                     <li><a href="/<?= LANG;?>/client/degustation"><?= translate("Mes dégustations");?></a></li>
-                                    <li><a href="/<?= LANG; ?>/client/order/order"><?= translate("Une petite faim ?"); ?></a></li>
+                                    <li><a href="/<?= LANG; ?>/client/order/trucks"><?= translate("Une petite faim ?"); ?></a></li>
                                     <li><a href="/<?= LANG; ?>/client/order/history"><?= translate("Historique commandes"); ?></a></li>
                                     <li><a href="/<?= LANG; ?>/client/trucksMap"><?= translate("Tous nos FoodTruck"); ?></a></li>
                                 </ul>
