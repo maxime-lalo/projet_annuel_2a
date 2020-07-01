@@ -15,8 +15,6 @@ class EventRepository extends AbstractRepository
 
         if ($rows != null){
             $return = [];
-
-            $uRepo = new UserRepository();
             foreach($rows as $event){
                 $return[] = new Event($event);
             }
@@ -44,5 +42,21 @@ class EventRepository extends AbstractRepository
         ]);
 
         return $rows == 1;
+    }
+
+    public function getFranchiseeEvents(User $franchisee){
+        $rows = $this->dbManager->getAll("SELECT * FROM event WHERE franchisee = ? ORDER BY date DESC",[
+            $franchisee->getId(),
+        ]);
+
+        if ($rows != null){
+            $return = [];
+            foreach($rows as $event){
+                $return[] = new Event($event);
+            }
+            return $return;
+        }else{
+            return null;
+        }
     }
 }
