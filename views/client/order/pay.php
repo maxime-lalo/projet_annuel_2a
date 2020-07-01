@@ -12,6 +12,9 @@ $order = $coRepo->getOneById($_GET['order_id']);
     <h1 id="page-title">
         <?= translate("Espace Client"); ?> - <?= translate("Payement"); ?>
     </h1>
+    <?php
+    if(!$order->isPayed()){
+    ?>
     <div class="row">
         <div class="col-lg-4">
             <table class="table table-bordered text-center">
@@ -139,8 +142,14 @@ $order = $coRepo->getOneById($_GET['order_id']);
                 </form>
             </div>
         </div>
-
     </div>
+    <?php
+    }else{
+    ?>
+    <h4><?= translate("Votre commandé à déjà été payé !")?></h4>
+    <?php
+    }
+    ?>
 </div>
 
 <script>

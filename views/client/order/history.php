@@ -40,10 +40,11 @@ $user = $uRepo->getOneById($_COOKIE['user_id']);
                                         <?php
                                         if ($order->getStatus() == 4) {
                                         ?>
-
+                                            <h4 id="status<?= $order->getId() ?>">
                                             <a class="btn btn-primary" data-toggle="tooltip" title="<?= translate("Payé"); ?>" href="pay?order_id=<?= $order->getId() ?>">
                                                 <i class="fa fa-credit-card"></i> <?= translate("Commande à payé !") ?>
                                             </a>
+                                        </h4>
                                         <?php
                                         } else {
                                         ?>
