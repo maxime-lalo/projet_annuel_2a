@@ -53,12 +53,13 @@ class ClientOrderRepository extends AbstractRepository
         }
     }
 
-    public function add(array $menus, int $id_user, int $id_food_truck){
+    public function add(array $menus, int $id_user, int $id_food_truck, int $usePoints):ClientOrder{
+
         $uRepo = new UserRepository();
         $rows = $this->dbManager->exec("INSERT INTO client_order (id_user,id_food_truck,status) VALUES (?,?,?)",[
             $id_user,
             $id_food_truck,
-            0
+            4
         ]);
         
         $orders = $this->dbManager->getAll("SELECT * FROM client_order WHERE id_user = ? &&  id_food_truck = ? ORDER BY date DESC",[
@@ -68,11 +69,19 @@ class ClientOrderRepository extends AbstractRepository
         $newOrder = ["menus"=> $menus];
         $newOrder = array_merge($newOrder, $orders[0]);
         $order = new ClientOrder($newOrder);
-
+        
         $user = $order->getUser();
         $userPoints = $user->getPoints();
-        $user->setPoints($userPoints+intval($order->getTotalPrice()));
+
+        if($order->getTotalPrice() * 2 <= $userPoints && $usePoints === 1){
+            $user->setPoints($userPoints-intval($order->getTotalPrice()*2));
+            $order->setIsPayed(1);
+            $order->setStatus(0);
+            $order->setUsePoints(1);
+            $this->update($order);
+        }
         $uRepo->update($user);
+
         foreach($order->getMenus() as $menu){
             foreach($menu->getRecipes() as $recipe){
                 $rows = $this->dbManager->exec("INSERT INTO client_order_content (id_order, id_menu, id_recipe, quantity, uuid) VALUES (?,?,?,?, ?)",[
@@ -95,5 +104,49 @@ class ClientOrderRepository extends AbstractRepository
         }  
         
         return $order;
+    }
+
+    public function getAllFromUser(User $client):array{
+        $clientOrders = array();
+        $orders = $this->dbManager->getAll("SELECT * FROM client_order WHERE id_user = ? ORDER BY date DESC",[
+            $client->getId()
+        ]);
+
+        if($orders){
+            foreach($orders as $order){
+                $clientOrders[] = $this->getOneById($order['id']);
+            }
+        }
+        return $clientOrders;
+    }
+
+    public function getAllFromDateAndFranchisee(int $worker_id, string $date_range):array{
+        $ordersObjects = array();
+        $uRepo = new UserRepository();
+        $worker = $uRepo->getOneById($worker_id);
+        if($worker->isWorker() && $worker->getTruck() instanceof FoodTruck){
+            if($date_range == 'today'){
+                $orders = $this->dbManager->getAll("SELECT * FROM client_order WHERE id_food_truck = ? AND DAY(date) =  DAY(CURRENT_TIMESTAMP)
+                AND MONTH(date) = MONTH(CURRENT_TIMESTAMP)
+                AND YEAR(date) = Year(CURRENT_TIMESTAMP) ORDER BY date DESC",[
+                    $worker->getTruck()->getId()
+                ]);
+            }
+            foreach($orders as $order){
+                $ordersObjects[] = $this->getOneById($order['id']);
+            }
+        }
+        
+        return $ordersObjects;
+    }
+
+    public function update(ClientOrder $order){
+        $rows = $this->dbManager->exec('UPDATE client_order SET status =?, use_points =?, is_payed =? WHERE id = ?', [
+            $order->getStatus(),
+            $order->getUsePoints(),
+            $order->isPayed(),
+            $order->getId()
+        ]);
+        return $rows == 1;
     }
 }

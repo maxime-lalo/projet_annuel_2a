@@ -13,7 +13,9 @@ class ClientOrder implements JsonSerializable
     private DateTime $date;
     private array $menus;
     private int $status;
-    private float $totalPrice;
+    private float $total_price;
+    private int $use_points;
+    private int $is_payed;
 
     /**
      * ClientOrder constructor.
@@ -31,8 +33,10 @@ class ClientOrder implements JsonSerializable
         $this->truck = $ftRepo->getOneById($data['id_food_truck']);
 
         $this->date = new DateTime($data['date']);
+        $this->use_points = (isset($data['use_points']))?$data['use_points']:0;
+        $this->is_payed = (isset($data['is_payed']))?$data['is_payed']:0;
 
-        $this->totalPrice = 0.0;
+        $this->total_price = 0.0;
         if(isset($data['menus'])){
             $rRepo = new RecipeRepository();
             $fRepo = new FoodRepository();
@@ -53,7 +57,7 @@ class ClientOrder implements JsonSerializable
 
                 $this->menus[$i]->setQuantity($data['menus'][$i]['quantity']);
                 $this->menus[$i]->setUuid($data['menus'][$i]['uuid']);
-                $this->totalPrice += $this->menus[$i]->getPrice();
+                $this->total_price += $this->menus[$i]->getPrice()*$this->menus[$i]->getQuantity();
             }
         }
         
@@ -166,14 +170,48 @@ class ClientOrder implements JsonSerializable
      */ 
     public function getTotalPrice(): float
     {
-        return $this->totalPrice;
+        return $this->total_price;
     }
 
     /**
-     * @param float|mixed $totalPrice
+     * @param float|mixed $total_price
      */ 
-    public function setTotalPrice(float $totalPrice)
+    public function setTotalPrice(float $total_price)
     {
-        $this->totalPrice = $totalPrice;
+        $this->total_price = $total_price;
+    }
+
+    /**
+     * @return int|mixed
+     */ 
+    public function getUsePoints():int
+    {
+        return $this->use_points;
+    }
+
+    /**
+     * @param float|mixed $use_points
+     *
+     */ 
+    public function setUsePoints(int $use_points)
+    {
+        $this->use_points = $use_points;
+    }
+
+    /**
+     * @return int
+     */ 
+    public function isPayed():int
+    {
+        return $this->is_payed;
+    }
+
+    /**
+     *
+     *@param int $is_payed
+     */ 
+    public function setIsPayed(int $is_payed)
+    {
+        $this->is_payed = $is_payed;
     }
 }

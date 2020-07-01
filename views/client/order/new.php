@@ -12,6 +12,14 @@ $user = $uRepo->getOneById($_COOKIE['user_id']);
 <div class="container">
     <h1 id="page-title">
         <?= translate("Espace Client");?> - <?= translate("Nouvelle commande");?>
+        <span class="float-right">
+            <div class="form-check form-check-inline">
+                <h4><?= translate("Points fidélité: ")?></h4>
+            </div>
+            <div class="form-check form-check-inline">
+                <h4 id="userPoints"><?= $user->getPoints()?></h4>
+            </div>
+        </span>
     </h1>
     <div class="row">
         <div class="col-lg-8">
@@ -65,9 +73,6 @@ $user = $uRepo->getOneById($_COOKIE['user_id']);
                             </td>
                             <td><?= $menu->getPrice()." €";?></td>
                             <td>
-                                <button class="btn btn-primary" data-toggle="tooltip" title="<?= translate("Voir les ingrédients");?>" onclick="getMenu(<?= $menu->getId();?>)">
-                                    <i class="fa fa-eye"></i>
-                                </button>
                                 <button class="btn btn-success" data-toggle="tooltip" title="<?= translate("Ajouter au panier");?>" onclick="getMenu(<?= $menu->getId();?>)">
                                     <i class="fa fa-box"></i>
                                 </button>
@@ -87,8 +92,25 @@ $user = $uRepo->getOneById($_COOKIE['user_id']);
             </table>
         </div>
         <div class="col-lg-4">
+            
             <table class="table table-bordered text-center">
                 <thead>
+                    <tr>
+                        <th colspan="3">
+                            <div class="form-check form-check-inline">
+                                <h4><?= translate("Utilisez vos points acquis ? ")?></h4>
+                            </div>
+                            
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="pointsUse" id="pointsYes" value="1">
+                                <label class="form-check-label" for="pointsYes"><?= translate("Oui")?></label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="pointsUse" id="pointsNo" value="0" checked>
+                                <label class="form-check-label" for="pointsUse"><?= translate("Non")?></label>
+                            </div>
+                         </th>
+                    </tr>
                     <tr>
                         <th colspan="3"><i class="fas fa-shopping-basket"></i> <?=translate("Mon panier")?></th>
                     </tr>
@@ -110,9 +132,6 @@ $user = $uRepo->getOneById($_COOKIE['user_id']);
 <script type="text/javascript">
     var basket = [];
     var validateOrderButton = '<tr id="validateOrder"><td colspan="3" class="text-center"><a class="btn btn-success" onclick="createOrder(<?= $user->getId().','.$_GET['truck_id']?>)"><?= translate('Passer la commande')?></a></td></tr>'; 
-    $(window).bind('beforeunload', function(){
-        return '<?= translate("Si vous quittez ou recharger cette page votre panier sera perdu !")?>';
-    });
     function getMenu(idMenu){
         $.ajax({
             url : '/api/menu',
@@ -217,9 +236,9 @@ $user = $uRepo->getOneById($_COOKIE['user_id']);
                 '</td>';
                 orderReview +=
                 '<td>'+menu.quantity+'</td>'+
-                '<td>'+parseInt(menu.price)*parseInt(menu.quantity)+' €</td>'+
+                '<td>'+parseFloat(menu.price)*parseFloat(menu.quantity)+' €</td>'+
             '</tr>';
-            totalPrice += parseInt(menu.price)*parseInt(menu.quantity);
+            totalPrice += parseFloat(menu.price)*parseFloat(menu.quantity);
         })
         orderReview += 
         '<tr style="background-color:lightgray">'+
@@ -249,7 +268,7 @@ $user = $uRepo->getOneById($_COOKIE['user_id']);
             confirmButtonText: '<?= translate("Je valide ma commande !")?>'
             }).then((result) => {
                 if (result.value) {
-                    order = {id_user: idUser, id_food_truck: idTruck, menus: basket}
+                    order = {id_user: idUser, id_food_truck: idTruck, menus: basket, use_points: $("input[name='pointsUse']:checked").val()}
                     console.log(JSON.stringify(order));
                     $.ajax({
                         url : '/api/order',
@@ -258,6 +277,7 @@ $user = $uRepo->getOneById($_COOKIE['user_id']);
                     }).done(function(data){
                         if(data.status == "success"){
                             basket = [];
+                            
                             $('#validateOrder').remove();
                             $('#basket').html('<tr style="background-color:lightgray"><td colspan="3"><?= translate("Votre panier est vide");?></td></tr>')
                             Swal.fire({
@@ -267,9 +287,14 @@ $user = $uRepo->getOneById($_COOKIE['user_id']);
                                 showConfirmButton: false,
                                 timer: 2000
                             })
+                            setTimeout(redirectToOrders, 2000);
                         }
                     });
                 }
         })
+    }
+
+    function redirectToOrders(){
+        window.location.href = "history";
     }
 </script>
