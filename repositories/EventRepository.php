@@ -7,6 +7,22 @@ class EventRepository extends AbstractRepository
 
     const DEGUSTATION = 1;
 
+    public function getOneById(int $id){
+        $event = $this->dbManager->find("SELECT * FROM event WHERE id = ?" ,[
+            $id
+        ]);
+
+        if ($event == null){
+            return null;
+        }else{
+            $event['participants'] = $this->dbManager->getAll("SELECT id_user FROM event_user WHERE id_event = ?",[
+                $event['id']
+            ]);
+            $strClass = $this->getClassName();
+            return new $strClass($event);
+        }
+    }
+
     public function getUserEvents(User $user,int $type){
         $rows = $this->dbManager->getAll("SELECT b.id,b.name,b.date,b.type,b.place,b.franchisee FROM event_user a INNER JOIN event b ON a.id_event = b.id WHERE a.id_user = ? AND b.type = ? ORDER BY date DESC",[
             $user->getId(),
@@ -58,5 +74,15 @@ class EventRepository extends AbstractRepository
         }else{
             return null;
         }
+    }
+
+    public function delete(int $id): bool
+    {
+        $res = parent::delete($id);
+        $res2 = $this->dbManager->exec("DELETE FROM event_user WHERE id_event = ?",[
+            $id
+        ]);
+
+        return $res AND $res2;
     }
 }

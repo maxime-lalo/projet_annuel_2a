@@ -33,13 +33,13 @@ $uRepo = new UserRepository();
                         <td><?= $event->getDate()->format("d/m/Y H:i");?></td>
                         <td><?= $event->getPlace();?></td>
                         <td>
-                            <button class="btn btn-primary" data-toggle="tooltip" title="<?= translate('Voir les participants');?>"><i class="fa fa-eye"></i></button>
+                            <button onclick="viewEvent(<?= $event->getId();?>)" class="btn btn-primary" data-toggle="tooltip" title="<?= translate('Voir les participants');?>"><i class="fa fa-eye"></i></button>
                             <?php
                             if ($event->getDate() > new DateTime('Now')){
                                 $titleDelete = translate("Supprimer l'évènement");
                                 ?>
                                 <button class="btn btn-success" data-toggle="tooltip" title="<?= translate('Inviter un client');?>"><i class="fa fa-plus"></i></button>
-                                <button class="btn btn-danger" data-toggle="tooltip" title="<?= $titleDelete;?>"><i class="fa fa-trash-alt"></i></button>
+                                <button onclick="deleteEvent(<?= $event->getId();?>)" class="btn btn-danger" data-toggle="tooltip" title="<?= $titleDelete;?>"><i class="fa fa-trash-alt"></i></button>
                                 <?php
                             }
                             ?>
@@ -59,3 +59,86 @@ $uRepo = new UserRepository();
         </tbody>
     </table>
 </div>
+<script>
+    function viewEvent(idEvent){
+        $.get({
+            url: '/api/event',
+            data: {
+                id: idEvent
+            },
+            dataType: "JSON",
+            success: function(data){
+                if (data.status === "success"){
+                    var users = data.Event.participants;
+                    var html =
+                        "<table class='table table-bordered'>" +
+                            "<thead>" +
+                                "<tr>" +
+                                    "<th>Identifiant</th>" +
+                                    "<th>Nom</th>" +
+                                "</tr>" +
+                            "</thead>" +
+                            "<tbody>"
+                    ;
+                    for (var i = 0; i < users.length; i++){
+                        console.log(users[i]);
+                        html +=
+                            "<tr>" +
+                                "<td>" + users[i].id + "</td>" +
+                                "<td>" + users[i].firstname + " " + users[i].lastname + "</td>" +
+                            "</tr>"
+                        ;
+                    }
+
+                    html +=
+                        "</tbody>" +
+                    "</table>"
+                    ;
+
+                    Swal.fire({
+                        title: "Participants à : " + data.Event.name,
+                        html: html
+                    })
+                }else{
+                    Swal.fire(
+                        'Erreur',
+                        "L'évènement n'a pas été trouvé",
+                        'error'
+                    )
+                }
+            }
+        })
+
+
+    }
+
+    function deleteEvent(idEvent){
+        Swal.fire({
+            title: '<?= translate("Êtes-vous sûr ?");?>',
+            text: '<?= translate("Vous ne pourrez pas revenir en arrière");?>',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#0205a1',
+            confirmButtonText: "<?= translate('Supprimer');?>",
+            cancelButtonText: "<?= translate('Annuler');?>",
+        }).then((result) => {
+            if (result.value) {
+                $.ajax({
+                    url : '/api/event',
+                    type: 'DELETE',
+                    data: 'id=' + idEvent
+                }).done(function(data){
+                    Swal.fire({
+                        title: "<?= translate('Supprimé');?>",
+                        text:"<?= translate('Cet évènement a bien été supprimé');?>",
+                        icon: 'success'
+                    }).then((result) => {
+                        document.location.reload(true);
+                    })
+                });
+
+            }
+        })
+    }
+</script>
