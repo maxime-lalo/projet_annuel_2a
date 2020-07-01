@@ -120,6 +120,26 @@ class ClientOrderRepository extends AbstractRepository
         return $clientOrders;
     }
 
+    public function getAllFromDateAndFranchisee(int $worker_id, string $date_range):array{
+        $ordersObjects = array();
+        $uRepo = new UserRepository();
+        $worker = $uRepo->getOneById($worker_id);
+        if($worker->isWorker() && $worker->getTruck() instanceof FoodTruck){
+            if($date_range == 'today'){
+                $orders = $this->dbManager->getAll("SELECT * FROM client_order WHERE id_food_truck = ? AND DAY(date) =  DAY(CURRENT_TIMESTAMP)
+                AND MONTH(date) = MONTH(CURRENT_TIMESTAMP)
+                AND YEAR(date) = Year(CURRENT_TIMESTAMP) ORDER BY date DESC",[
+                    $worker->getTruck()->getId()
+                ]);
+            }
+            foreach($orders as $order){
+                $ordersObjects[] = $this->getOneById($order['id']);
+            }
+        }
+        
+        return $ordersObjects;
+    }
+
     public function update(ClientOrder $order){
         $rows = $this->dbManager->exec('UPDATE client_order SET status =?, use_points =?, is_payed =? WHERE id = ?', [
             $order->getStatus(),

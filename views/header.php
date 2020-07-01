@@ -41,7 +41,7 @@ if (isset($_GET['pdf']) OR $url[count($url) - 1] == "deconnexion"){
         strpos($uri,"/admin/manageFranchisee") != false){
         $page = "admin";
     }
-    if( strpos($uri,"/franchisee/truck") != false || strpos($uri,"/franchisee/order/new") != false){
+    if( strpos($uri,"/franchisee/truck") != false || strpos($uri,"/franchisee/order/new") != false || strpos($uri,"/franchisee/clientOrder/today") != false){
         $page = "worker";
     }
     if( strpos($uri,"/client/order/trucks") != false || strpos($uri,"/client/order/history") != false || strpos($uri,"/client/trucksMap") != false || strpos($uri,"client/order/new") != false || strpos($uri,"/client/degustation") != false || strpos($uri,"/client/order/pay") != false ){
@@ -116,8 +116,8 @@ if (isset($_GET['pdf']) OR $url[count($url) - 1] == "deconnexion"){
                             <li class="drop-down <?= ($page == "admin")? 'active': "" ?>"><a href="#"><?= translate("Gestion"); ?></a>
                                 <ul>
                                     <li><a href="/<?= LANG; ?>/admin/truck/gestionTruck"><?= translate("Gestion camions"); ?></a></li>
-                                    <li><a href="/<?= LANG; ?>/admin/gestionWarehouse"><?= translate("Gestion entrepôts"); ?></a></li>
-                                    <li><a href="/<?= LANG; ?>/admin/manageFranchisees"><?= translate("Gestion des franchisés"); ?></a></li>
+                                    <li><a href="/<?= LANG; ?>/admin/warehouse/gestionWarehouse"><?= translate("Gestion entrepôts"); ?></a></li>
+                                    <li><a href="/<?= LANG; ?>/admin/manageFranchisee"><?= translate("Gestion des franchisés"); ?></a></li>
                                     <li><a href="/<?= LANG; ?>/admin/truck/manageBreakdowns"><?= translate("Gestion des pannes"); ?></a></li>
                                     <li><a href="/<?= LANG; ?>/admin/menu/listofMenu"><?= translate("Gestion des menus"); ?></a></li>
                                 </ul>
@@ -127,6 +127,7 @@ if (isset($_GET['pdf']) OR $url[count($url) - 1] == "deconnexion"){
                             ?>
                             <li class="drop-down <?= ($page == "worker")? 'active': "" ?>"><a href="#"><?= translate("Espace franchisés"); ?></a>
                                 <ul>
+                                    <li><a href="/<?= LANG; ?>/franchisee/clientOrder/today"><?= translate("Commandes du jour"); ?></a></li>
                                     <li><a href="/<?= LANG; ?>/franchisee/truck"><?= translate("Gestion camion"); ?></a></li>
                                     <li><a href="/<?= LANG; ?>/franchisee/order/new"><?= translate("Faire une commande"); ?></a></li>
                                 </ul>

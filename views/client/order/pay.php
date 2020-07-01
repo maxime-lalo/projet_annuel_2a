@@ -176,7 +176,7 @@ $order = $coRepo->getOneById($_GET['order_id']);
                 if (data.status == "success") {
                     Swal.fire(
                         '<?= translate("Validé")?>',
-                        '<?= translate("Votre Commande a été payé avec succès !")?>',
+                        '<?= translate("Votre Commande a été payée avec succès !")?>',
                         'success'
                     )
                     setTimeout(redirectToOrders, 1000);
