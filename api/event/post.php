@@ -10,9 +10,18 @@ if (
     isset($json['franchisee'])
 ) {
     foreach($json as $key => $parameter){
-        if (empty($parameter)){
-            new JsonReturn(JsonReturn::ERROR, "Field ".$key." empty",400);
-            break;
+        if ($key == "eventClients"){
+            if (empty($parameter)){
+                if ($parameter < 0){
+                    new JsonReturn(JsonReturn::ERROR, "Field ".$key." empty",400);
+                    die(400);
+                }
+            }
+        }else{
+            if (empty($parameter)){
+                new JsonReturn(JsonReturn::ERROR, "Field ".$key." empty",400);
+                die(400);
+            }
         }
     }
 

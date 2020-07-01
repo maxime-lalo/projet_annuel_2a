@@ -50,8 +50,6 @@ $uRepo = new UserRepository();
                         <label for="eventClients"><?= translate("Inviter mes X clients les plus fidèles");?></label>
                         <input type="number" class="form-control" name="eventClients" id="eventClients" value="10">
                     </div>
-                </div>
-                <div class="row">
                     <div class="col">
                         <label for="eventType"><?= translate("Type d'évènement");?></label>
                         <select name="eventType" id="eventType" class="form-control">
@@ -77,28 +75,29 @@ $uRepo = new UserRepository();
     </div>
 </div>
 <script type="text/javascript">
-    function getFormData($form){
-        var unindexed_array = $form.serializeArray();
-        var indexed_array = {};
-
-        $.map(unindexed_array, function(n, i){
-            indexed_array[n['name']] = n['value'];
-        });
-
-        return indexed_array;
-    }
-
     function createEventFranchisee(){
-
-        console.log(getFormData($('#addEvent')));
         $.ajax({
             url : '/api/event',
             type: 'post',
             data: JSON.stringify(getFormData($('#addEvent'))),
             dataType: "json",
             contentType: "application/json"
-        }).done(function(data){
-            console.log(data);
+        }).always(function(data){
+            if (data.status === "success"){
+                Swal.fire({
+                    title: "Succès",
+                    icon: "success",
+                    text: "L'évènement  a bien été crée"
+                }).then((result) => {
+                    document.location = "index ";
+                })
+            }else{
+               Swal.fire({
+                   title: "Erreur",
+                   icon: "error",
+                   text: "Veuillez remplir tous les champs"
+               })
+            }
         });
     }
 </script>

@@ -9,6 +9,8 @@ class Event implements JsonSerializable
     private User $franchisee;
 
     private array $participants;
+    private array $invited;
+
     /**
      * Event constructor.
      * @param array $parameters
@@ -31,6 +33,14 @@ class Event implements JsonSerializable
                 $participants[] = $uRepo->getOneById($participant['id_user']);
             }
             $this->participants = $participants;
+        }
+
+        if (isset($parameters['invited'])){
+            $inviteds = [];
+            foreach($parameters['invited'] as $invited){
+                $inviteds[] = $uRepo->getOneById($invited['id_user']);
+            }
+            $this->invited = $inviteds;
         }
     }
 
@@ -146,7 +156,21 @@ class Event implements JsonSerializable
         $this->participants = $participants;
     }
 
+    /**
+     * @return array|mixed
+     */
+    public function getInvited()
+    {
+        return $this->invited;
+    }
 
+    /**
+     * @param array|mixed $invited
+     */
+    public function setInvited($invited): void
+    {
+        $this->invited = $invited;
+    }
 
     public function jsonSerialize()
     {

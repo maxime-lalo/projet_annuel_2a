@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . "/AbstractRepository.php";
+require_once __DIR__ . "/ClientOrderRepository.php";
 require_once __DIR__ . "/UserRepository.php";
 require_once __DIR__ . "/../models/Event.php";
 class EventRepository extends AbstractRepository
@@ -16,11 +17,14 @@ class EventRepository extends AbstractRepository
         if ($event == null){
             return null;
         }else{
-            $event['participants'] = $this->dbManager->getAll("SELECT id_user FROM event_user WHERE id_event = ?",[
+            $event['participants'] = $this->dbManager->getAll("SELECT id_user FROM event_user WHERE id_event = ? AND state = 1",[
                 $event['id']
             ]);
-            $strClass = $this->getClassName();
-            return new $strClass($event);
+
+            $event['invited'] = $this->dbManager->getAll("SELECT id_user FROM event_user WHERE id_event = ? AND state = 0",[
+                $event['id']
+            ]);
+            return new Event($event);
         }
     }
 
@@ -110,7 +114,19 @@ class EventRepository extends AbstractRepository
         ]);
 
         if ($row == 1){
-            return $this->dbManager->getLastInsertId();
+            $idEvent = $this->dbManager->getLastInsertId();
+
+            $cORepo = new ClientOrderRepository();
+
+            $clientsToInvite = $cORepo->getMostFaithfulClients($numberOfClients,$event->getFranchisee()->getTruck()->getId());
+
+            foreach($clientsToInvite as $client){
+                $row = $this->dbManager->exec("INSERT INTO event_user (id_event, id_user) VALUES (?,?)",[
+                    $idEvent,
+                    $client->getId()
+                ]);
+            }
+            return $idEvent;
         }
     }
 }

@@ -1,9 +1,11 @@
 <?php
 require_once __DIR__ . "/../../../repositories/EventRepository.php";
 require_once __DIR__ . "/../../../repositories/UserRepository.php";
+require_once __DIR__ . "/../../../repositories/ClientOrderRepository.php";
 
 $eRepo = new EventRepository();
 $uRepo = new UserRepository();
+$cORepo = new ClientOrderRepository();
 ?>
 <title><?= translate("Espace franchisé");?> - <?= translate("Gérer mes évènements");?></title>
 <div class="container">
@@ -71,25 +73,41 @@ $uRepo = new UserRepository();
             dataType: "JSON",
             success: function(data){
                 if (data.status === "success"){
-                    var users = data.Event.participants;
+                    var usersParticipating = data.Event.participants;
+                    var usersInvited = data.Event.invited;
                     var html =
                         "<table class='table table-bordered'>" +
                             "<thead>" +
                                 "<tr>" +
-                                    "<th>Identifiant</th>" +
                                     "<th>Nom</th>" +
+                                    "<th>État</th>" +
                                 "</tr>" +
                             "</thead>" +
                             "<tbody>"
                     ;
-                    for (var i = 0; i < users.length; i++){
-                        console.log(users[i]);
-                        html +=
-                            "<tr>" +
-                                "<td>" + users[i].id + "</td>" +
-                                "<td>" + users[i].firstname + " " + users[i].lastname + "</td>" +
-                            "</tr>"
-                        ;
+
+                    if (usersParticipating.length <= 0 && usersInvited.length <= 0){
+                        html += "<tr>" +
+                                    "<td colspan='2'>Pas encore de participants</td>" +
+                                "</tr>";
+                    }else{
+                        for (var i = 0; i < usersParticipating.length; i++){
+                            html +=
+                                "<tr>" +
+                                    "<td>" + usersParticipating[i].firstname + " " + usersParticipating[i].lastname + "</td>" +
+                                    "<td>Participant</td>" +
+                                "</tr>"
+                            ;
+                        }
+
+                        for (var j = 0; j < usersInvited.length; j++){
+                            html +=
+                                "<tr>" +
+                                    "<td>" + usersInvited[j].firstname + " " + usersInvited[j].lastname + "</td>" +
+                                    "<td>Invité</td>" +
+                                "</tr>"
+                            ;
+                        }
                     }
 
                     html +=
@@ -142,5 +160,9 @@ $uRepo = new UserRepository();
 
             }
         })
+    }
+
+    function inviteClient(email){
+
     }
 </script>
