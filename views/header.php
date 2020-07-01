@@ -37,8 +37,8 @@ if (isset($_GET['pdf']) OR $url[count($url) - 1] == "deconnexion"){
         $page = "signin";
     }
     if( strpos($uri,"/admin/truck/gestionTruck") != false || 
-        strpos($uri,"/admin/warehouse/gestionWarehouse") != false || strpos($uri,"/admin/manageNewFranchisee") != false || 
-        strpos($uri,"/admin/manageFranchisee") != false){
+        strpos($uri,"/admin/warehouse/manageWarehouses") != false || strpos($uri,"/admin/manageNewFranchisee") != false || 
+        strpos($uri,"/admin/manageFranchisees") != false){
         $page = "admin";
     }
     if( strpos($uri,"/franchisee/truck") != false || strpos($uri,"/franchisee/order/new") != false || strpos($uri,"/franchisee/clientOrder/today") != false){
