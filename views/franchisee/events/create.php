@@ -55,7 +55,14 @@ $uRepo = new UserRepository();
                     <div class="col">
                         <label for="eventType"><?= translate("Type d'évènement");?></label>
                         <select name="eventType" id="eventType" class="form-control">
-                            <option value="1"><?= translate("Dégustation");?></option>
+                            <?php
+                            $possibleTypes = $eRepo->getAllTypes();
+                            foreach($possibleTypes as $type){
+                                ?>
+                                <option value="<?= $type['id'];?>"><?= translate($type['type']);?></option>
+                                <?php
+                            }
+                            ?>
                         </select>
                     </div>
                 </div>

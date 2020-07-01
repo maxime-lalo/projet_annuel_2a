@@ -6,7 +6,8 @@ class EventRepository extends AbstractRepository
 {
 
     const DEGUSTATION = 1;
-
+    const MEETING = 2;
+    
     public function getOneById(int $id){
         $event = $this->dbManager->find("SELECT * FROM event WHERE id = ?" ,[
             $id
@@ -87,12 +88,16 @@ class EventRepository extends AbstractRepository
     }
 
     public function getTypeString(int $type):string{
-        switch ($type){
-            case 1:
-                return translate("Dégustation");
-            default:
-                return translate("Non trouvé");
-        }
+        $row = $this->dbManager->find("SELECT type FROM event_type WHERE id = ?",[
+            $type
+        ]);
+
+        return $row != null ? translate($row['type']):translate("Non trouvé");
+    }
+
+    public function getAllTypes():?array{
+        $rows = $this->dbManager->getAll('SELECT * FROM event_type');
+        return $rows ? $rows:null;
     }
 
     public function add(Event $event, int $numberOfClients){
