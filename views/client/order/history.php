@@ -48,7 +48,7 @@ $user = $uRepo->getOneById($_COOKIE['user_id']);
                                         <?php
                                         } else {
                                         ?>
-                                            <h4 id="status<?= $order->getId() ?>"><?= translate(ORDER_STATUS[$order->getStatus()]); ?></h4>
+                                            <h4 id="status<?= $order->getId() ?>"><?= translate("Commande").' '.translate(ORDER_STATUS[$order->getStatus()]); ?></h4>
                                         <?php
                                         }
                                         ?>

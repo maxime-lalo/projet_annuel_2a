@@ -85,13 +85,54 @@ $user = $uRepo->getOneById($_COOKIE['user_id']);
         var orderTemp = '';
         $.each(orders, function(index, order){
 
-            orderTemp += 
+            orderTemp = 
             '<div class="col-lg-4">'+
                 '<table class="table table-bordered text-center">'+
                     '<thead>'+
                         '<tr>'+
-                        '<th colspan="4"><i class="fas fa-shopping-basket"></i> <?= translate("Commande numéro: ")?> '+order.id+'</th>'+
-                        '</tr>'+
+                            '<th colspan="4"><i class="fas fa-shopping-basket"></i> <?= translate("Commande numéro: ")?> '+order.id+'</th>'+
+                        '</tr>';
+            if(order.status == 5){
+                orderTemp += 
+                        '<tr>'+
+                            '<th colspan="4">'+
+                                '<button class="btn btn-primary" data-toggle="tooltip" title="<?= translate(ORDER_STATUS[3]); ?>" onclick="finishOrder('+order.id+')">'+
+                                    '<i class="fa fa-eye" style="margin-right: 5px;"></i><?= translate(ORDER_STATUS[3]);?> ?'+
+                                '</button>'+
+                            '</th>'+
+                        '</tr>';
+            }
+            if(order.status == 1){
+                orderTemp += 
+                        '<tr>'+
+                            '<th colspan="2">'+
+                                '<button class="btn btn-primary" data-toggle="tooltip" title="<?= translate(ORDER_STATUS[5]); ?>" onclick="finishPrepOrder('+order.id+')">'+
+                                    '<i class="fa fa-eye" style="margin-right: 5px;"></i> <?= translate(ORDER_STATUS[5]);?> ?'+
+                                '</button>'+
+                            '</th>'+
+                            '<th colspan="2">'+
+                                '<button class="btn btn-danger" data-toggle="tooltip" title="<?= translate(ORDER_STATUS[2]); ?>" onclick="cancelOrder('+order.id+')">'+
+                                    '<i class="fa fa-close" style="margin-right: 5px;"></i><?= translate(ORDER_STATUS[2]);?> ?'+
+                                '</button>'+
+                            '</th>'+
+                        '</tr>';
+            } 
+            if(order.status == 0){
+                orderTemp += 
+                        '<tr>'+
+                            '<th colspan="2">'+
+                                '<button class="btn btn-primary" data-toggle="tooltip" title="<?= translate(ORDER_STATUS[1]); ?>" onclick="prepareOrder('+order.id+')">'+
+                                    '<i class="fa fa-gear" style="margin-right: 5px;"></i><?= translate(ORDER_STATUS[1]);?> ?'+
+                                '</button>'+
+                            '</th>'+
+                            '<th colspan="2">'+
+                                '<button class="btn btn-danger" data-toggle="tooltip" title="<?= translate(ORDER_STATUS[2]);?>" onclick="cancelOrder('+order.id+')">'+
+                                    '<i class="fa fa-close" style="margin-right: 5px;"></i><?= translate(ORDER_STATUS[2]);?> ?'+
+                                '</button>'+
+                            '</th>'+
+                        '</tr>';
+            }  
+            orderTemp +=
                         '<tr>'+
                             '<th><?= translate("Menu")?></th>'+
                             '<th><?= translate("Plat/Article")?></th>'+
@@ -109,12 +150,12 @@ $user = $uRepo->getOneById($_COOKIE['user_id']);
                     orderTemp +=
                             '<td>'+menu.recipes[0].name+'</th>'+
                             '<td rowspan="'+parseInt(menu.ingredients_num+menu.recipes_num)+'">'+menu.quantity+'</th>'+
-                            '<td rowspan="'+parseInt(menu.ingredients_num+menu.recipes_num)+'">'+menu.price+' €</th>';
+                            '<td rowspan="'+parseInt(menu.ingredients_num+menu.recipes_num)+'">'+parseFloat(menu.price*menu.quantity)+' €</th>';
                 }else{
                     orderTemp +=
                             '<td>'+menu.ingredients[0].name+'</th>'+
                             '<td rowspan="'+parseInt(menu.ingredients_num+menu.recipes_num)+'">'+menu.quantity+'</th>'+
-                            '<td rowspan="'+parseInt(menu.ingredients_num+menu.recipes_num)+'">'+menu.price+' €</th>';
+                            '<td rowspan="'+parseInt(menu.ingredients_num+menu.recipes_num)+'">'+parseFloat(menu.price*menu.quantity)+' €</th>';
                 }
                 orderTemp +=
                         '</tr>';
@@ -164,11 +205,87 @@ $user = $uRepo->getOneById($_COOKIE['user_id']);
         $("#ordersInStandBy").html(ordersInStandBy);
         $("#ordersDone").html(ordersDone);
 
-        $("#statusJS").html('<i class="fa fa-check" aria-hidden="true"></i>');
+        $("#statusJS").html('<i class="fa fa-refresh" aria-hidden="true"></i>');
         startTimer = Date.now();
         setTimeout(() => {
             mouseMove = false;
             reloadData();
         }, 10000);
+    }
+
+    function cancelOrder(orderId){
+        $.ajax({
+            url: '/api/order',
+            type: 'PUT',
+            data: JSON.stringify({id: orderId, new_status: 2})
+        }).done(function(data) {
+            if (data.status == "success") {
+                Swal.fire({
+                    position: 'top-end',
+                    icon: 'success',
+                    title: '<?=translate('Commande annulée !')?>',
+                    showConfirmButton: false,
+                    timer: 1000
+                })
+                getTodayOrders();
+            }
+        });
+    }
+
+    function prepareOrder(orderId){
+        $.ajax({
+            url: '/api/order',
+            type: 'PUT',
+            data: JSON.stringify({id: orderId, new_status: 1})
+        }).done(function(data) {
+            if (data.status == "success") {
+                Swal.fire({
+                    position: 'top-end',
+                    icon: 'success',
+                    title: '<?=translate('Commande maintenant en préparation.')?>',
+                    showConfirmButton: false,
+                    timer: 1000
+                })
+                getTodayOrders();
+            }
+        });
+    }
+
+    function finishPrepOrder(orderId){
+        $.ajax({
+            url: '/api/order',
+            type: 'PUT',
+            data: JSON.stringify({id: orderId, new_status: 5})
+        }).done(function(data) {
+            if (data.status == "success") {
+                Swal.fire({
+                    position: 'top-end',
+                    icon: 'success',
+                    title: '<?=translate('Préparation terminé.')?>',
+                    showConfirmButton: false,
+                    timer: 1000
+                })
+                getTodayOrders();
+            }
+        });
+    }
+
+    function finishOrder(orderId){
+        $.ajax({
+            url: '/api/order',
+            type: 'PUT',
+            data: JSON.stringify({id: orderId, new_status: 3})
+        }).done(function(data) {
+            if (data.status == "success") {
+                Swal.fire({
+                    position: 'top-end',
+                    icon: 'success',
+                    title: '<?=translate('Commande terminé !')?>',
+                    showConfirmButton: false,
+                    timer: 1000
+                })
+                getTodayOrders();
+            }
+        });
     }
 </script>

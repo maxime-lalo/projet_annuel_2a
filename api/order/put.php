@@ -10,16 +10,30 @@ if (
     isset($json['user_id'])
 ) {
     $coRep = new ClientOrderRepository();
-    $uRep = new UserRepository();
     $order = $coRep->getOneById($json['id']);
-    $user = $order->getUser();
-    $userPoints = $user->getPoints();
-    $user->setPoints($userPoints+$order->getTotalPrice());
-    $uRep->update($user);
-    $order->setIsPayed(1);
-    $order->setStatus(0);
-    $coRep->update($order);
-    new JsonReturn(JsonReturn::SUCCESS,"Order Created",201, $order);
+    if($order != null){
+        $uRep = new UserRepository();
+        $user = $order->getUser();
+        $userPoints = $user->getPoints();
+        $user->setPoints($userPoints+$order->getTotalPrice());
+        $uRep->update($user);
+        $order->setIsPayed(1);
+        $order->setStatus(0);
+        $coRep->update($order);
+        new JsonReturn(JsonReturn::SUCCESS,"Status updated",200, $order);
+    }else{
+        new JsonReturn(JsonReturn::ERROR,"Order not found",404);
+    }
+}elseif(isset($json['id']) && isset($json['new_status'])){
+    $coRep = new ClientOrderRepository();
+    $order = $coRep->getOneById($json['id']);
+    if($order != null){
+        $order->setStatus($json['new_status']);
+        $coRep->update($order);
+        new JsonReturn(JsonReturn::SUCCESS,"Status updated",200, $order);
+    }else{
+        new JsonReturn(JsonReturn::ERROR,"Order not found",404);
+    }
 }else{
     new JsonReturn(JsonReturn::ERROR,"Missing arguments",400);
 }
