@@ -129,4 +129,21 @@ class EventRepository extends AbstractRepository
             return $idEvent;
         }
     }
+
+    public function inviteUser(Event $event,User $user){
+        $row = $this->dbManager->find("SELECT * FROM event_user WHERE id_event = ? AND id_user = ?",[
+            $event->getId(),
+            $user->getId()
+        ]);
+        if ($row){
+            return -1;
+        }else{
+            $invite = $this->dbManager->exec("INSERT INTO event_user (id_event, id_user) VALUES (?,?)",[
+                $event->getId(),
+                $user->getId()
+            ]);
+
+            return $invite ? true:false;
+        }
+    }
 }

@@ -6,6 +6,25 @@ require_once __DIR__ . "/../../../repositories/ClientOrderRepository.php";
 $eRepo = new EventRepository();
 $uRepo = new UserRepository();
 $cORepo = new ClientOrderRepository();
+
+if (isset($_POST['email']) && isset($_POST['idEvent'])){
+    $userToAdd = $uRepo->getOneBy("email",$_POST['email']);
+    if ($userToAdd){
+        $event = $eRepo->getOneById($_POST['idEvent']);
+        $res = $eRepo->inviteUser($event,$userToAdd);
+        if ($res === -1){
+            new SweetAlert(SweetAlert::ERROR,"Erreur","Ce client est déjà invité");
+        }else{
+            if ($res){
+                new SweetAlert(SweetAlert::SUCCESS,"Succès","Le client a bien reçu une invitation");
+            }else{
+                new SweetAlert(SweetAlert::ERROR,"Erreur","Erreur lors de l'invitation");
+            }
+        }
+    }else{
+        new SweetAlert(SweetAlert::ERROR,"Erreur","L'utilisateur saisi n'existe pas");
+    }
+}
 ?>
 <title><?= translate("Espace franchisé");?> - <?= translate("Gérer mes évènements");?></title>
 <div class="container">
@@ -42,7 +61,7 @@ $cORepo = new ClientOrderRepository();
                             if ($event->getDate() > new DateTime('Now')){
                                 $titleDelete = translate("Supprimer l'évènement");
                                 ?>
-                                <button class="btn btn-success" data-toggle="tooltip" title="<?= translate('Inviter un client');?>"><i class="fa fa-plus"></i></button>
+                                <button onclick="inviteClient(<?= $event->getId();?>)" class="btn btn-success" data-toggle="tooltip" title="<?= translate('Inviter un client');?>"><i class="fa fa-plus"></i></button>
                                 <button onclick="deleteEvent(<?= $event->getId();?>)" class="btn btn-danger" data-toggle="tooltip" title="<?= $titleDelete;?>"><i class="fa fa-trash-alt"></i></button>
                                 <?php
                             }
@@ -162,7 +181,27 @@ $cORepo = new ClientOrderRepository();
         })
     }
 
-    function inviteClient(email){
 
+    async function inviteClient(idEvent) {
+        const {value: email} = await Swal.fire({
+            title: 'Qui souhaitez-vous inviter ?',
+            input: 'email',
+            showCancelButton: true,
+            confirmButtonText: '<i class="fa fa-plus"></i> Inviter',
+            showLoaderOnConfirm: true,
+            cancelButtonText: '<i class="fa fa-times"></i> Annuler',
+            inputValidator: (quantity) => {
+                if (!quantity || quantity <= 0) {
+                    return "Vous devez saisir un email valide"
+                }
+            }
+        })
+
+        if (email){
+            redirectPost("",{
+                email: email,
+                idEvent: idEvent
+            });
+        }
     }
 </script>
