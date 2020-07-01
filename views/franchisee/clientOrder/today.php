@@ -14,7 +14,7 @@ $user = $uRepo->getOneById($_COOKIE['user_id']);
         <span  class="float-right">
         <div class="form-check form-check-inline">
             <input class="form-check-input" type="checkbox" id="autoRefresh" checked>
-            <label class="form-check-label" for="autoSizingCheck2" style="font-size: 0.3em;"><?=translate("Rechargement-auto")?></label>
+            <label class="form-check-label" for="autoSizingCheck2" style="font-size: 0.3em;"><?=translate("rafraichissement-auto")?></label>
         </div>
     </span>
         
@@ -26,12 +26,15 @@ $user = $uRepo->getOneById($_COOKIE['user_id']);
     </span>
     <div class="col-lg">
         <h2>Commandes en cours</h2>
+        
         <div id="ordersInPrep" class="row">
         </div>
+        <hr>
         <h2>Commandes en attente de préparation</h2>
+
         <div id="ordersInStandBy" class="row">
         </div>
-
+        <hr>
         <h2>Commandes terminées</h2>
         <div id="ordersDone" class="row">
         </div>
@@ -96,8 +99,8 @@ $user = $uRepo->getOneById($_COOKIE['user_id']);
                 orderTemp += 
                         '<tr>'+
                             '<th colspan="4">'+
-                                '<button class="btn btn-primary" data-toggle="tooltip" title="<?= translate(ORDER_STATUS[3]); ?>" onclick="finishOrder('+order.id+')">'+
-                                    '<i class="fa fa-eye" style="margin-right: 5px;"></i><?= translate(ORDER_STATUS[3]);?> ?'+
+                                '<button class="btn btn-success" data-toggle="tooltip" title="<?= translate(ORDER_STATUS[3]); ?>" onclick="finishOrder('+order.id+')">'+
+                                    '<i class="fa fa-check" style="margin-right: 5px;"></i><?= translate(ORDER_STATUS[3]);?> ?'+
                                 '</button>'+
                             '</th>'+
                         '</tr>';
@@ -107,7 +110,7 @@ $user = $uRepo->getOneById($_COOKIE['user_id']);
                         '<tr>'+
                             '<th colspan="2">'+
                                 '<button class="btn btn-primary" data-toggle="tooltip" title="<?= translate(ORDER_STATUS[5]); ?>" onclick="finishPrepOrder('+order.id+')">'+
-                                    '<i class="fa fa-eye" style="margin-right: 5px;"></i> <?= translate(ORDER_STATUS[5]);?> ?'+
+                                    '<i class="fa fa-thumbs-up" style="margin-right: 5px;"></i> <?= translate(ORDER_STATUS[5]);?> ?'+
                                 '</button>'+
                             '</th>'+
                             '<th colspan="2">'+
@@ -182,8 +185,14 @@ $user = $uRepo->getOneById($_COOKIE['user_id']);
                 }
                         
             })
+            orderDate = new Date(order.date.date);
             orderTemp +=
-                    '</tbody>'+
+                    '<tr>'+
+                        '<td colspan="4">'+order.user.firstname + ' ' + order.user.lastname +'</td>'+
+                    '</tr>'+
+                    '<tr>'+
+                        '<td colspan="4"><?= translate("Commandé à ")?>'+orderDate.getHours() + 'h' + orderDate.getMinutes() +'</td>'+
+                    '</tr>'+
                     '<tr style="background-color: #54F055">'+
                         '<td colspan="4"><?= translate("Somme payé: ")?>'+order.total_price+' €</td>'+
                     '</tr>'+
@@ -261,7 +270,7 @@ $user = $uRepo->getOneById($_COOKIE['user_id']);
                 Swal.fire({
                     position: 'top-end',
                     icon: 'success',
-                    title: '<?=translate('Préparation terminé.')?>',
+                    title: '<?=translate('Préparation terminée.')?>',
                     showConfirmButton: false,
                     timer: 1000
                 })
@@ -280,7 +289,7 @@ $user = $uRepo->getOneById($_COOKIE['user_id']);
                 Swal.fire({
                     position: 'top-end',
                     icon: 'success',
-                    title: '<?=translate('Commande terminé !')?>',
+                    title: '<?=translate('Commande terminée !')?>',
                     showConfirmButton: false,
                     timer: 1000
                 })
