@@ -85,4 +85,27 @@ class EventRepository extends AbstractRepository
 
         return $res AND $res2;
     }
+
+    public function getTypeString(int $type):string{
+        switch ($type){
+            case 1:
+                return translate("Dégustation");
+            default:
+                return translate("Non trouvé");
+        }
+    }
+
+    public function add(Event $event, int $numberOfClients){
+        $row = $this->dbManager->exec("INSERT INTO event (name, date, type, place, franchisee) VALUES (?,?,?,?,?)",[
+            $event->getName(),
+            $event->getDate()->format("Y-m-d H:i:s"),
+            $event->getType(),
+            $event->getPlace(),
+            $event->getFranchisee()->getId()
+        ]);
+
+        if ($row == 1){
+            return $this->dbManager->getLastInsertId();
+        }
+    }
 }

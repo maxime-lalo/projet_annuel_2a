@@ -19,6 +19,7 @@ $uRepo = new UserRepository();
                 <th><?= translate("Nom de l'évènement");?></th>
                 <th><?= translate("Date");?></th>
                 <th><?= translate("Lieu");?></th>
+                <th><?= translate("Type");?></th>
                 <th><?= translate("Actions");?></th>
             </tr>
         </thead>
@@ -32,6 +33,7 @@ $uRepo = new UserRepository();
                         <td><?= $event->getName();?></td>
                         <td><?= $event->getDate()->format("d/m/Y H:i");?></td>
                         <td><?= $event->getPlace();?></td>
+                        <td><?= $eRepo->getTypeString($event->getType());?></td>
                         <td>
                             <button onclick="viewEvent(<?= $event->getId();?>)" class="btn btn-primary" data-toggle="tooltip" title="<?= translate('Voir les participants');?>"><i class="fa fa-eye"></i></button>
                             <?php
