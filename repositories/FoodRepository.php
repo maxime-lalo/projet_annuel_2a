@@ -7,7 +7,7 @@ require_once __DIR__ . "/AbstractRepository.php";
 class FoodRepository extends AbstractRepository
 {
     public function getAllWithStock(Warehouse $warehouse):?Array{
-        $stocks = $this->dbManager->getAll("SELECT a.id,a.name,a.weight,a.type,b.quantity FROM food a INNER JOIN stock b ON a.id = b.id_food WHERE b.id_warehouse = ?",[
+        $stocks = $this->dbManager->getAll("SELECT a.id,a.name,a.weight,a.type,b.quantity,a.unity FROM food a INNER JOIN stock b ON a.id = b.id_food WHERE b.id_warehouse = ?",[
             $warehouse->getId()
         ]);
 
@@ -17,5 +17,14 @@ class FoodRepository extends AbstractRepository
         }
 
         return $stocks ? $food:null;
+    }
+    public function setStock(int $idFood, int $idWarehouse, int $quantity){
+        $rows = $this->dbManager->exec("UPDATE stock SET quantity = ? WHERE id_food = ? AND id_warehouse = ?",[
+            $quantity,
+            $idFood,
+            $idWarehouse
+        ]);
+
+        return $rows == 1;
     }
 }

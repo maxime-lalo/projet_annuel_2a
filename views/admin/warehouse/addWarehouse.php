@@ -7,7 +7,7 @@ $tRepo = new WarehouseRepository();
     <h1 id="page-title">
         <?= translate("Espace Admin");?> - <?= translate("Ajouter un entrepôt");?>
         <span class="float-right">
-            <a class="mb-2 btn btn-primary" href="gestionWarehouse">
+            <a class="mb-2 btn btn-primary" href="manageWarehouses">
                 <i class="fa fa-edit"></i> <?= translate("Gestion des entrepôts");?>
             </a>
         </span>
@@ -72,7 +72,7 @@ $tRepo = new WarehouseRepository();
                         text: "<?= translate("L'entrepôt a bien été ajouté");?>",
                         icon: 'success'
                     }).then((result) => {
-                        document.location = "gestionWarehouse"
+                        document.location = "manageWarehouses"
                     })
                 }else{
                     Swal.fire({

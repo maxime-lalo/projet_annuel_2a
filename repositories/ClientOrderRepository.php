@@ -106,6 +106,50 @@ class ClientOrderRepository extends AbstractRepository
         return $order;
     }
 
+    public function getMostFaithfulClients(int $nbr, int $idFoodTruck){
+        $lastMonth = new DateTime("Now");
+        $lastMonth->modify("-1 month");
+
+        $users = $this->dbManager->getAll("SELECT id_user FROM client_order WHERE id_food_truck = ? AND date >= ? GROUP BY id_user",[
+            $idFoodTruck,
+            $lastMonth->format("Y-m-d")
+        ]);
+
+        $allTotals = [];
+        foreach ($users as $user){
+
+            $orders = $this->dbManager->getAll("SELECT * FROM client_order WHERE id_user = ?",[
+                $user['id_user']
+            ]);
+
+            if ($orders){
+                $ttlSpent = 0;
+                foreach($orders as $order){
+                    $orderObj = $this->getOneById($order['id']);
+                    $ttlSpent += $orderObj->getTotalPrice();
+                }
+                $allTotals[] = [
+                    'ttl' => $ttlSpent,
+                    'id_user' => $user['id_user'],
+                ];
+            }
+        }
+        rsort($allTotals);
+
+        $uRepo = new UserRepository();
+        $return = [];
+
+        if ($nbr > count($allTotals)){
+            $nbr = count($allTotals);
+        }else{
+            $nbr--;
+        }
+        for ($i = 0; $i < $nbr; $i++){
+            $return[] = $uRepo->getOneById($allTotals[$i]['id_user']);
+        }
+        return $return;
+    }
+
     public function getAllFromUser(User $client):array{
         $clientOrders = array();
         $orders = $this->dbManager->getAll("SELECT * FROM client_order WHERE id_user = ? ORDER BY date DESC",[
