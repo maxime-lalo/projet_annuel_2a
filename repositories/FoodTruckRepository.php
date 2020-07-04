@@ -40,7 +40,7 @@ class FoodTruckRepository extends AbstractRepository
     }
 
     public function update(FoodTruck $truck):bool{
-        $rows = $this->dbManager->exec('UPDATE food_truck SET date_last_check = ?, mileage = ?, name = ?, city = ?, zipcode = ?, street_number = ?, street_name = ? WHERE id = ?',[
+        $rows = $this->dbManager->exec('UPDATE food_truck SET date_last_check = ?, mileage = ?, name = ?, city = ?, zipcode = ?, street_number = ?, street_name = ?, accepts_orders = ? WHERE id = ?',[
             $truck->getDateCheck(),
             $truck->getMileage(),
             $truck->getName(),
@@ -48,6 +48,7 @@ class FoodTruckRepository extends AbstractRepository
             $truck->getZipcode(),
             $truck->getStreetNumber(),
             $truck->getStreetName(),
+            $truck->getAcceptsOrders(),
             $truck->getId()
         ]);
         return $rows == 1;

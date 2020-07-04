@@ -6,8 +6,10 @@ $coRep = new ClientOrderRepository();
 $uRepo = new UserRepository();
 $user = $uRepo->getOneById($_COOKIE['user_id']);
 $accepting_orders = '';
-if($user->getTruck()->getAcceptsOrders() == 1){
+$truckId = ($user->getTruck() instanceof FoodTruck)? $user->getTruck()->getId() : -1;
+if($user->getTruck() instanceof FoodTruck && $user->getTruck()->getAcceptsOrders() == 1){
     $accepting_orders = 'checked';
+
 }
 ?>
 
@@ -17,14 +19,14 @@ if($user->getTruck()->getAcceptsOrders() == 1){
         <?= translate("Espace Franchisee"); ?> - <?= translate("Commandes du jour"); ?>
         <span  class="float-right">
         <div class="custom-control custom-switch">
-                    <input type="checkbox" class="custom-control-input" id="acceptOrders" <?= $accepting_orders?>>
-                    <label class="custom-control-label" for="acceptOrders" style="font-size: 0.4em;">Toggle this switch element</label>
+                    <input type="checkbox" class="custom-control-input" onclick="acceptOrders('<?= $truckId; ?>')" id="acceptOrders" <?= $accepting_orders?>>
+                    <label class="custom-control-label" for="acceptOrders" style="font-size: 0.4em;"><?= translate("Accepter des commandes ?")?></label>
             </div>
         </span>
         
     </h1>
     <div class="row">
-        <div class="col col-lg-3">
+        <div class="col col-lg-2">
         <div class="form-check form-check-inline">
                 <input class="form-check-input" type="checkbox" id="autoRefresh" checked>
                 <label class="form-check-label" for="autoSizingCheck2" style="font-size: 0.8em;"><?=translate("rafraichissement-auto")?></label>
@@ -309,6 +311,31 @@ if($user->getTruck()->getAcceptsOrders() == 1){
                     timer: 1000
                 })
                 getTodayOrders();
+            }
+        });
+    }
+
+    function acceptOrders(idTruck){
+        if($("#acceptOrders").is(":checked")){
+            var acceptOrders = 1;
+            var acceptMsg = '<?= translate("Vous acceptez maintenant des commandes !")?>';
+        }else{
+            var acceptOrders = 0;
+            var acceptMsg = `<?= translate("Vous n'acceptez plus de commandes !")?>`;
+        }
+        $.ajax({
+            url: '/api/truck',
+            type: 'PUT',
+            data: JSON.stringify({id: idTruck, accepts_orders: acceptOrders})
+        }).done(function(data) {
+            if (data.status == "success") {
+                Swal.fire({
+                    position: 'top-end',
+                    icon: 'success',
+                    title: acceptMsg,
+                    showConfirmButton: false,
+                    timer: 1000
+                })
             }
         });
     }
