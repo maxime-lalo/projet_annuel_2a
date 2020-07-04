@@ -6,10 +6,12 @@ $coRep = new ClientOrderRepository();
 $uRepo = new UserRepository();
 $user = $uRepo->getOneById($_COOKIE['user_id']);
 $accepting_orders = '';
+$autoRefresh = 'checked';
 $truckId = ($user->getTruck() instanceof FoodTruck)? $user->getTruck()->getId() : -1;
 if($user->getTruck() instanceof FoodTruck && $user->getTruck()->getAcceptsOrders() == 1){
     $accepting_orders = 'checked';
-
+}else{
+    $autoRefresh = 'disabled';
 }
 ?>
 
@@ -28,16 +30,14 @@ if($user->getTruck() instanceof FoodTruck && $user->getTruck()->getAcceptsOrders
     <div class="row">
         <div class="col col-lg-2">
         <div class="form-check form-check-inline">
-                <input class="form-check-input" type="checkbox" id="autoRefresh" checked>
+                <input class="form-check-input" type="checkbox" id="autoRefresh" <?= $autoRefresh;?>>
                 <label class="form-check-label" for="autoSizingCheck2" style="font-size: 0.8em;"><?=translate("rafraichissement-auto")?></label>
             </div>
             
         </div>
         <span id="statusJS" class="float-right">
             
-            <div class="spinner-border text-dark" role="status">
-                <span class="sr-only">Loading...</span>
-            </div>
+            <i class="fa fa-refresh" aria-hidden="true"></i>
         </span>
             
     </div>
@@ -329,6 +329,14 @@ if($user->getTruck() instanceof FoodTruck && $user->getTruck()->getAcceptsOrders
             data: JSON.stringify({id: idTruck, accepts_orders: acceptOrders})
         }).done(function(data) {
             if (data.status == "success") {
+                disabled="disabled"
+                if(acceptOrders == 0){
+                    $("#autoRefresh").removeAttr("checked");
+                    $("#autoRefresh").attr("disabled", "disabled");
+                }else{
+                    $("#autoRefresh").removeAttr("disabled");
+                    $("#autoRefresh").attr("checked", "checked");
+                }
                 Swal.fire({
                     position: 'top-end',
                     icon: 'success',
