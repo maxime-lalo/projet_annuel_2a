@@ -16,6 +16,8 @@ class FranchiseeOrder
 
     private float $percentage;
 
+    private int $status;
+
     /**
      * FranchiseeOrder constructor.
      * @param array $data
@@ -36,6 +38,7 @@ class FranchiseeOrder
         $this->date = new DateTime($data['date']);
 
         $this->foods = $data['foods'];
+        $this->status = $data['status'];
 
         $fRepo = new FoodRepository();
         foreach(json_decode($data['missing'],true) as $missingIngredient){
@@ -160,4 +163,21 @@ class FranchiseeOrder
 
 
 
+
+    /**
+     * Get the value of status
+     */ 
+    public function getStatus():int
+    {
+        return $this->status;
+    }
+
+    /**
+     * Set the value of status
+     *
+     */ 
+    public function setStatus(int $status)
+    {
+        $this->status = $status;
+    }
 }

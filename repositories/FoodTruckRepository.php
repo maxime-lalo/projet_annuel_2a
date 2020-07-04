@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . "/../models/FoodTruck.php";
+require_once __DIR__ . "/../models/FranchiseeOrder.php";
 require_once __DIR__ . "/AbstractRepository.php";
 
 class FoodTruckRepository extends AbstractRepository
@@ -143,5 +144,17 @@ class FoodTruckRepository extends AbstractRepository
         }
         $trucks_ordered = array_unique($trucks_ordered, SORT_REGULAR);
         return $trucks_ordered;
+    }
+
+    public function addOrderToStock(FranchiseeOrder $order):bool{
+        foreach($order->getFoods() as $food){
+            $line = $this->dbManager->exec("INSERT INTO stock (id_food, id_food_truck, quantity) VALUES (?,?,?)",[
+                $food->getId(),
+                $order->getUser()->getTruck()->getId(),
+                $food->getQuantity()
+            ]);
+            if($line != 1)return false;
+        }
+        return true;
     }
 }

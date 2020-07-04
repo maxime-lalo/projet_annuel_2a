@@ -22,6 +22,14 @@ $user = $uRepo->getOneById($_COOKIE['user_id']);
         <div class="row justify-content-center mb-2">
             <a href="history" class="btn btn-primary mr-2"><?= translate("Retour à l'historique");?></a>
             <a href="generatePdf?pdf=true&id=<?= $order->getId();?>" class="btn btn-primary" target="blank"><i class="fas fa-print"></i> <?= translate("Imprimer le bon de commande");?></a>
+            <?php
+                if($order->getStatus() == 0){
+            ?>
+            <a href="#" id="confirmOrder" class="btn btn-primary mr-2" onclick="confirmOrder('<?= $order->getId();?>')"><?= translate("Confirmé la réception ?");?></a>
+
+            <?php
+               }
+            ?>
         </div>
         <table class="table table-bordered text-center">
             <thead>
@@ -99,6 +107,7 @@ $user = $uRepo->getOneById($_COOKIE['user_id']);
                 <th><?= translate("Nombre d'articles");?></th>
                 <th><?= translate("Nombre d'articles manquants");?></th>
                 <th><?= translate("Pourcentage");?></th>
+                <th><?= translate("Status");?></th>
             </tr>
             </thead>
             <tbody>
@@ -113,6 +122,7 @@ $user = $uRepo->getOneById($_COOKIE['user_id']);
                         <td><?= count($order->getFoods());?></td>
                         <td><?= count($order->getMissing());?></td>
                         <td><?= $order->getPercentage();?></td>
+                        <td><?= translate(ORDER_STATUS[$order->getStatus()]);?></td>()
                     </tr>
                     <?php
                 }
@@ -131,3 +141,34 @@ $user = $uRepo->getOneById($_COOKIE['user_id']);
     ?>
 
 </div>
+
+<script>
+    function confirmOrder(orderId){
+        $.ajax({
+            url: '/api/order',
+            type: 'PUT',
+            data: JSON.stringify({id: orderId, new_status: 3, user_type: 'worker'})
+        }).done(function(data) {
+            if (data.status == "success") {
+                $("#confirmOrder").remove();
+                Swal.fire({
+                    position: 'top-end',
+                    icon: 'success',
+                    title: '<?=translate('Votre stock a été mis à jour !')?>',
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+            }
+            if (data.status == "error") {
+                $("#confirmOrder").remove();
+                Swal.fire({
+                    position: 'top-end',
+                    icon: 'error',
+                    title: data.info,
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+            }
+        });
+    }
+</script>
