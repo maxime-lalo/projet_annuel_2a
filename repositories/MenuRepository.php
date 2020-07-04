@@ -85,16 +85,19 @@ class MenuRepository extends AbstractRepository
             foreach($menus as $menu){
                 $checkRecipesAv = true;
                 $checkIngredientsAv = true;
-                foreach($menu->getRecipes() as $ingredient){
+                foreach($menu->getRecipes() as $recipe){
                     $checkAv = false;
-                    foreach($foodTruckStock as $ingredientAv){
-                        if($ingredientAv->getId() == $ingredient->getId()){
-                            $checkAv = true;
-                            if($ingredientAv->getQuantity() < 1){
-                                $checkAv = false;
+                    foreach($recipe->getIngredients() as $ingredient){
+                        foreach($foodTruckStock as $ingredientAv){
+                            if($ingredientAv->getId() == $ingredient->getId()){
+                                $checkAv = true;
+                                if($ingredientAv->getQuantity() < $ingredient->getQuantity()){
+                                    $checkAv = false;
+                                }
                             }
                         }
                     }
+                    
                     if(!$checkAv) $checkRecipesAv = false;
                 }
                 foreach($menu->getIngredients() as $ingredient){
@@ -102,7 +105,7 @@ class MenuRepository extends AbstractRepository
                     foreach($foodTruckStock as $ingredientAv){
                         if($ingredientAv->getId() == $ingredient->getId()){
                             $checkAv = true;
-                            if($ingredientAv->getQuantity() < 1){
+                            if($ingredientAv->getQuantity() < $ingredient->getQuantity()){
                                 $checkAv = false;
                             }
                         }

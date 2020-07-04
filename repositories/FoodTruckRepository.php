@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . "/../models/FoodTruck.php";
 require_once __DIR__ . "/../models/FranchiseeOrder.php";
+require_once __DIR__ . "/../models/ClientOrder.php";
 require_once __DIR__ . "/MenuRepository.php";
 require_once __DIR__ . "/AbstractRepository.php";
 
@@ -192,9 +193,22 @@ class FoodTruckRepository extends AbstractRepository
         ]);
         foreach($stocks as $food){
             $foodObj = $fRepo->getOneById($food['id_food']);
-            $foodObj->setQuantity($food['quantity']);
+            $foodObj->setQuantity($food['quantity']*$foodObj->getWeight());
             $foods[] = $foodObj;
         }
         return $foods;
+    }
+
+    public function updateStockFromOrder(ClientOrder $newOrder){
+        /*
+        foreach($newOrder->getMenus() as $menu){
+            $rows = $this->dbManager->exec('UPDATE stock SET status =?, use_points =?, is_payed =? WHERE id = ?', [
+                $order->getStatus(),
+                $order->getUsePoints(),
+                $order->isPayed(),
+                $order->getId()
+            ]);
+        }
+        */
     }
 }
