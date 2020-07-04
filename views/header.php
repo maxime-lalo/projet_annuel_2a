@@ -41,7 +41,7 @@ if (isset($_GET['pdf']) OR $url[count($url) - 1] == "deconnexion"){
         strpos($uri,"/admin/manageFranchisees") != false){
         $page = "admin";
     }
-    if( strpos($uri,"/franchisee/truck") != false || strpos($uri,"/franchisee/order/new") != false || strpos($uri,"/franchisee/clientOrder/today") != false){
+    if( strpos($uri,"/franchisee/truck") != false || strpos($uri,"/franchisee/order/new") != false || strpos($uri,"/franchisee/clientOrder/today") != false || strpos($uri,"/franchisee/order/history") != false ){
         $page = "worker";
     }
     if( strpos($uri,"/client/order/trucks") != false || strpos($uri,"/client/order/history") != false || strpos($uri,"/client/trucksMap") != false || strpos($uri,"client/order/new") != false || strpos($uri,"/client/degustation") != false || strpos($uri,"/client/order/pay") != false ){

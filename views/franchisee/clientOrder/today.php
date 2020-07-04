@@ -1,10 +1,14 @@
 <?php
 require_once __DIR__ . "/../../../repositories/ClientOrderRepository.php";
 require_once __DIR__ . "/../../../repositories/UserRepository.php";
+require_once __DIR__ . "/../../../repositories/FoodTruckRepository.php";
 $coRep = new ClientOrderRepository();
 $uRepo = new UserRepository();
 $user = $uRepo->getOneById($_COOKIE['user_id']);
-
+$accepting_orders = '';
+if($user->getTruck()->getAcceptsOrders() == 1){
+    $accepting_orders = 'checked';
+}
 ?>
 
 <title><?= translate("Espace Franchisee"); ?> - <?= translate("Commandes du jour"); ?></title>
@@ -12,18 +16,29 @@ $user = $uRepo->getOneById($_COOKIE['user_id']);
     <h1 id="page-title">
         <?= translate("Espace Franchisee"); ?> - <?= translate("Commandes du jour"); ?>
         <span  class="float-right">
-        <div class="form-check form-check-inline">
-            <input class="form-check-input" type="checkbox" id="autoRefresh" checked>
-            <label class="form-check-label" for="autoSizingCheck2" style="font-size: 0.3em;"><?=translate("rafraichissement-auto")?></label>
-        </div>
-    </span>
+        <div class="custom-control custom-switch">
+                    <input type="checkbox" class="custom-control-input" id="acceptOrders" <?= $accepting_orders?>>
+                    <label class="custom-control-label" for="acceptOrders" style="font-size: 0.4em;">Toggle this switch element</label>
+            </div>
+        </span>
         
     </h1>
-    <span id="statusJS" class="float-right">
-        <div class="spinner-border text-dark" role="status">
-            <span class="sr-only">Loading...</span>
+    <div class="row">
+        <div class="col col-lg-3">
+        <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" id="autoRefresh" checked>
+                <label class="form-check-label" for="autoSizingCheck2" style="font-size: 0.8em;"><?=translate("rafraichissement-auto")?></label>
+            </div>
+            
         </div>
-    </span>
+        <span id="statusJS" class="float-right">
+            
+            <div class="spinner-border text-dark" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </span>
+            
+    </div>
     <div class="col-lg">
         <h2>Commandes en cours</h2>
         

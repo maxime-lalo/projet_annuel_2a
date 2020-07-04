@@ -1,7 +1,9 @@
 <?php
 require_once __DIR__ . "/../models/FoodTruck.php";
 require_once __DIR__ . "/../models/FranchiseeOrder.php";
+require_once __DIR__ . "/MenuRepository.php";
 require_once __DIR__ . "/AbstractRepository.php";
+
 
 class FoodTruckRepository extends AbstractRepository
 {
@@ -146,15 +148,52 @@ class FoodTruckRepository extends AbstractRepository
         return $trucks_ordered;
     }
 
+    public function getTrucksAvailable(string $address){
+        $foodTruckAv = array();
+        $allTrucks = $this->getTrucksByDistance($this->getAll(), $address);
+        $mRepo = new MenuRepository();
+        foreach($allTrucks as $truck){
+            $foodTrucksMenus = $mRepo->getAllAvailableFromTruck($truck->getId());
+            if(!empty($foodTrucksMenus) && $truck->getAcceptsOrders() == 1)$foodTruckAv[] = $truck;
+        }
+        return $foodTruckAv;
+    }
+
     public function addOrderToStock(FranchiseeOrder $order):bool{
         foreach($order->getFoods() as $food){
-            $line = $this->dbManager->exec("INSERT INTO stock (id_food, id_food_truck, quantity) VALUES (?,?,?)",[
+            $stock = $this->dbManager->find('SELECT * FROM stock WHERE id_food = ? AND id_food_truck = ? ',[
                 $food->getId(),
-                $order->getUser()->getTruck()->getId(),
-                $food->getQuantity()
+                $order->getUser()->getTruck()->getId()
             ]);
-            if($line != 1)return false;
+            if($stock != null){
+                $line = $this->dbManager->exec("UPDATE stock SET quantity = ? WHERE id_food = ? AND id_food_truck = ?",[
+                    $food->getQuantity() + $stock['quantity'],
+                    $food->getId(),
+                    $order->getUser()->getTruck()->getId()
+                ]);
+            }else{
+                $line = $this->dbManager->exec("INSERT INTO stock (id_food, id_food_truck, quantity) VALUES (?,?,?)",[
+                    $food->getId(),
+                    $order->getUser()->getTruck()->getId(),
+                    $food->getQuantity()
+                ]);
+            }
+            if($line < 1)return false;
         }
         return true;
+    }
+
+    public function getStock(int $truckId):array{
+        $fRepo = new FoodRepository();
+        $foods = array();
+        $stocks = $this->dbManager->getAll("SELECT * FROM stock WHERE id_food_truck = ?",[
+            $truckId
+        ]);
+        foreach($stocks as $food){
+            $foodObj = $fRepo->getOneById($food['id_food']);
+            $foodObj->setQuantity($food['quantity']);
+            $foods[] = $foodObj;
+        }
+        return $foods;
     }
 }

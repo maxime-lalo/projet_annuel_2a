@@ -29,11 +29,11 @@ if (
     $order = $foRep->getOneById($json['id']);
     if($order != null){
         if($json['new_status'] == 3){
-            if($foRep->confirmOrder($order)){
+            if($foRep->confirmOrder($order) == true){
                 $order->setStatus(3);
                 new JsonReturn(JsonReturn::SUCCESS,"Order Confirmed",200, $order);
             }else{
-                new JsonReturn(JsonReturn::ERROR,"Could not update Order, try again.",304);
+                new JsonReturn(JsonReturn::ERROR,"Could not update Order, try again.",400);
             }
         }else{
             new JsonReturn(JsonReturn::ERROR,"Missing arguments",400);

@@ -58,7 +58,7 @@ $directions_url = 'https://www.google.com/maps/dir/?api=1&travelmode=walking&ori
         </thead>
         <tbody>
         <?php
-        $foodTrucks = $fRepo->getTrucksByDistance($fRepo->getAll(), $origin_client);
+        $foodTrucks = $fRepo->getTrucksAvailable($origin_client);
         if ($foodTrucks != null){
             foreach ($foodTrucks as $foodTruck){
                 ?>

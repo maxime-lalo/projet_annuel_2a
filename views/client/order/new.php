@@ -34,7 +34,7 @@ $user = $uRepo->getOneById($_COOKIE['user_id']);
                 </thead>
                 <tbody>
                 <?php
-                $menus = $mRepo->getAllFromTruck($_GET["truck_id"]);
+                $menus = $mRepo->getAllAvailableFromTruck($_GET["truck_id"]);
                 if ($menus){
                     foreach ($menus as $menu){
                         ?>

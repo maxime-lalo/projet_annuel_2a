@@ -157,14 +157,18 @@ class FranchiseeOrderRepository extends AbstractRepository
         }
     }
 
+    
+
     public function confirmOrder(FranchiseeOrder $order):bool{
-        $ftRepo = new FoodTruckRepository();
-        if($ftRepo->addOrderToStock($order)){
-            $line = $this->dbManager->exec("UPDATE franchisee_order SET status = ? WHERE id = ? ",[
-                3,
-                $order->getId()
-            ]);
-            if($line == 1)return true;
+        if($order->getStatus() != 3){
+            $ftRepo = new FoodTruckRepository();
+            if($ftRepo->addOrderToStock($order)){
+                $line = $this->dbManager->exec("UPDATE franchisee_order SET status = ? WHERE id = ? ",[
+                    3,
+                    $order->getId()
+                ]);
+                if($line == 1)return true;
+            }
         }
         return false;
     }
