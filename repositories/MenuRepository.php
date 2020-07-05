@@ -2,6 +2,7 @@
 require_once __DIR__ . "/../models/Menu.php";
 require_once __DIR__ . "/RecipeRepository.php";
 require_once __DIR__ . "/FoodRepository.php";
+require_once __DIR__ . "/FoodTruckRepository.php";
 require_once __DIR__ . "/AbstractRepository.php";
 
 class MenuRepository extends AbstractRepository
@@ -73,6 +74,50 @@ class MenuRepository extends AbstractRepository
             $return[] = $this->getOneById($menuId["id_menu"]);
         }
 		return $return;
+    }
+
+    public function getAllAvailableFromTruck(int $truckId):array{
+        $availableStock = array();
+        $ftRepo = new FoodTruckRepository();
+        $foodTruckStock = $ftRepo->getStock($truckId);
+        //var_dump($foodTruckStock);
+        $menus = $this->getAllFromTruck($truckId);
+        if(!empty($foodTruckStock) && !empty($menus)){
+            foreach($menus as $menu){
+                $checkRecipesAv = true;
+                $checkIngredientsAv = true;
+                foreach($menu->getRecipes() as $recipe){
+                    $checkAv = false;
+                    foreach($recipe->getIngredients() as $ingredient){
+                        
+                        foreach($foodTruckStock as $ingredientAv){
+                            if($ingredientAv->getId() == $ingredient->getId()){
+                                $checkAv = true;
+                                if($ingredientAv->getQuantity() < $ingredient->getQuantity()){
+                                    $checkAv = false;
+                                }
+                            }
+                        }
+                    }
+                    
+                    if(!$checkAv) $checkRecipesAv = false;
+                }
+                foreach($menu->getIngredients() as $ingredient){
+                    $checkAv = false;
+                    foreach($foodTruckStock as $ingredientAv){
+                        if($ingredientAv->getId() == $ingredient->getId()){
+                            $checkAv = true;
+                            if($ingredientAv->getQuantity() < $ingredient->getQuantity()){
+                                $checkAv = false;
+                            }
+                        }
+                    }
+                    if(!$checkAv)$checkIngredientsAv = false;
+                }
+                if($checkIngredientsAv && $checkRecipesAv)$availableStock[] = $menu;
+            }
+        }
+		return $availableStock;
     }
 
     public function add(Menu $menu):?int{

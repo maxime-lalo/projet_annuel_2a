@@ -1,6 +1,10 @@
 <?php
 require_once __DIR__ . "/../models/FoodTruck.php";
+require_once __DIR__ . "/../models/FranchiseeOrder.php";
+require_once __DIR__ . "/../models/ClientOrder.php";
+require_once __DIR__ . "/MenuRepository.php";
 require_once __DIR__ . "/AbstractRepository.php";
+
 
 class FoodTruckRepository extends AbstractRepository
 {
@@ -37,7 +41,7 @@ class FoodTruckRepository extends AbstractRepository
     }
 
     public function update(FoodTruck $truck):bool{
-        $rows = $this->dbManager->exec('UPDATE food_truck SET date_last_check = ?, mileage = ?, name = ?, city = ?, zipcode = ?, street_number = ?, street_name = ? WHERE id = ?',[
+        $rows = $this->dbManager->exec('UPDATE food_truck SET date_last_check = ?, mileage = ?, name = ?, city = ?, zipcode = ?, street_number = ?, street_name = ?, accepts_orders = ? WHERE id = ?',[
             $truck->getDateCheck(),
             $truck->getMileage(),
             $truck->getName(),
@@ -45,6 +49,7 @@ class FoodTruckRepository extends AbstractRepository
             $truck->getZipcode(),
             $truck->getStreetNumber(),
             $truck->getStreetName(),
+            $truck->getAcceptsOrders(),
             $truck->getId()
         ]);
         return $rows == 1;
@@ -143,5 +148,143 @@ class FoodTruckRepository extends AbstractRepository
         }
         $trucks_ordered = array_unique($trucks_ordered, SORT_REGULAR);
         return $trucks_ordered;
+    }
+
+    public function getTrucksAvailable(string $address){
+        $foodTruckAv = array();
+        $allTrucks = $this->getTrucksByDistance($this->getAll(), $address);
+        $mRepo = new MenuRepository();
+        foreach($allTrucks as $truck){
+            $foodTrucksMenus = $mRepo->getAllAvailableFromTruck($truck->getId());
+            if(!empty($foodTrucksMenus) && $truck->getAcceptsOrders() == 1)$foodTruckAv[] = $truck;
+        }
+        return $foodTruckAv;
+    }
+
+    public function addOrderToStock(FranchiseeOrder $order):bool{
+        foreach($order->getFoods() as $food){
+            $stock = $this->dbManager->find('SELECT * FROM stock WHERE id_food = ? AND id_food_truck = ? ',[
+                $food->getId(),
+                $order->getUser()->getTruck()->getId()
+            ]);
+            if($stock != null){
+                $line = $this->dbManager->exec("UPDATE stock SET quantity = ? WHERE id_food = ? AND id_food_truck = ?",[
+                    intval($food->getQuantity()/$food->getWeight()) + $stock['quantity'],
+                    $food->getId(),
+                    $order->getUser()->getTruck()->getId()
+                ]);
+            }else{
+                $line = $this->dbManager->exec("INSERT INTO stock (id_food, id_food_truck, quantity) VALUES (?,?,?)",[
+                    $food->getId(),
+                    $order->getUser()->getTruck()->getId(),
+                    $food->getQuantity()
+                ]);
+            }
+            if($line < 1)return false;
+        }
+        return true;
+    }
+
+    public function getStock(int $truckId):array{
+        $fRepo = new FoodRepository();
+        $foods = array();
+        $stocks = $this->dbManager->getAll("SELECT * FROM stock WHERE id_food_truck = ?",[
+            $truckId
+        ]);
+        foreach($stocks as $food){
+            $foodObj = $fRepo->getOneById($food['id_food']);
+            $foodObj->setQuantity($food['quantity']*$foodObj->getWeight());
+            $foods[] = $foodObj;
+        }
+        return $foods;
+    }
+
+    public function updateStock(int $truckId, array $stock):int{
+        $lines = 0;
+        foreach($stock as $food){
+            $currentStock = $this->dbManager->find('SELECT * FROM stock WHERE id_food = ? AND id_food_truck = ? ',[
+                $food->getId(),
+                $truckId
+            ]);
+            if($currentStock != null){
+                $line = $this->dbManager->exec("UPDATE stock SET quantity = ? WHERE id_food = ? AND id_food_truck = ?",[
+                    intval($food->getQuantity()/$food->getWeight()),
+                    $food->getId(),
+                    $truckId
+                ]);
+                $lines += $line;
+            }
+        }
+        return $lines;
+    }
+
+    public function updateStockFromOrder(ClientOrder $newOrder):array{
+        $returnArray = array();
+        $truckStock = $this->getStock($newOrder->getTruck()->getId());
+        $checkOrderAv = true;
+        foreach($newOrder->getMenus() as $menu){
+            foreach($menu->getRecipes() as $recipe){
+                foreach($recipe->getIngredients() as $ingredient){
+                    foreach($truckStock as $ingredientAv){
+                        if($ingredientAv->getId() == $ingredient->getId()){
+                            $ingredientAvQuantity = $ingredientAv->getQuantity();
+                            if($ingredientAvQuantity - ($ingredient->getQuantity()*$menu->getQuantity()) >= 0){
+                                $ingredientAv->setQuantity($ingredientAvQuantity - intval($ingredient->getQuantity()*$menu->getQuantity()));
+                            }else{
+                                $menu->setIsMissing(1);
+                                $checkOrderAv = false;
+                            }
+                        }
+                    }
+                }
+            }
+            foreach($menu->getIngredients() as $ingredient){
+                foreach($truckStock as $ingredientAv){
+                    if($ingredientAv->getId() == $ingredient->getId()){
+                        $ingredientAvQuantity = $ingredientAv->getQuantity();
+                        if($ingredientAvQuantity - ($ingredient->getQuantity()*$menu->getQuantity()) >= 0){
+                            $ingredientAv->setQuantity($ingredientAvQuantity - intval($ingredient->getQuantity()*$menu->getQuantity()));
+                        }else{
+                            $menu->setIsMissing(1);
+                            $checkOrderAv = false;
+                        }
+                    }
+                }
+            }
+        }
+        $returnArray += ["order"=>$newOrder];
+        if($checkOrderAv){
+            $this->updateStock($newOrder->getTruck()->getId(), $truckStock);
+            $returnArray += ["status"=>1];
+            return $returnArray;
+        }else{
+            $returnArray += ["status"=>0];
+            return $returnArray;
+        }
+    }
+
+    public function updateStockFromCanceledOrder(ClientOrder $order):int{
+        $truckStock = $this->getStock($order->getTruck()->getId());
+        foreach($order->getMenus() as $menu){
+            foreach($menu->getRecipes() as $recipe){
+                foreach($recipe->getIngredients() as $ingredient){
+                    foreach($truckStock as $ingredientAv){
+                        if($ingredientAv->getId() == $ingredient->getId()){
+                            $ingredientAvQuantity = $ingredientAv->getQuantity();
+                            $ingredientAv->setQuantity($ingredientAvQuantity + intval($ingredient->getQuantity()*$menu->getQuantity()));
+                        }
+                    }
+                }
+            }
+            foreach($menu->getIngredients() as $ingredient){
+                foreach($truckStock as $ingredientAv){
+                    if($ingredientAv->getId() == $ingredient->getId()){
+                        $ingredientAvQuantity = $ingredientAv->getQuantity();
+                        $ingredientAv->setQuantity($ingredientAvQuantity + intval($ingredient->getQuantity()*$menu->getQuantity()));
+                    }
+                }
+            }
+        }
+        return $this->updateStock($order->getTruck()->getId(), $truckStock) != 0;
     }
 }

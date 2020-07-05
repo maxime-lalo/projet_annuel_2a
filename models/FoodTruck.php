@@ -15,6 +15,7 @@ class FoodTruck implements JsonSerializable
     private string $street_name;
     private int $street_number;
     private ?int $distance_to_client;
+    private int $accepts_orders;
 
     /**
      * FoodTruck constructor.
@@ -33,6 +34,7 @@ class FoodTruck implements JsonSerializable
         $this->zipcode = $truck['zipcode'];
         $this->street_name = $truck['street_name'];
         $this->street_number = $truck['street_number'];
+        $this->accepts_orders = $truck['accepts_orders'];
     }
 
     /**
@@ -237,4 +239,21 @@ class FoodTruck implements JsonSerializable
         return get_object_vars($this);
     }
 
+
+    /**
+     * Get the value of accepts_orders
+     */ 
+    public function getAcceptsOrders():int
+    {
+        return $this->accepts_orders;
+    }
+
+    /**
+     * Set the value of accepts_orders
+     *
+     */ 
+    public function setAcceptsOrders(int $accepts_orders)
+    {
+        $this->accepts_orders = $accepts_orders;
+    }
 }

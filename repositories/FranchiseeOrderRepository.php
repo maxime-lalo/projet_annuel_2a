@@ -2,6 +2,7 @@
 require_once __DIR__ . "/RecipeRepository.php";
 require_once __DIR__ . "/UserRepository.php";
 require_once __DIR__ . "/FoodRepository.php";
+require_once __DIR__ . "/FoodTruckRepository.php";
 require_once __DIR__ . "/../models/FranchiseeOrder.php";
 
 class FranchiseeOrderRepository extends AbstractRepository
@@ -154,5 +155,21 @@ class FranchiseeOrderRepository extends AbstractRepository
         }else{
             return null;
         }
+    }
+
+    
+
+    public function confirmOrder(FranchiseeOrder $order):bool{
+        if($order->getStatus() != 3){
+            $ftRepo = new FoodTruckRepository();
+            if($ftRepo->addOrderToStock($order)){
+                $line = $this->dbManager->exec("UPDATE franchisee_order SET status = ? WHERE id = ? ",[
+                    3,
+                    $order->getId()
+                ]);
+                if($line == 1)return true;
+            }
+        }
+        return false;
     }
 }

@@ -9,8 +9,9 @@ class Menu implements JsonSerializable
     private float $price;
     private int $recipes_num;
     private int $ingredients_num;
-    private int $quantity;
-    private string $uuid;
+    private ?int $quantity;
+    private ?string $uuid;
+    private ?int $is_missing;
 
     /**
      * Recipe constructor.
@@ -26,6 +27,7 @@ class Menu implements JsonSerializable
         $this->recipes_num = $parameters['recipes_num'];
         $this->ingredients_num = $parameters['ingredients_num'];
         $this->quantity = (isset($parameters['quantity']))?$parameters['quantity'] : 1;
+        $this->is_missing = (isset($parameters['is_missing']))?$parameters['is_missing'] : 0;
         $this->uuid = (isset($parameters['uuid']))?$parameters['uuid'] : 'none';
     }
 
@@ -176,5 +178,22 @@ class Menu implements JsonSerializable
     public function setUuid(string $uuid)
     {
         $this->uuid = $uuid;
+    }
+
+    /**
+     * Get the value of is_missing
+     */ 
+    public function isMissing():int
+    {
+        return $this->is_missing;
+    }
+
+    /**
+     * Set the value of is_missing
+     *
+     */ 
+    public function setIsMissing(int $is_missing)
+    {
+        $this->is_missing = $is_missing;
     }
 }

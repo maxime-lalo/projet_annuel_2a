@@ -7,6 +7,8 @@ if (isset($json['id']) && isset($json['user_type'])){
         $coRepo = new ClientOrderRepository();
         $order = $coRepo->getOneById($json['id']);
         if($order->getStatus() == 0 || $order->getStatus() == 4){
+            $ftRepo = new FoodTruckRepository();
+            $ftRepo->updateStockFromCanceledOrder($order);
             $order->setStatus(2);
             if($order->getUsePoints() == 1){
                 $uRepo = new UserRepository();
