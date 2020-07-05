@@ -2,6 +2,7 @@
 require_once __DIR__ . "/RecipeRepository.php";
 require_once __DIR__ . "/UserRepository.php";
 require_once __DIR__ . "/FoodRepository.php";
+require_once __DIR__ . "/FoodTruckRepository.php";
 require_once __DIR__ . "/../models/ClientOrder.php";
 
 class ClientOrderRepository extends AbstractRepository
@@ -53,7 +54,7 @@ class ClientOrderRepository extends AbstractRepository
         }
     }
 
-    public function add(array $menus, int $id_user, int $id_food_truck, int $usePoints):ClientOrder{
+    public function add(array $menus, int $id_user, int $id_food_truck, int $usePoints):array{
 
         $uRepo = new UserRepository();
         $rows = $this->dbManager->exec("INSERT INTO client_order (id_user,id_food_truck,status) VALUES (?,?,?)",[
@@ -70,40 +71,49 @@ class ClientOrderRepository extends AbstractRepository
         $newOrder = array_merge($newOrder, $orders[0]);
         $order = new ClientOrder($newOrder);
         
-        $user = $order->getUser();
-        $userPoints = $user->getPoints();
+        $ftRepo = new FoodTruckRepository();
+        $resultOrder = $ftRepo->updateStockFromOrder($order);
+        if($resultOrder["status"] === 1){
+            $user = $order->getUser();
+            $userPoints = $user->getPoints();
 
-        if($order->getTotalPrice() * 2 <= $userPoints && $usePoints === 1){
-            $user->setPoints($userPoints-intval($order->getTotalPrice()*2));
-            $order->setIsPayed(1);
-            $order->setStatus(0);
-            $order->setUsePoints(1);
-            $this->update($order);
+            if($order->getTotalPrice() * 2 <= $userPoints && $usePoints === 1){
+                $user->setPoints($userPoints-intval($order->getTotalPrice()*2));
+                $order->setIsPayed(1);
+                $order->setStatus(0);
+                $order->setUsePoints(1);
+                $this->update($order);
+            }
+            $uRepo->update($user);
+
+            foreach($order->getMenus() as $menu){
+                foreach($menu->getRecipes() as $recipe){
+                    $rows = $this->dbManager->exec("INSERT INTO client_order_content (id_order, id_menu, id_recipe, quantity, uuid) VALUES (?,?,?,?, ?)",[
+                        $order->getId(),
+                        $menu->getId(),
+                        $recipe->getId(),
+                        $menu->getQuantity(),
+                        $menu->getUuid()
+                    ]);
+                }
+                foreach($menu->getIngredients() as $ingredient){
+                    $rows = $this->dbManager->exec("INSERT INTO client_order_content (id_order, id_menu, id_food, quantity, uuid) VALUES (?,?,?,?,?)",[
+                        $order->getId(),
+                        $menu->getId(),
+                        $ingredient->getId(),
+                        $menu->getQuantity(),
+                        $menu->getUuid()
+                    ]);
+                }
+            }  
+        }else{
+            $rows = $this->dbManager->exec("DELETE FROM client_order WHERE id = ?",[
+                $order->getId()
+            ]);
         }
-        $uRepo->update($user);
-
-        foreach($order->getMenus() as $menu){
-            foreach($menu->getRecipes() as $recipe){
-                $rows = $this->dbManager->exec("INSERT INTO client_order_content (id_order, id_menu, id_recipe, quantity, uuid) VALUES (?,?,?,?, ?)",[
-                    $order->getId(),
-                    $menu->getId(),
-                    $recipe->getId(),
-                    $menu->getQuantity(),
-                    $menu->getUuid()
-                ]);
-            }
-            foreach($menu->getIngredients() as $ingredient){
-                $rows = $this->dbManager->exec("INSERT INTO client_order_content (id_order, id_menu, id_food, quantity, uuid) VALUES (?,?,?,?,?)",[
-                    $order->getId(),
-                    $menu->getId(),
-                    $ingredient->getId(),
-                    $menu->getQuantity(),
-                    $menu->getUuid()
-                ]);
-            }
-        }  
         
-        return $order;
+        
+        return $resultOrder;
     }
 
     public function getMostFaithfulClients(int $nbr, int $idFoodTruck){

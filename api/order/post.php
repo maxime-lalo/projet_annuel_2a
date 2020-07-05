@@ -9,8 +9,13 @@ if (
     isset($json['use_points'])
 ) {
     $coRep = new ClientOrderRepository();
-    $order = $coRep->add($json['menus'], $json['id_user'], $json['id_food_truck'], $json['use_points']);
-    new JsonReturn(JsonReturn::SUCCESS,"Order Created",201, $order);
+    $orderResult = $coRep->add($json['menus'], $json['id_user'], $json['id_food_truck'], $json['use_points']);
+    if($orderResult["status"] === 1){
+        new JsonReturn(JsonReturn::SUCCESS,"Order Created",201, $orderResult["order"]);
+    }else{
+        new JsonReturn(JsonReturn::ERROR,"Could not create order missing ingredients",400);
+    }
+    
 }else{
     new JsonReturn(JsonReturn::ERROR,"Missing arguments",400);
 }

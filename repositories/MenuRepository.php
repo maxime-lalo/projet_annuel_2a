@@ -80,6 +80,7 @@ class MenuRepository extends AbstractRepository
         $availableStock = array();
         $ftRepo = new FoodTruckRepository();
         $foodTruckStock = $ftRepo->getStock($truckId);
+        //var_dump($foodTruckStock);
         $menus = $this->getAllFromTruck($truckId);
         if(!empty($foodTruckStock) && !empty($menus)){
             foreach($menus as $menu){
@@ -88,6 +89,7 @@ class MenuRepository extends AbstractRepository
                 foreach($menu->getRecipes() as $recipe){
                     $checkAv = false;
                     foreach($recipe->getIngredients() as $ingredient){
+                        
                         foreach($foodTruckStock as $ingredientAv){
                             if($ingredientAv->getId() == $ingredient->getId()){
                                 $checkAv = true;
