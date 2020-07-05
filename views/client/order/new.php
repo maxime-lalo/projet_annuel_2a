@@ -213,7 +213,9 @@ $user = $uRepo->getOneById($_COOKIE['user_id']);
                 }else{
                     $('#'+idItem).remove();
                 }
-                delete basket.find(x => x.uuid === idItem);
+                basket = basket.filter(function( obj ) {
+                    return obj.uuid !== idItem;
+                });
             }
         }
     }

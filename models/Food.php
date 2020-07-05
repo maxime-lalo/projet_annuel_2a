@@ -23,7 +23,7 @@ class Food implements JsonSerializable
         $this->type = $parameters['type'];
         $this->unity = $parameters['unity'];
 
-        $this->quantity = isset($parameters['quantity'])? $parameters['quantity']:null;
+        $this->quantity = isset($parameters['quantity'])? $parameters['quantity']:$parameters['weight'];
     }
 
     /**

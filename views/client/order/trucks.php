@@ -82,7 +82,7 @@ $directions_url = 'https://www.google.com/maps/dir/?api=1&travelmode=walking&ori
         }else{
             ?>
                 <tr style="background-color:lightgray">
-                    <td colspan="7" class="text-center"><?= translate("Oops il semble qu'aucun Foodtruck ne soit disponible proche de votre position.");?></td>
+                    <td colspan="7" class="text-center"><?= translate("Aucun Foodtruck n'est actuellement disponible proche de votre position.");?></td>
                 </tr>
             <?php
         }

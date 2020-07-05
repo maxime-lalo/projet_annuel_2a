@@ -229,7 +229,7 @@ class FoodTruckRepository extends AbstractRepository
                         if($ingredientAv->getId() == $ingredient->getId()){
                             $ingredientAvQuantity = $ingredientAv->getQuantity();
                             if($ingredientAvQuantity - ($ingredient->getQuantity()*$menu->getQuantity()) >= 0){
-                                $ingredientAv->setQuantity($ingredientAvQuantity - ($ingredient->getQuantity()*$menu->getQuantity()));
+                                $ingredientAv->setQuantity($ingredientAvQuantity - intval($ingredient->getQuantity()*$menu->getQuantity()));
                             }else{
                                 $menu->setIsMissing(1);
                                 $checkOrderAv = false;
@@ -243,7 +243,7 @@ class FoodTruckRepository extends AbstractRepository
                     if($ingredientAv->getId() == $ingredient->getId()){
                         $ingredientAvQuantity = $ingredientAv->getQuantity();
                         if($ingredientAvQuantity - ($ingredient->getQuantity()*$menu->getQuantity()) >= 0){
-                            $ingredientAv->setQuantity($ingredientAvQuantity - ($ingredient->getQuantity()*$menu->getQuantity()));
+                            $ingredientAv->setQuantity($ingredientAvQuantity - intval($ingredient->getQuantity()*$menu->getQuantity()));
                         }else{
                             $menu->setIsMissing(1);
                             $checkOrderAv = false;
@@ -261,5 +261,30 @@ class FoodTruckRepository extends AbstractRepository
             $returnArray += ["status"=>0];
             return $returnArray;
         }
+    }
+
+    public function updateStockFromCanceledOrder(ClientOrder $order):int{
+        $truckStock = $this->getStock($order->getTruck()->getId());
+        foreach($order->getMenus() as $menu){
+            foreach($menu->getRecipes() as $recipe){
+                foreach($recipe->getIngredients() as $ingredient){
+                    foreach($truckStock as $ingredientAv){
+                        if($ingredientAv->getId() == $ingredient->getId()){
+                            $ingredientAvQuantity = $ingredientAv->getQuantity();
+                            $ingredientAv->setQuantity($ingredientAvQuantity + intval($ingredient->getQuantity()*$menu->getQuantity()));
+                        }
+                    }
+                }
+            }
+            foreach($menu->getIngredients() as $ingredient){
+                foreach($truckStock as $ingredientAv){
+                    if($ingredientAv->getId() == $ingredient->getId()){
+                        $ingredientAvQuantity = $ingredientAv->getQuantity();
+                        $ingredientAv->setQuantity($ingredientAvQuantity + intval($ingredient->getQuantity()*$menu->getQuantity()));
+                    }
+                }
+            }
+        }
+        return $this->updateStock($order->getTruck()->getId(), $truckStock) != 0;
     }
 }
