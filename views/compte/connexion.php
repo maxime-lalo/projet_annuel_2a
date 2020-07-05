@@ -1,24 +1,32 @@
 <?php
 require_once __DIR__ . '/../../services/auth/AuthService.php';
 require_once __DIR__ . '/../../utils/database/DatabaseManager.php';
+require_once __DIR__ . '/../../repositories/UserRepository.php';
+
 if(isset($_POST['mail']) && isset($_POST['password'])){
     $manager = new DatabaseManager();
     $authService = new AuthService($manager);
     $user = $authService->log($_POST['mail'],$_POST['password']);
+
+    $uRepo = new UserRepository();
+
     if($user >= 0){
         if(isset($_POST['check'])) {
-            session_start();
             setcookie('user_id', $user, time() + 2592000,"/");
 
+
+            $_SESSION['user'] = serialize($uRepo->getOneById($user));
+            header('Location: compte');
         }else{
+            $_SESSION['user'] = serialize($uRepo->getOneById($user));
             setcookie('user_id', $user,time() + 3600,"/");
             header('Location: compte');
         }
     }else{
         if ($user == -1){
-            new SweetAlert("error","Erreur","E-mail ou mot de passe incorrect");
+            new SweetAlert(SweetAlert::ERROR,"Erreur","E-mail ou mot de passe incorrect");
         }elseif($user == -2){
-            new SweetAlert("error","Erreur","Votre compte n'est pas encore activé");
+            new SweetAlert(SweetAlert::ERROR,"Erreur","Votre compte n'est pas encore activé");
         }
     }
 

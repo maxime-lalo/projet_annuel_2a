@@ -12,7 +12,10 @@ class DatabaseManager {
         'dbname=' . DB_NAME,
         'port=' . DB_PORT
     ];
-    $this->pdo = new PDO(DB_DRIVER . ':' . join(';', $options), DB_USER, DB_PASSWORD);
+    $pdo = new PDO(DB_DRIVER . ':' . join(';', $options), DB_USER, DB_PASSWORD,array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"));
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+    $this->pdo = $pdo;
   }
 
   public function getAll(string $sql, array $params = []): array {
@@ -44,8 +47,13 @@ class DatabaseManager {
   }
 
   private function internalExec(string $sql, array $params): ?PDOStatement {
-    $statement = $this->pdo->prepare($sql);
-    if($statement === false) {
+    try{
+      $statement = $this->pdo->prepare($sql);
+    }catch(PDOException $e){
+      echo $e->getMessage();
+    }
+
+    if(!isset($statement) OR $statement === false) {
       return null;
     }
     $res = $statement->execute($params);

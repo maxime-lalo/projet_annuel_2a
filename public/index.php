@@ -1,7 +1,7 @@
 <?php
 session_start();
 require_once __DIR__ . '/../.env';
-require_once __DIR__ . '/../assets/functions.php';
+require_once __DIR__ . '/../utils/functions.php';
 require_once __DIR__ . '/../utils/database/DatabaseManager.php';
 
 $url = $_SERVER['REQUEST_URI'];
@@ -10,7 +10,6 @@ if (substr($url,-1) == '/') {
 	$url = substr($url, 0,strlen($url)-1);
 }
 $explodedUrl = explode("/", explode("?",$url)[0]);
-
 if ($explodedUrl[0] == 'public') {
 	$explode = explode('.',$url);
 	if (isset($explode[1])) {
@@ -33,6 +32,7 @@ if ($explodedUrl[0] == 'public') {
     }else{
         $fileName = $_GET['file'];
         $file = __DIR__ . '/../uploads/' . $fileName;
+        var_dump($file);
         if (file_exists($file)){
             if (isset($_GET['type'])){
                 if ($_GET['type'] == "download"){
@@ -49,7 +49,8 @@ if ($explodedUrl[0] == 'public') {
                     readfile($file);
                     exit;
                 }elseif($_GET['type'] == "view"){
-                    header('Content-Type: application/pdf');
+                    $explodeName = explode(".",$fileName);
+                    header(getMimeType($explodeName[count($explodeName)-1]));
                     $fp = fopen($file,"r");
                     while($data = fread($fp, 1024)){
                         echo $data;
@@ -86,7 +87,7 @@ if ($explodedUrl[0] == 'public') {
 		require_once __DIR__ . '/../views/index.php';
 	}else{
 		$path = "/".implode("/", $explodedUrl).".php";
-		if (file_exists(__DIR__ . '/../views/' . $path)) {
+		if (file_exists(__DIR__ . '/../views/' . $path) ) {
 			if (in_array(LANG,POSSIBLE_LANGUAGES)) {
 				http_response_code(200);
 				require_once __DIR__ . '/../views/' . $path;
@@ -95,12 +96,13 @@ if ($explodedUrl[0] == 'public') {
 				require_once __DIR__ . '/../views/errors/400.php';
 			}
 		}else{
-			if (empty($explodedUrl)) {
+			if (empty($explodedUrl) OR (isset($explodedUrl[0]) && $explodedUrl[0] == "")) {
 				http_response_code(200);
 				require_once __DIR__ . '/../views/index.php';
 			}else{
-				http_response_code(404);	
-				require_once __DIR__ . '/../views/errors/404.php';
+
+                http_response_code(404);
+                require_once __DIR__ . '/../views/errors/404.php';
 			}
 		}
 	}

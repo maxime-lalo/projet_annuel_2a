@@ -180,4 +180,53 @@
     mirror: false
   });
 
+
+  // Activation des lignes clickables dans les tableaux
+  $(".clickable-row").click(function() {
+    window.location = $(this).data("href");
+  });
+
+  // Ligne clickable qui ouvre dans un nouvel onglet
+  $(".clickable-row-new-tab").click(function() {
+    var win = window.open($(this).data("href"),'_blank');
+    win.focus();
+  });
+
 })(jQuery);
+
+function formatDate(date, format){
+  splitDate1 = date.split("/");
+  splitDate2 = date.split("-");
+  if (format === "d/m/Y"){
+    dateVal = splitDate2[2] + "/" + splitDate2[1] + "/" + splitDate2[0];
+  }else{
+    dateVal = splitDate1[2] + "-" + splitDate1[1] + "-" + splitDate1[0];
+  }
+  return dateVal;
+}
+
+function redirectPost(url, data) {
+  var form = document.createElement('form');
+  document.body.appendChild(form);
+  form.method = 'post';
+  form.action = url;
+  for (var name in data) {
+    var input = document.createElement('input');
+    input.type = 'hidden';
+    input.name = name;
+    input.value = data[name];
+    form.appendChild(input);
+  }
+  form.submit();
+}
+
+function getFormData($form){
+  var unindexed_array = $form.serializeArray();
+  var indexed_array = {};
+
+  $.map(unindexed_array, function(n, i){
+    indexed_array[n['name']] = n['value'];
+  });
+
+  return indexed_array;
+}
