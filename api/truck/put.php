@@ -34,6 +34,22 @@ if(
         new JsonReturn(JsonReturn::ERROR,"Truck not found",404);
     }
     
+}elseif(isset($json['id']) && isset($json['city']) && isset($json['zipcode']) && isset($json['street_number']) && isset($json['street_name'])){
+    $truck = $tRepo->getOneById($json['id']);
+    if($truck != null){
+        $truck->setCity($json['city']);
+        $truck->setZipcode($json['zipcode']);
+        $truck->setStreetNumber($json['street_number']);
+        $truck->setStreetName($json['street_name']);
+        $update = $tRepo->update($truck);
+        if ($update){
+            new JsonReturn(JsonReturn::SUCCESS,"Truck succesfully updated",200,$truck);
+        }else{
+            new JsonReturn(JsonReturn::ERROR,"Error updating Truck",400);
+        } 
+    }else{
+        new JsonReturn(JsonReturn::ERROR,"Truck not found",404);
+    }
 }elseif(isset($json['id']) && isset($json['accepts_orders'])){
     $truck = $tRepo->getOneById($json['id']);
     if($truck != null){
