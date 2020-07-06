@@ -146,4 +146,21 @@ class EventRepository extends AbstractRepository
             return $invite ? true:false;
         }
     }
+
+    public function getFollowingEvents(User $user)
+    {
+        $rows = $this->dbManager->getAll("SELECT b.id,b.name,b.date,b.type,b.place,b.franchisee FROM event_user a INNER JOIN event b ON a.id_event = b.id WHERE a.id_user = ? AND b.date >= CURDATE() ORDER BY date DESC",[
+            $user->getId()
+        ]);
+
+        if ($rows != null){
+            $return = [];
+            foreach($rows as $event){
+                $return[] = new Event($event);
+            }
+            return $return;
+        }else{
+            return null;
+        }
+    }
 }
