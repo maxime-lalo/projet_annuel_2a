@@ -25,7 +25,7 @@ $directions_url = 'https://www.google.com/maps/dir/?api=1&travelmode=walking&ori
         if(isset($_GET['addr'])){
         ?>
             <span class="float-right">
-                <a class="mb-2 btn btn-primary" href="order">
+                <a class="mb-2 btn btn-primary" href="trucks">
                     <i class="fa fa-home"></i> <?= translate("Livraison chez vous ?");?>
                 </a>
             </span>
