@@ -86,6 +86,12 @@ class ClientOrderRepository extends AbstractRepository
             }
             $uRepo->update($user);
 
+            $ca = $this->dbManager->exec("INSERT INTO ca (id_user,price,price_ca) VALUES (?,?,?)",[
+                $id_user,
+                $order->getTotalPrice(),
+                ($order->getTotalPrice() * 0.04)
+            ]);
+
             foreach($order->getMenus() as $menu){
                 foreach($menu->getRecipes() as $recipe){
                     $rows = $this->dbManager->exec("INSERT INTO client_order_content (id_order, id_menu, id_recipe, quantity, uuid) VALUES (?,?,?,?, ?)",[
