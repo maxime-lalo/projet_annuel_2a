@@ -4,16 +4,7 @@ require_once __DIR__ . '/../.env';
 require_once __DIR__ . '/../utils/functions.php';
 require_once __DIR__ . '/../utils/database/DatabaseManager.php';
 require_once __DIR__ . '/../vendor/autoload.php';
-
-
-// Create the Transport
-$transport = (new Swift_SmtpTransport('ssl://smtp.gmail.com', 465))
-    ->setUsername('eplp.lloret@gmail.com')
-    ->setPassword('ac5aabba1e')
-;
-
-// Create the Mailer using your created Transport
-$mailer = new Swift_Mailer($transport);
+require_once __DIR__ . '/../services/Mailer.php';
 
 $url = $_SERVER['REQUEST_URI'];
 $url = substr($url, 1,strlen($url));

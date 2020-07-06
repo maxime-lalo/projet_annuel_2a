@@ -2,13 +2,7 @@
 require_once __DIR__ . '/../vendor/autoload.php';
 require_once __DIR__ . "/../repositories/EventRepository.php";
 require_once __DIR__ . "/../repositories/UserRepository.php";
-
-$transport = (new Swift_SmtpTransport('ssl://smtp.gmail.com', 465))
-    ->setUsername('eplp.lloret@gmail.com')
-    ->setPassword('ac5aabba1e')
-;
-
-$mailer = new Swift_Mailer($transport);
+require_once __DIR__ . "/Mailer.php";
 
 $uRepo = new UserRepository();
 $eRepo = new EventRepository();
@@ -56,14 +50,7 @@ if ($allClients){
             "<a href='http://ffw-pmv.com/client/degustation'>Consulter mes évènements</a>"
         ;
 
-        $message = (new Swift_Message('Newsletter DrivNCook'))
-            ->setFrom(['drivncook@gmail.com' => 'DrivNCook'])
-            ->setTo([$client->getEmail()])
-            ->setBody($htmlMail)
-        ;
+        new Mailer($client->getEmail(),"Newsletter DrivNCook",$htmlMail);
 
-        $message->setContentType("text/html");
-
-        $result = $mailer->send($message);
     }
 }
