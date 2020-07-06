@@ -17,19 +17,17 @@ $allClients = $uRepo->getAllBy("is_client",1);
 
 if ($allClients){
 
-    ?>
-    <style>
+    $htmlMail = "<style>
         table, tr, td, th{
             border: 1px solid black;
         }
         td, th{
             padding: 5px 20px 5px 20px
         }
-    </style>
-    <?php
+    </style>";
     /* @var $client User */
     foreach ($allClients as $client){
-        $htmlMail =
+        $htmlMail .=
             "<h1>Bonjour, " .$client->getFirstname() . ".</h1>".
             "<p>Voici vos évènements à venir</p>".
             "<table>".
@@ -72,6 +70,8 @@ if ($allClients){
             ->setTo([$client->getEmail()])
             ->setBody($htmlMail)
         ;
+
+        $message->setContentType("text/html");
 
         $result = $mailer->send($message);
     }
