@@ -16,27 +16,18 @@ $eRepo = new EventRepository();
 $allClients = $uRepo->getAllBy("is_client",1);
 
 if ($allClients){
-
-    $htmlMail = "<style>
-        table, tr, td, th{
-            border: 1px solid black;
-        }
-        td, th{
-            padding: 5px 20px 5px 20px
-        }
-    </style>";
     /* @var $client User */
     foreach ($allClients as $client){
-        $htmlMail .=
+        $htmlMail =
             "<h1>Bonjour, " .$client->getFirstname() . ".</h1>".
             "<p>Voici vos évènements à venir</p>".
-            "<table>".
+            "<table style='border: 1px solid black'>".
                 "<thead>".
-                    "<tr>".
-                        "<th>Nom</th>".
-                        "<th>Date</th>".
-                        "<th>Lieu</th>".
-                        "<th>Inscrit ?</th>".
+                    "<tr style='border: 1px solid black'>".
+                        "<th style='border: 1px solid black;padding: 5px 20px 5px 20px'>Nom</th>".
+                        "<th style='border: 1px solid black;padding: 5px 20px 5px 20px'>Date</th>".
+                        "<th style='border: 1px solid black;padding: 5px 20px 5px 20px'>Lieu</th>".
+                        "<th style='border: 1px solid black;padding: 5px 20px 5px 20px'>Inscrit ?</th>".
                     "</tr>".
                 "</thead>".
             "<tbody>"
@@ -49,11 +40,11 @@ if ($allClients){
             $strParticipates = $eRepo->isUserParticipating($client,$event) ? "Inscrit":"Non inscrit";
 
             $htmlMail .=
-                "<tr>".
-                    "<td>".$event->getName()."</td>".
-                    "<td>".$event->getDate()->format("d/m/Y H:i")."</td>".
-                    "<td>".$event->getPlace()."</td>".
-                    "<td>".$strParticipates."</td>".
+                "<tr style='border: 1px solid black'>".
+                    "<td style='border: 1px solid black;padding: 5px 20px 5px 20px'>".$event->getName()."</td>".
+                    "<td style='border: 1px solid black;padding: 5px 20px 5px 20px'>".$event->getDate()->format("d/m/Y H:i")."</td>".
+                    "<td style='border: 1px solid black;padding: 5px 20px 5px 20px'>".$event->getPlace()."</td>".
+                    "<td style='border: 1px solid black;padding: 5px 20px 5px 20px'>".$strParticipates."</td>".
                 "</tr>"
             ;
         }
