@@ -3,6 +3,27 @@ session_start();
 require_once __DIR__ . '/../.env';
 require_once __DIR__ . '/../utils/functions.php';
 require_once __DIR__ . '/../utils/database/DatabaseManager.php';
+require_once __DIR__ . '/../vendor/autoload.php';
+
+
+// Create the Transport
+$transport = (new Swift_SmtpTransport('tls://smtp.gmail.com', 587))
+    ->setUsername('maxime.lalo.pro@gmail.com')
+    ->setPassword('ac5aabba1e&&')
+;
+
+// Create the Mailer using your created Transport
+$mailer = new Swift_Mailer($transport);
+
+// Create a message
+$message = (new Swift_Message('Wonderful Subject'))
+    ->setFrom(['john@doe.com' => 'John Doe'])
+    ->setTo(['receiver@domain.org', 'other@domain.org' => 'A name'])
+    ->setBody('Here is the message itself')
+;
+
+// Send the message
+$result = $mailer->send($message);
 
 $url = $_SERVER['REQUEST_URI'];
 $url = substr($url, 1,strlen($url));
