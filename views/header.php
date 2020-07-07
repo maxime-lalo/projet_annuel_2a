@@ -19,7 +19,9 @@ if (isset($_SESSION['user'])){
     }
 }
 $url = explode("/",$_SERVER['REQUEST_URI']);
-if (isset($_GET['pdf']) OR $url[count($url) - 1] == "deconnexion"){
+
+$urlWithoutParameters = explode("?",$url[count($url) - 1]);
+if (isset($_GET['pdf']) OR $url[count($url) - 1] == "deconnexion" OR ($urlWithoutParameters[0] == "connexion" && $_SERVER['REQUEST_METHOD'] == "POST")){
 
 }else{
     $manager = new DatabaseManager();

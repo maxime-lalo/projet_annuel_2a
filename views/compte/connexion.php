@@ -11,27 +11,27 @@ if(isset($_POST['mail']) && isset($_POST['password'])){
     $uRepo = new UserRepository();
 
     if($user >= 0){
-        if(isset($_POST['check'])) {
-            setcookie('user_id', $user, time() + 2592000,"/");
-
-
-            $_SESSION['user'] = serialize($uRepo->getOneById($user));
-            header('Location: compte');
-        }else{
-            $_SESSION['user'] = serialize($uRepo->getOneById($user));
-            setcookie('user_id', $user,time() + 3600,"/");
-            header('Location: compte');
-        }
+        $userObj = $uRepo->getOneById($user);
+        $_SESSION['user'] = serialize($userObj);
+        $cookieTime = isset($_POST['check']) ? 2592000:3600;
+        setcookie('user_id', $user, time() + $cookieTime,"/");
+        header('Location: compte');
     }else{
         if ($user == -1){
-            new SweetAlert(SweetAlert::ERROR,"Erreur","E-mail ou mot de passe incorrect");
+            header('Location: connexion?error=incorrectPass');
         }elseif($user == -2){
-            new SweetAlert(SweetAlert::ERROR,"Erreur","Votre compte n'est pas encore activé");
+            header('Location: connexion?error=notActivated');
+
         }
     }
+}
 
-
-
+if (isset($_GET['error'])){
+    if ($_GET['error'] == "notActivated"){
+        new SweetAlert(SweetAlert::ERROR,"Erreur","Votre compte n'est pas encore activé");
+    }elseif($_GET['error'] == "incorrectPass"){
+        new SweetAlert(SweetAlert::ERROR,"Erreur","E-mail ou mot de passe incorrect");
+    }
 }
 ?>
 <form method="post">
