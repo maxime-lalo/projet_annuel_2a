@@ -7,6 +7,15 @@ $fORepo = new FranchiseeOrderRepository();
 $uRepo = new UserRepository();
 $sRepo = new StockRepository();
 $rRepo = new RecipeRepository();
+
+if (isset($_POST['idFood']) && isset($_POST['quantity']) && isset($_POST['action'])){
+    $res = $sRepo->modifyStock($_POST['idFood'],$_POST['quantity'],$user,$_POST['action']);
+    if ($res){
+        new SweetAlert(SweetAlert::SUCCESS,"Succès","La quantité a bien été mise à jour");
+    }else{
+        new SweetAlert(SweetAlert::ERROR,"Erreur","Erreur lors de la modification du stock");
+    }
+}
 ?>
 <title><?= translate("Espace Franchisé");?> - <?= translate("Consulter mon stock");?></title>
 <div class="container">
@@ -16,7 +25,7 @@ $rRepo = new RecipeRepository();
     <?php
     if ($user){
         ?>
-        <table class="table table-bordered table-hover">
+        <table class="table table-bordered table-striped">
             <thead>
             <tr>
                 <th><?= translate("Article");?></th>
@@ -35,7 +44,19 @@ $rRepo = new RecipeRepository();
                     <tr>
                         <td><?= $food->getName();?></td>
                         <td><?= $food->getType();?></td>
-                        <td><?= $food->getQuantity();?></td>
+                        <td class="text-center">
+                            <span class="float-left">
+                                <button class="btn btn-danger" title="<?= translate('Enlever du stock');?>" data-toggle="tooltip" onclick="modifyStock(<?= $food->getId();?>,'remove')">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                            </span>
+                            <?= $food->getQuantity();?>
+                            <span class="float-right">
+                                <button class="btn btn-success" title="<?= translate('Ajouter du stock');?>" data-toggle="tooltip" onclick="modifyStock(<?= $food->getId();?>,'add')">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </span>
+                        </td>
                         <td><?= $food->getWeight().$food->getUnity();?></td>
                     </tr>
                     <?php
@@ -52,7 +73,7 @@ $rRepo = new RecipeRepository();
         </table>
 
         <p class="lead"><?= translate("Avec ces ingrédients vous pouvez cuisiner");?> : </p>
-        <table class="table table-bordered">
+        <table class="table table-bordered table-striped">
             <thead>
                 <th><?= translate("Recette");?></th>
                 <th><?= translate("Quantité fabriquable");?></th>
@@ -76,12 +97,15 @@ $rRepo = new RecipeRepository();
                                 }
                             }
                         }
-                        ?>
-                        <tr>
-                            <td><?= $recipe->getName();?></td>
-                            <td><?= min($maximumCreatableQuantity);?></td>
-                        </tr>
-                        <?php
+
+                        if (min($maximumCreatableQuantity) > 0){
+                            ?>
+                            <tr>
+                                <td><?= $recipe->getName();?></td>
+                                <td><?= min($maximumCreatableQuantity);?></td>
+                            </tr>
+                            <?php
+                        }
                     }
                 }
                 ?>
@@ -93,3 +117,34 @@ $rRepo = new RecipeRepository();
     }
     ?>
 </div>
+<script type="text/javascript">
+    async function modifyStock(idFood,action) {
+        if (action === "remove"){
+            var title = 'Combien de cet article souhaitez-vous enlever au stock ?';
+        }else{
+            var title = 'Combien de cet article souhaitez-vous ajouter au stock ?';
+
+        }
+        const {value: quantity} = await Swal.fire({
+            title: title,
+            input: 'number',
+            showCancelButton: true,
+            confirmButtonText: '<i class="fa fa-plus"></i> Ajouter',
+            showLoaderOnConfirm: true,
+            cancelButtonText: '<i class="fa fa-times"></i> Annuler',
+            inputValidator: (quantity) => {
+                if (!quantity || quantity <= 0) {
+                    return "Vous devez saisir une quantité valide"
+                }
+            }
+        })
+
+        if (quantity){
+            redirectPost("",{
+                idFood: idFood,
+                quantity: quantity,
+                action: action
+            });
+        }
+    }
+</script>

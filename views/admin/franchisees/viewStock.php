@@ -19,7 +19,7 @@ $sRepo = new StockRepository();
         if ($franchisee){
             ?>
             <p class="lead"><?= translate("Stock du franchisé");?> : <?= $franchisee->getFirstName()." ".$franchisee->getLastName();?></p>
-            <table class="table table-bordered table-hover">
+            <table class="table table-bordered table-striped">
                 <thead>
                     <tr>
                         <th><?= translate("Article");?></th>
