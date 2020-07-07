@@ -20,12 +20,12 @@ $user = $uRepo->getOneById($_COOKIE['user_id']);
         $order = $fORepo->getOneById($_GET['id']);
         ?>
         <div class="row justify-content-center mb-2">
-            <a href="history" class="btn btn-primary mr-2"><?= translate("Retour à l'historique");?></a>
-            <a href="generatePdf?pdf=true&id=<?= $order->getId();?>" class="btn btn-primary" target="blank"><i class="fas fa-print"></i> <?= translate("Imprimer le bon de commande");?></a>
+            <a href="history" class="btn btn-primary"><?= translate("Retour à l'historique");?></a>
+            <a href="generatePdf?pdf=true&id=<?= $order->getId();?>" class="btn btn-primary ml-2" target="blank"><i class="fas fa-print"></i> <?= translate("Imprimer le bon de commande");?></a>
             <?php
                 if($order->getStatus() == 0){
             ?>
-            <a href="#" id="confirmOrder" class="btn btn-primary mr-2" onclick="confirmOrder('<?= $order->getId();?>')"><?= translate("Confirmé la réception ?");?></a>
+            <a href="#" id="confirmOrder" class="btn btn-primary ml-2" onclick="confirmOrder('<?= $order->getId();?>')"><?= translate("Confirmer la réception");?></a>
 
             <?php
                }
@@ -59,6 +59,7 @@ $user = $uRepo->getOneById($_COOKIE['user_id']);
             </thead>
             <tbody>
                 <?php
+                    /* @var $food Food */
                     foreach($order->getFoods() as $food){
                         ?>
                         <tr>
@@ -114,6 +115,7 @@ $user = $uRepo->getOneById($_COOKIE['user_id']);
             <?php
             $orders = $fORepo->getAllOrders($user);
             if ($orders){
+                /* @var $order FranchiseeOrder */
                 foreach ($orders as $order){
                     ?>
                     <tr class="clickable-row" data-href="?id=<?= $order->getId();?>">
@@ -122,7 +124,7 @@ $user = $uRepo->getOneById($_COOKIE['user_id']);
                         <td><?= count($order->getFoods());?></td>
                         <td><?= count($order->getMissing());?></td>
                         <td><?= $order->getPercentage();?></td>
-                        <td><?= translate(ORDER_STATUS[$order->getStatus()]);?></td>()
+                        <td><?= translate(ORDER_STATUS[$order->getStatus()]);?></td>
                     </tr>
                     <?php
                 }

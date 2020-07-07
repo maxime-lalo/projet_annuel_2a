@@ -68,6 +68,9 @@ class FranchiseeOrderRepository extends AbstractRepository
             $missingIngredients = array();
             $notMissingIngredients = array();
 
+            $totalWeightMissing = 0;
+            $totalWeightNotMissing = 0;
+
             foreach ($ingredientsList as $ingredient){
                 $quantityNeeded = $ingredient->getQuantity() / $ingredient->getWeight();
                 if ($quantityNeeded != intval($quantityNeeded)){
@@ -81,29 +84,36 @@ class FranchiseeOrderRepository extends AbstractRepository
                 $ingredient->setQuantity($quantityNeeded);
 
                 if ($res == null){
+                    $totalWeightMissing += $ingredient->getWeight() * $ingredient->getQuantity();
                     $missingIngredients[] = $ingredient;
                 }else{
                     if ($res - $quantityNeeded >= 0){
+                        $totalWeightNotMissing += $ingredient->getWeight() * $ingredient->getQuantity();
                         $notMissingIngredients[] = $ingredient;
                     }else{
                         if ($res == 0){
-                            $missing[] = $ingredient;
+                            $totalWeightMissing += $ingredient->getWeight() * $ingredient->getQuantity();
+                            $missingIngredients[] = $ingredient;
                         }else{
                             $ingredient->setQuantity($res);
+                            $totalWeightNotMissing += $ingredient->getWeight() * $ingredient->getQuantity();
                             $notMissingIngredients[] = $ingredient;
 
                             $ingredient2 = clone $ingredient;
                             $ingredient2->setQuantity(-($res - $quantityNeeded));
+
+                            $totalWeightMissing += $ingredient->getWeight() * $ingredient->getQuantity();
                             $missingIngredients[] = $ingredient2;
                         }
                     }
                 }
             }
-
+            $totalWeight = $totalWeightMissing + $totalWeightNotMissing;
+            $percentage = ($totalWeightMissing / $totalWeight) * 100;
             $header = $this->dbManager->exec("INSERT INTO franchisee_order (id_user, id_warehouse, percentage, missing) VALUES (?,?,?,?)",[
                 $user->getId(),
                 $user->getWarehouse()->getId(),
-                100,
+                number_format($percentage, 2, '.', ''),
                 json_encode($missingIngredients)
             ]);
 
