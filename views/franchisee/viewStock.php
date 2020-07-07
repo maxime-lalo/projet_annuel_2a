@@ -16,6 +16,14 @@ if (isset($_POST['idFood']) && isset($_POST['quantity']) && isset($_POST['action
         new SweetAlert(SweetAlert::ERROR,"Erreur","Erreur lors de la modification du stock");
     }
 }
+if (isset($_POST['foodToAdd'])){
+    $res = $sRepo->addToStock($_POST['foodToAdd'],$user);
+    if ($res){
+        new SweetAlert(SweetAlert::SUCCESS,"Succès","L'article a bien été ajouté");
+    }else{
+        new SweetAlert(SweetAlert::ERROR,"Erreur","Erreur lors de l'ajout de l'article");
+    }
+}
 ?>
 <title><?= translate("Espace Franchisé");?> - <?= translate("Consulter mon stock");?></title>
 <div class="container">
@@ -112,6 +120,30 @@ if (isset($_POST['idFood']) && isset($_POST['quantity']) && isset($_POST['action
             </tbody>
         </table>
         <?php
+        $missingFood = $sRepo->getMissingFood($user);
+        if ($missingFood){
+            ?>
+            <p class="lead"><?= translate("Ajouter à mon stock");?></p>
+            <form method="POST">
+                <div class="form-group">
+                    <select name="foodToAdd" id="foodToAdd" class="form-control">
+                        <option value="null" selected disabled>--- <?= translate("Sélectionnez un article");?> ---</option>
+                        <?php
+                        /* @var $food Food */
+                        foreach ($missingFood as $food){
+                            ?>
+                            <option value="<?= $food->getId();?>"><?= $food->getName();?></option>
+                            <?php
+                        }
+                        ?>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <input type="submit" class="btn btn-primary" value="Ajouter à mon stock">
+                </div>
+            </form>
+            <?php
+        }
     }else{
         echo translate("Veuillez vous connecter");
     }
@@ -147,4 +179,8 @@ if (isset($_POST['idFood']) && isset($_POST['quantity']) && isset($_POST['action
             });
         }
     }
+
+    $(document).ready(function() {
+        $('#foodToAdd').select2();
+    });
 </script>

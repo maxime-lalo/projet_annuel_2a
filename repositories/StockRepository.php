@@ -52,4 +52,32 @@ class StockRepository extends AbstractRepository
 
         return $rows == 1;
     }
+
+    public function getMissingFood(?User $user):?array
+    {
+        $sql = "SELECT * FROM food WHERE id NOT IN (SELECT a.id FROM food a LEFT JOIN stock b ON a.id = b.id_food WHERE id_food_truck = ?)";
+        $rows = $this->dbManager->getAll($sql,[
+            $user->getTruck()->getId()
+        ]);
+
+        if ($rows){
+            $returnArray = [];
+            foreach($rows as $row){
+                $returnArray[] = new Food($row);
+            }
+            return $returnArray;
+        }else{
+            return null;
+        }
+    }
+
+    public function addToStock(int $foodToAdd, ?User $user):bool
+    {
+        $rows = $this->dbManager->exec("INSERT INTO stock (id_food, id_warehouse, id_food_truck, quantity) VALUES (?,null,?,0)",[
+            $foodToAdd,
+            $user->getTruck()->getId()
+        ]);
+
+        return $rows == 1;
+    }
 }
