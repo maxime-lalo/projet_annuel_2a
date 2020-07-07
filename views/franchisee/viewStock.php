@@ -36,8 +36,8 @@ if (isset($_POST['foodToAdd'])){
         <table class="table table-bordered table-striped" data-toggle="table" data-search="true">
             <thead>
             <tr>
-                <th><?= translate("Article");?></th>
-                <th><?= translate("Type");?></th>
+                <th data-sortable="true" data-field="name"><?= translate("Article");?></th>
+                <th data-sortable="true" data-field="type"><?= translate("Type");?></th>
                 <th><?= translate("Stock");?></th>
                 <th><?= translate("Poids unitaire");?></th>
             </tr>
