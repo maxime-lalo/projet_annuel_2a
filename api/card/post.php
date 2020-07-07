@@ -10,15 +10,17 @@ if (
     $point = $_POST['point'];
 
     $client = $uR->getOneById($_POST['id_userFrom']);
-    $client->setPoints($client->getPoint() - $point);
-    $clientTo = $uR->getOneById($_POST['id_userTo']);
-    $clientTo->setPoints($clientTo->getPoint() + $point);
+    if($client != null) {
+        $client->setPoints($client->getPoints() - $point);
+        $clientTo = $uR->getOneById($_POST['id_userTo']);
+        if($clientTo != null) {
+            $clientTo->setPoints($clientTo->getPoints() + $point);
+            $uR->update($client);
+            $uR->update($clientTo);
 
-
-    $uR->update($client);
-    $uR->update($clientTo);
-
-    new JsonReturn(JsonReturn::SUCCESS, "Users updated", 201, $uR);
+            new JsonReturn(JsonReturn::SUCCESS, "Users updated", 201, $uR);
+        }
+    }
 }
 else{
     new JsonReturn(JsonReturn::ERROR,"Missing arguments",400);
