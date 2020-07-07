@@ -21,11 +21,11 @@ $rRepo = new RecipeRepository();
         if ($franchisee){
             ?>
             <p class="lead"><?= translate("Stock du franchisé");?> : <?= $franchisee->getFirstName()." ".$franchisee->getLastName();?></p>
-            <table class="table table-bordered table-striped">
+            <table class="table table-bordered table-striped" data-toggle="table" data-search="true">
                 <thead>
                     <tr>
-                        <th><?= translate("Article");?></th>
-                        <th><?= translate("Type");?></th>
+                        <th data-sortable="true" data-field="name"><?= translate("Article");?></th>
+                        <th data-sortable="true" data-field="type"><?= translate("Type");?></th>
                         <th><?= translate("Stock");?></th>
                         <th><?= translate("Poids unitaire");?></th>
                     </tr>
