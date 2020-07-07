@@ -132,6 +132,7 @@ if (isset($_GET['pdf']) OR $url[count($url) - 1] == "deconnexion"){
                                     <li><a href="/<?= LANG; ?>/franchisee/truck"><?= translate("Gestion camion"); ?></a></li>
                                     <li><a href="/<?= LANG; ?>/franchisee/order/new"><?= translate("Faire une commande"); ?></a></li>
                                     <li><a href="/<?= LANG; ?>/franchisee/events/index"><?= translate("Gérer mes évènements"); ?></a></li>
+                                    <li><a href="/<?= LANG; ?>/franchisee/viewStock"><?= translate("Mon stock"); ?></a></li>
                                 </ul>
                             </li>
                             <?php

@@ -5,7 +5,7 @@ require_once __DIR__ . "/FoodRepository.php";
 class StockRepository extends AbstractRepository
 {
     public function getAllByFranchisee(User $franchisee): ?array{
-        $rows = $this->dbManager->getAll("SELECT * FROM stock WHERE id_food_truck = ?",[
+        $rows = $this->dbManager->getAll("SELECT * FROM stock a INNER JOIN food b ON a.id_food = b.id WHERE id_food_truck = ? ORDER BY b.type",[
             $franchisee->getTruck()->getId()
         ]);
 
