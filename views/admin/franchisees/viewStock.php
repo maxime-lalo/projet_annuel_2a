@@ -2,9 +2,11 @@
 require_once __DIR__ . "/../../../repositories/FranchiseeOrderRepository.php";
 require_once __DIR__ . "/../../../repositories/StockRepository.php";
 require_once __DIR__ . "/../../../repositories/UserRepository.php";
+require_once __DIR__ . "/../../../repositories/RecipeRepository.php";
 $fORepo = new FranchiseeOrderRepository();
 $uRepo = new UserRepository();
 $sRepo = new StockRepository();
+$rRepo = new RecipeRepository();
 ?>
 <title><?= translate("Consulter le stock des franchisés");?> - <?= translate("Consulter le stock des franchisés");?></title>
 <div class="container">
@@ -51,6 +53,45 @@ $sRepo = new StockRepository();
                         <?php
                     }
                     ?>
+                </tbody>
+            </table>
+            <p class="lead"><?= translate("Avec ces ingrédients le franchisé peut cuisiner");?> : </p>
+            <table class="table table-bordered table-striped">
+                <thead>
+                <th><?= translate("Recette");?></th>
+                <th><?= translate("Quantité fabriquable");?></th>
+                </thead>
+                <tbody>
+                <?php
+                $allRecipes = $rRepo->getAll();
+                if ($allRecipes) {
+                    /* @var $recipe Recipe */
+                    foreach ($allRecipes as $recipe) {
+                        $maximumCreatableQuantity = [];
+                        /* @var $ingredient Food */
+                        foreach ($recipe->getIngredients() as $ingredient) {
+                            /* @var $foodInStock Food */
+                            foreach ($stock as $foodInStock) {
+                                if ($ingredient->getId() == $foodInStock->getId()) {
+                                    $requiredQuantityForRecipe = $ingredient->getWeight();
+                                    $availableQuantity = $foodInStock->getQuantity() * $foodInStock->getWeight();
+
+                                    $maximumCreatableQuantity[] = intval($availableQuantity / $requiredQuantityForRecipe);
+                                }
+                            }
+                        }
+
+                        if (min($maximumCreatableQuantity) > 0){
+                            ?>
+                            <tr>
+                                <td><?= $recipe->getName();?></td>
+                                <td><?= min($maximumCreatableQuantity);?></td>
+                            </tr>
+                            <?php
+                        }
+                    }
+                }
+                ?>
                 </tbody>
             </table>
         <?php
