@@ -81,8 +81,11 @@ $uRepository = new UserRepository();
                     <button class="btn btn-primary" title="<?= translate("Éditer");?>" data-toggle="tooltip" onclick="editUser(<?= $user->getId();?>)">
                         <i class="fas fa-edit"></i>
                     </button>
-                    <a class="btn btn-primary" title="<?= translate("Commande");?>" data-toggle="tooltip" href="#">
+                    <a class="btn btn-primary" title="<?= translate("Voir les commandes");?>" data-toggle="tooltip" href="franchisees/viewHistory?id=<?= $user->getId();?>">
                         <i class="fas fa-shopping-cart"></i>
+                    </a>
+                    <a class="btn btn-primary" title="<?= translate("Voir le stock");?>" data-toggle="tooltip" href="franchisees/viewStock?id=<?= $user->getId();?>">
+                        <i class="fas fa-box-open"></i>
                     </a>
                 </td>
             </tr>
