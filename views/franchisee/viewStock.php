@@ -33,7 +33,7 @@ if (isset($_POST['foodToAdd'])){
     <?php
     if ($user){
         ?>
-        <table class="table table-bordered table-striped">
+        <table class="table table-bordered table-striped" data-toggle="table" data-search="true">
             <thead>
             <tr>
                 <th><?= translate("Article");?></th>
