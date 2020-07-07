@@ -13,7 +13,7 @@ $uRepository = new UserRepository();
                 $users[] = $uRepository->getOneById($_GET['id']);
                 if($users[0] != null && $users[0]->isWorker()){
                     ?>
-                        <a href="manageFranchisee" class="btn btn-primary mb-2">
+                        <a href="manageFranchisees" class="btn btn-primary mb-2">
                             <i class="fa fa-eye"></i>
                             <?= translate("Afficher le reste des franchisés");?>
                         </a>
@@ -25,7 +25,7 @@ $uRepository = new UserRepository();
                 $users = $uRepository->getAllWorkers();
             }
         ?>
-            <a href="manageNewFranchisee" class="btn btn-primary mb-2">
+            <a href="manageNewFranchisees" class="btn btn-primary mb-2">
                 <i class="fa fa-eye"></i>
                 <?= translate("Voir les franchisés en attente");?>
             </a>
