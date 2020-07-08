@@ -3,6 +3,8 @@ require_once __DIR__ . "/AbstractRepository.php";
 require_once __DIR__ . "/ClientOrderRepository.php";
 require_once __DIR__ . "/UserRepository.php";
 require_once __DIR__ . "/../models/Event.php";
+require_once __DIR__ . "/../services/Mailer.php";
+
 class EventRepository extends AbstractRepository
 {
 
@@ -151,6 +153,14 @@ class EventRepository extends AbstractRepository
                 $user->getId()
             ]);
 
+            if ($invite){
+                $msg = "<h1>Invitation à un évènement</h1>" .
+                    "<p>Le FoodTruck de ".$event->getFranchisee()->getFirstname()." ".$event->getFranchisee()->getLastname()." vous invite à un évènement '".$this->getTypeString($event->getType())."' le ".$event->getDate()->format("d/m/Y \à H:i")."</p>" .
+                    "<p>Répondez sur l'interface dédiée pour lui indiqué si vous participez !</p>".
+                    "<a href='http://127.0.0.3/client/events'>Voir l'évènement sur l'interface</a>"
+                ;
+                new Mailer($user->getEmail(),"Invitation à un évènement","Votre foodtruck ");
+            }
             return $invite ? true:false;
         }
     }
