@@ -37,14 +37,20 @@ if (
 
     $res = $eRepo->add($event, $json['eventClients']);
 
-    if ($res != null){
+    if ($res != null && $res >= 0){
         $event->setId($res);
     }
 
-    if ($res){
-        new JsonReturn(JsonReturn::SUCCESS,"Event created",201,$event);
+    if ($res == -1){
+        new JsonReturn(JsonReturn::ERROR,"Error while sending mails but event has been created",201);
+    }elseif($res == -2){
+        new JsonReturn(JsonReturn::ERROR,"Error while sending mails and event not created",500);
     }else{
-        new JsonReturn(JsonReturn::ERROR,"Error creating event",400);
+        if ($res){
+            new JsonReturn(JsonReturn::SUCCESS,"Event created",201,$event);
+        }else{
+            new JsonReturn(JsonReturn::ERROR,"Error creating event",400);
+        }
     }
 }else{
     new JsonReturn(JsonReturn::ERROR,"Missing fields",400);

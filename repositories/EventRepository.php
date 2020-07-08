@@ -125,15 +125,26 @@ class EventRepository extends AbstractRepository
 
         if ($row == 1){
             $idEvent = $this->dbManager->getLastInsertId();
-
+            $event->setId($idEvent);
             $cORepo = new ClientOrderRepository();
 
             $clientsToInvite = $cORepo->getMostFaithfulClients($numberOfClients,$event->getFranchisee()->getTruck()->getId());
 
+            $error = false;
             foreach($clientsToInvite as $client){
-                $this->inviteUser($event,$client);
+                $mail = $this->inviteUser($event,$client);
+                if (!$mail){
+                    $error = true;
+                }
             }
-            return $idEvent;
+
+            if ($error && $idEvent){
+                return -1;
+            }elseif($error && !$idEvent){
+                return -2;
+            }
+
+            return $idEvent ? $idEvent:null;
         }
     }
 
@@ -152,13 +163,12 @@ class EventRepository extends AbstractRepository
 
             if ($invite){
                 $msg = "<h1>Invitation à un évènement</h1>" .
-                    "<p>Le FoodTruck de ".$event->getFranchisee()->getFirstname()." ".$event->getFranchisee()->getLastname()." vous invite à un évènement '".$this->getTypeString($event->getType())."' le ".$event->getDate()->format("d/m/Y \à H:i")."</p>" .
-                    "<p>Répondez sur l'interface dédiée pour lui indiqué si vous participez !</p>".
-                    "<a href='http://127.0.0.3/client/events'>Voir l'évènement sur l'interface</a>"
+                    "<p>Le FoodTruck de ".$event->getFranchisee()->getFirstname()." ".$event->getFranchisee()->getLastname()." vous invite à un évènement le ".$event->getDate()->format("d/m/Y \à H:i")."</p>" .
+                    "<p>Répondez sur l'interface dédiée pour lui indiquer si vous participez !</p>".
+                    "<a href='http://ffw-pmv.com/client/events'>Voir l'évènement sur l'interface</a>"
                 ;
                 $res = Mailer::sendMail($user->getEmail(),"Invitation à un évènement",$msg);
-
-                return $res ? true:false;
+                return $res;
             }else{
                 return false;
             }

@@ -76,6 +76,11 @@ $uRepo = new UserRepository();
 </div>
 <script type="text/javascript">
     function createEventFranchisee(){
+        Swal.fire({
+            title: "Chargement",
+            text: "Envoi des emails...",
+            showConfirmButton: false
+        });
         $.ajax({
             url : '/api/event',
             type: 'post',
@@ -89,14 +94,24 @@ $uRepo = new UserRepository();
                     icon: "success",
                     text: "L'évènement  a bien été crée"
                 }).then((result) => {
-                    document.location = "index ";
+                    document.location = "index";
                 })
             }else{
-               Swal.fire({
-                   title: "Erreur",
-                   icon: "error",
-                   text: "Veuillez remplir tous les champs"
-               })
+                if (data.info === "Error while sending mails but event has been created"){
+                    Swal.fire({
+                        title: "Erreur",
+                        icon: "info",
+                        text: "L'évènement a bien été crée mais une erreur d'envoi de mail a eu lieu"
+                    }).then((result) => {
+                        document.location = "index";
+                    })
+                }else{
+                    Swal.fire({
+                        title: "Erreur",
+                        icon: "error",
+                        text: "Veuillez remplir tous les champs"
+                    })
+                }
             }
         });
     }

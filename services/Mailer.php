@@ -26,8 +26,13 @@ class Mailer
 
         $message->setContentType("text/html");
 
-        $result = $mailer->send($message);
+        $error = false;
+        try{
+            $result = $mailer->send($message);
+        }catch(Swift_TransportException $STe){
+            $error = true;
+        }
 
-        return $result;
+        return !$error;
     }
 }

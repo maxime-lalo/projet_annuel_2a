@@ -47,7 +47,7 @@ if ($allClients){
                 "</tbody>".
             "</table>".
             "<br>".
-            "<a href='http://ffw-pmv.com/client/degustation'>Consulter mes évènements</a>"
+            "<a href='http://ffw-pmv.com/client/events'>Consulter mes évènements</a>"
         ;
 
         Mailer::sendMail($client->getEmail(),"Newsletter DrivNCook",$htmlMail);
