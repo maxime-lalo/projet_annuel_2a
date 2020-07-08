@@ -40,32 +40,13 @@ else {
             </div>
         </div>
         <div class="row">
-            <div class="col-sm-10"><h1><?= $user->getFirstname() . ' ' . $user->getLastname(); ?></h1></div>
-            <div class="col-sm-2"><a href="#" class="pull-right">
-                <img title="profile image" class="img-circle img-responsive" src="http://www.gravatar.com/avatar/28fd20ccec6865e2d5f0e1f4446eb7bf?s=100"></a>
-            </div>
+            <div class="col-10"><h1><?= $user->getFirstname() . ' ' . $user->getLastname(); ?></h1></div>
         </div>
         <div class="row">
-            <div class="col-sm-3"><!--left col-->
-
-
-                <div class="text-center">
-                    <img src="http://ssl.gstatic.com/accounts/ui/avatar_2x.png" class="avatar img-circle img-thumbnail"
-                         alt="avatar">
-                    <h6><?= translate("Changé de photo de profil")?></h6>
-                    <input type="file" class="text-center center-block file-upload">
-                </div>
-                </hr><br>
-
-            </div><!--/col-3-->
-            <div class="col-sm-9">
+            <div class="col-12">
                 <ul class="nav nav-tabs">
                     <li class="active"><a data-toggle="tab" href="#settings"><?= translate("Informations")?></a></li>
-                    <?php if ($user->isWorker()) { ?>
-                        <li><a data-toggle="tab" href="#camions"><?= translate("Camion")?></a></li>
-                        <li><a data-toggle="tab" href="#entrepots"><?= translate("Entrepot")?></a></li>
-                    <?php } ?>
-                       <li><a data-toggle="tab" href="#mdp"><?= translate("Mot de passe")?></a></li>
+                    <li><a data-toggle="tab" href="#mdp"><?= translate("Mot de passe")?></a></li>
                 </ul>
 
 
@@ -131,7 +112,7 @@ else {
                                                 class="glyphicon glyphicon-ok-sign"></i> <?= translate("Enregistrer modifications")?>
                                     </button>
                                     <button class="btn btn-lg" type="reset"><i class="glyphicon glyphicon-repeat"></i>
-                                    <?= translate("Annulé modifications")?>
+                                    <?= translate("Annuler les modifications")?>
                                     </button>
                                 </div>
                             </div>
@@ -140,69 +121,6 @@ else {
                         <hr>
 
                     </div><!--/tab-pane-->
-
-                    <div class="tab-pane" id="camions">
-                        <hr>
-                        <?php 
-                        if (!isset($truck)) {
-                            echo 'pas de camion rattaché';
-                        }else{ 
-                            ?>
-                            <div class="form-group">
-
-                                <div class="col-xs-6">
-                                    <label for="mileage"><h4><?= translate("Kilométrage")?></h4></label>
-                                    <input required disabled type="text" class="form-control" name="mileage"
-                                           value="<?= $truck->getMileage(); ?>">
-                                </div>
-                                <div class="col-xs-6">
-                                    <label for="register"><h4><?= translate("Date d'enregistrement'")?></h4></label>
-                                    <input required disabled type="text" class="form-control" name="register"
-                                           value="<?= $truck->getDateRegister(); ?>">
-                                </div>
-
-                                <div class="col-xs-6">
-                                    <label for="lastcheck"><h4><?= translate("Date du dernier checkup")?></h4></label>
-                                    <input required disabled type="text" class="form-control" name="lastcheck"
-                                           value="<?= $truck->getDateCheck(); ?>">
-                                </div>
-                            </div>
-                        <?php 
-                        } 
-                        ?>
-                    </div><!--/tab-pane-->
-                    <div class="tab-pane" id="entrepots">
-                        <hr>
-                        <?php if (!isset($warehouse)) {
-                            echo 'pas d\'entrepot rattaché';
-                        }
-                        else{ ?>
-                        <div class="form-group">
-
-                            <div class="col-xs-6">
-                                <label for="name"><h4><?= translate("Nom")?></h4></label>
-                                <input required disabled type="text" class="form-control" name="name"
-                                       value="<?= $warehouse->getName(); ?>">
-                            </div>
-                            <div class="col-xs-6">
-                                <label for="city"><h4><?= translate("Ville")?></h4></label>
-                                <input required disabled type="text" class="form-control" name="city"
-                                       value="<?= $warehouse->getCity(); ?>">
-                            </div>
-
-                            <div class="col-xs-6">
-                                <label for="street_name"><h4><?= translate("Rue")?></h4></label>
-                                <input required disabled type="text" class="form-control" name="street_name"
-                                       value="<?= $warehouse->getStreetName(); ?>">
-                            </div>
-                            <div class="col-xs-6">
-                                <label for="street_number"><h4><?= translate("Numéro")?></h4></label>
-                                <input required disabled type="text" class="form-control" name="street_number"
-                                       value="<?= $warehouse->getStreetNumber(); ?>">
-                            </div>
-                        </div>
-                    <?php } ?>
-                    </div>
                     <div class="tab-pane" id="mdp">
                         <hr>
                         <form method="post" action="compte" class="form">
@@ -234,23 +152,3 @@ else {
         </div>
     </div>
 </div>
-        <script>
-            $(document).ready(function () {
-                var readURL = function (input) {
-                    if (input.files && input.files[0]) {
-                        var reader = new FileReader();
-
-                        reader.onload = function (e) {
-                            $('.avatar').attr('src', e.target.result);
-                        }
-
-                        reader.readAsDataURL(input.files[0]);
-                    }
-                }
-
-
-                $(".file-upload").on('change', function () {
-                    readURL(this);
-                });
-            });
-        </script>

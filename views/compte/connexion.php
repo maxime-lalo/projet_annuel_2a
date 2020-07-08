@@ -34,24 +34,26 @@ if (isset($_GET['error'])){
     }
 }
 ?>
-<form method="post">
-    <br>
-    <div class="container-fluid txt-container">
-        <h3 align="center"><?= translate("Connexion");?></h3>
+<div class="container">
+    <h1 id="page-title"><?= translate("Connexion");?></h1>
+    <form method="post">
         <br>
-    <div class="form-group">
-        <label for="mail">Email address</label>
-        <input required type="email" class="form-control" name="mail" aria-describedby="emailHelp">
-        <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
-    </div>
-    <div class="form-group">
-        <label for="password">Password</label>
-        <input required type="password" class="form-control" name="password">
-    </div>
-    <div class="form-group form-check">
-        <input type="checkbox" class="form-check-input" name="check">
-        <label class="form-check-label" for="check">Check me out</label>
-    </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
-    </div>
-</form>
+        <div class="container-fluid txt-container">
+            <div class="form-group">
+                <label for="mail"><?= translate("Adresse mail");?></label>
+                <input required type="email" class="form-control" name="mail" aria-describedby="emailHelp">
+            </div>
+            <div class="form-group">
+                <label for="password"><?= translate("Mot de passe");?></label>
+                <input required type="password" class="form-control" name="password">
+            </div>
+            <div class="form-check float-left">
+                <input type="checkbox" class="form-check-input" name="check" id="check">
+                <label class="form-check-label" for="check">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?= translate("Rester connecté");?></label>
+            </div>
+            <div class="float-right">
+                <button type="submit" class="btn btn-primary"><?= translate("Se connecter");?></button>
+            </div>
+        </div>
+    </form>
+</div>
