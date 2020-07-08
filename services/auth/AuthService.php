@@ -129,7 +129,7 @@ class AuthService
 
     public function exists(string $email): bool
     {
-        $affectedRows = $this->db->exec('SELECT id FROM User WHERE email = ?', [$email]);
+        $affectedRows = $this->db->exec('SELECT id FROM user WHERE email = ?', [$email]);
         return $affectedRows !== 0;
     }
 
