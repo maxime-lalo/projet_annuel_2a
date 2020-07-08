@@ -7,6 +7,10 @@ class SweetAlert
     private string $title;
     private string $text;
 
+    const SUCCESS = 0;
+    const ERROR = 1;
+    const INFO = 2;
+    const WARNING = 3;
     /**
      * SweetAlert constructor.
      * @param string $type
@@ -15,7 +19,20 @@ class SweetAlert
      */
     public function __construct(string $type, string $title, string $text)
     {
-        $this->type = $type;
+        switch ($type){
+            case 1:
+                $this->type = 'error';
+                break;
+            case 2:
+                $this->type = 'info';
+                break;
+            case 3:
+                $this->type = 'warning';
+                break;
+            default:
+                $this->type = 'success';
+                break;
+        }
         $this->title = $title;
         $this->text = $text;
 

@@ -16,6 +16,7 @@ if (isset($_POST['firstname']) && isset($_POST['lastname']) &&
         echo ('Ce Mail est déja utilisé');
         die();
     }
+    header('Location: ./connexion');
     http_response_code(201);
 } else {
     http_response_code(400);
