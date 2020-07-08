@@ -15,9 +15,9 @@ if (isset($_POST['idEvent']) && isset($_POST['action'])){
     }
 }
 ?>
-<title><?= translate("Espace Client");?> - <?= translate("Mes dégustations");?></title>
+<title><?= translate("Espace Client");?> - <?= translate("Mes évènements");?></title>
 <div class="container">
-    <h1 id="page-title"><?= translate("Espace Client");?> - <?= translate("Mes dégustations");?></h1>
+    <h1 id="page-title"><?= translate("Espace Client");?> - <?= translate("Mes évènements");?></h1>
     <div class="row">
         <table class="table table-bordered">
             <thead>
@@ -26,13 +26,15 @@ if (isset($_POST['idEvent']) && isset($_POST['action'])){
                     <th><?= translate("Nom");?></th>
                     <th><?= translate("Date");?></th>
                     <th><?= translate("Lieu");?></th>
+                    <th><?= translate("Type");?></th>
                     <th><?= translate("Actions");?></th>
                 </tr>
             </thead>
             <tbody>
                 <?php
                 $today = new DateTime("Now");
-                $events = $eRepo->getUserEvents($user,EventRepository::DEGUSTATION);
+                $events = $eRepo->getUserEvents($user,EventRepository::ALL_EVENTS);
+                /* @var $event Event */
                 foreach($events as $event){
                     ?>
                     <tr>
@@ -40,6 +42,7 @@ if (isset($_POST['idEvent']) && isset($_POST['action'])){
                         <td><?= $event->getName();?></td>
                         <td><?= $event->getDate()->format('d/m/Y H:i');?></td>
                         <td><?= $event->getPlace();?></td>
+                        <td><?= $eRepo->getTypeString($event->getType());?></td>
                         <td>
                             <?php
                             if ($event->getDate() < $today){
@@ -71,7 +74,7 @@ if (isset($_POST['idEvent']) && isset($_POST['action'])){
         var form = {
             idEvent: idEvent,
             action: action,
-        }
+        };
 
         redirectPost('', form);
     }

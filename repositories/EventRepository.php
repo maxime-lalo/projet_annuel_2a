@@ -6,6 +6,7 @@ require_once __DIR__ . "/../models/Event.php";
 class EventRepository extends AbstractRepository
 {
 
+    const ALL_EVENTS = 0;
     const DEGUSTATION = 1;
     const MEETING = 2;
     
@@ -29,10 +30,17 @@ class EventRepository extends AbstractRepository
     }
 
     public function getUserEvents(User $user,int $type){
-        $rows = $this->dbManager->getAll("SELECT b.id,b.name,b.date,b.type,b.place,b.franchisee FROM event_user a INNER JOIN event b ON a.id_event = b.id WHERE a.id_user = ? AND b.type = ? ORDER BY date DESC",[
-            $user->getId(),
-            $type
-        ]);
+        if ($type == 0){
+            $rows = $this->dbManager->getAll("SELECT b.id,b.name,b.date,b.type,b.place,b.franchisee FROM event_user a INNER JOIN event b ON a.id_event = b.id WHERE a.id_user = ? ORDER BY date DESC",[
+                $user->getId()
+            ]);
+        }else{
+            $rows = $this->dbManager->getAll("SELECT b.id,b.name,b.date,b.type,b.place,b.franchisee FROM event_user a INNER JOIN event b ON a.id_event = b.id WHERE a.id_user = ? AND b.type = ? ORDER BY date DESC",[
+                $user->getId(),
+                $type
+            ]);
+        }
+
 
         if ($rows != null){
             $return = [];
