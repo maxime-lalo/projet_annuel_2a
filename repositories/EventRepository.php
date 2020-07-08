@@ -131,10 +131,7 @@ class EventRepository extends AbstractRepository
             $clientsToInvite = $cORepo->getMostFaithfulClients($numberOfClients,$event->getFranchisee()->getTruck()->getId());
 
             foreach($clientsToInvite as $client){
-                $row = $this->dbManager->exec("INSERT INTO event_user (id_event, id_user) VALUES (?,?)",[
-                    $idEvent,
-                    $client->getId()
-                ]);
+                $this->inviteUser($event,$client);
             }
             return $idEvent;
         }
@@ -159,9 +156,12 @@ class EventRepository extends AbstractRepository
                     "<p>Répondez sur l'interface dédiée pour lui indiqué si vous participez !</p>".
                     "<a href='http://127.0.0.3/client/events'>Voir l'évènement sur l'interface</a>"
                 ;
-                new Mailer($user->getEmail(),"Invitation à un évènement","Votre foodtruck ");
+                $res = Mailer::sendMail($user->getEmail(),"Invitation à un évènement",$msg);
+
+                return $res ? true:false;
+            }else{
+                return false;
             }
-            return $invite ? true:false;
         }
     }
 

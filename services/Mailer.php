@@ -4,15 +4,13 @@ require_once __DIR__ . "/../vendor/autoload.php";
 require_once __DIR__ . "/../.env";
 class Mailer
 {
-    /**
-     * Mailer constructor.
-     * @param string $receiver
-     * @param string $object
-     * @param string $message
-     */
-    public function __construct(string $receiver, string $object, string $message)
+    public function __construct()
     {
 
+
+    }
+
+    public static function sendMail(string $receiver, string $object, string $message){
         $transport = (new Swift_SmtpTransport(SMTP_URL, SMTP_PORT))
             ->setUsername(SMTP_USERNAME)
             ->setPassword(SMTP_PASSWORD)
@@ -29,5 +27,7 @@ class Mailer
         $message->setContentType("text/html");
 
         $result = $mailer->send($message);
+
+        return $result;
     }
 }

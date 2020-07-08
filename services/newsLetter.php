@@ -50,7 +50,7 @@ if ($allClients){
             "<a href='http://ffw-pmv.com/client/degustation'>Consulter mes évènements</a>"
         ;
 
-        new Mailer($client->getEmail(),"Newsletter DrivNCook",$htmlMail);
+        Mailer::sendMail($client->getEmail(),"Newsletter DrivNCook",$htmlMail);
 
     }
 }
