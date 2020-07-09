@@ -27,4 +27,33 @@ class FoodRepository extends AbstractRepository
 
         return $rows == 1;
     }
+
+    public function addFood(Food $food){
+        $rows = $this->dbManager->exec("INSERT INTO food (name,weight,unity,type) VALUES (?,?,?,?)",[
+            $food->getName(),
+            $food->getWeight(),
+            $food->getUnity(),
+            $food->getType()
+        ]);
+
+        if ($rows == 1)
+            return 1 ;
+        else
+            return NULL;
+    }
+
+    public function updateFood(Food $food){
+        $rows = $this->dbManager->exec("UPDATE food SET name = ?,weight = ? ,unity = ?,type = ? WHERE id = ?",[
+            $food->getName(),
+            $food->getWeight(),
+            $food->getUnity(),
+            $food->getType(),
+            $food->getId()
+        ]);
+
+        if ($rows == 1)
+            return 1 ;
+        else
+            return NULL;
+    }
 }
