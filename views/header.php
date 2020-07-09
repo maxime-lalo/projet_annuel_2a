@@ -130,6 +130,7 @@ if (isset($_GET['pdf']) OR $url[count($url) - 1] == "deconnexion" OR ($urlWithou
                                     <li><a href="/<?= LANG; ?>/admin/truck/manageBreakdowns"><?= translate("Gestion des pannes"); ?></a></li>
                                     <li><a href="/<?= LANG; ?>/admin/menu/listofMenu"><?= translate("Gestion des menus"); ?></a></li>
                                     <li><a href="/<?= LANG; ?>/admin/ca/caFFW"><?= translate("Gestion du chiffre d'affaire"); ?></a></li>
+                                    <li><a href="/<?= LANG; ?>/admin/recipe/view"><?= translate("Gestion des recettes"); ?></a></li>
                                 </ul>
                             </li>
                             <?php
