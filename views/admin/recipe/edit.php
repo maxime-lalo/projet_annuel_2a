@@ -5,8 +5,7 @@ $rRepo = new RecipeRepository();
 $fRepo = new FoodRepository();
 
 if (isset($_POST['ingredient'])){
-    $recipe = $rRepo->getOneById($_GET['id']);
-    $deleted = $rRepo->deleteAllIngredients($recipe);
+    $deleted = $rRepo->deleteAllIngredients($_GET['id']);
     if ($deleted){
         $res = $rRepo->setIngredients($_POST, $_GET['id']);
         if ($res){
@@ -19,6 +18,7 @@ if (isset($_POST['ingredient'])){
     }
 }
 ?>
+<title><?= translate("Editer une recette");?></title>
 <div class="container">
     <div class="row">
         <div class="col-lg-12">
@@ -26,8 +26,10 @@ if (isset($_POST['ingredient'])){
             if (isset($_GET['id'])){
                 $recipe = $rRepo->getOneById($_GET['id']);
                 if ($recipe){
+                    $idRecipe = $recipe instanceof Recipe ? $recipe->getId():$recipe['id'];
+                    $recipeName = $recipe instanceof Recipe ? $recipe->getName():$recipe['name'];
                     ?>
-                    <h1 id="page-title"><?= translate("Modification de la recette");?> : <?= $recipe->getName();?></h1>
+                    <h1 id="page-title"><?= translate("Modification de la recette");?> : <?= $recipeName;?></h1>
                     <form method="POST">
                         <div class="row">
                             <div class="col">
@@ -43,37 +45,39 @@ if (isset($_POST['ingredient'])){
                         <?php
                         $allIngredients = $fRepo->getAll();
 
-                        /* @var $ingredient Food */
-                        foreach($recipe->getIngredients() as $ingredient){
-                            ?>
-                            <div class="row mb-4 ingredientRow" id="ingredient<?= $ingredient->getId();?>">
-                                <div class="col">
-                                    <select name="ingredient[]" class="form-control select2">
-                                        <?php
-                                        foreach($allIngredients as $food){
-                                            if ($ingredient->getId() == $food->getId()){
-                                                ?>
-                                                <option selected value="<?= $food->getId();?>"><?= $food->getName();?></option>
-                                                <?php
-                                            }else{
-                                                ?>
-                                                <option value="<?= $food->getId();?>"><?= $food->getName();?></option>
-                                                <?php
+                        if ($recipe instanceof Recipe){
+                            /* @var $ingredient Food */
+                            foreach($recipe->getIngredients() as $ingredient){
+                                ?>
+                                <div class="row mb-4 ingredientRow" id="ingredient<?= $ingredient->getId();?>">
+                                    <div class="col">
+                                        <select name="ingredient[]" class="form-control select2">
+                                            <?php
+                                            foreach($allIngredients as $food){
+                                                if ($ingredient->getId() == $food->getId()){
+                                                    ?>
+                                                    <option selected value="<?= $food->getId();?>"><?= $food->getName();?></option>
+                                                    <?php
+                                                }else{
+                                                    ?>
+                                                    <option value="<?= $food->getId();?>"><?= $food->getName();?></option>
+                                                    <?php
+                                                }
                                             }
-                                        }
-                                        ?>
-                                    </select>
+                                            ?>
+                                        </select>
+                                    </div>
+                                    <div class="col">
+                                        <input type="number"  name="ingredientQuantity[]" value="<?= $ingredient->getQuantity();?>" class="form-control">
+                                    </div>
+                                    <div class="col">
+                                        <button type="button" class="btn btn-danger" title="Supprimer l'ingrédient" data-toggle="tooltip" onclick="deleteIng(this)">
+                                            <i class="fa fa-trash"></i>
+                                        </button>
+                                    </div>
                                 </div>
-                                <div class="col">
-                                    <input type="number"  name="ingredientQuantity[]" value="<?= $ingredient->getQuantity();?>" class="form-control">
-                                </div>
-                                <div class="col">
-                                    <button type="button" class="btn btn-danger" title="Supprimer l'ingrédient" data-toggle="tooltip" onclick="deleteIng(<?= $ingredient->getId();?>, this)">
-                                        <i class="fa fa-trash"></i>
-                                    </button>
-                                </div>
-                            </div>
-                            <?php
+                                <?php
+                            }
                         }
                         ?>
                     </form>
@@ -91,10 +95,10 @@ if (isset($_POST['ingredient'])){
                                 </select>
                             </div>
                             <div class="col">
-                                <input type="number" name="ingredientQuantity[]" value="<?= $ingredient->getQuantity();?>" class="form-control">
+                                <input type="number" name="ingredientQuantity[]" class="form-control">
                             </div>
                             <div class="col">
-                                <button type="button" class="btn btn-danger" title="Supprimer l'ingrédient" data-toggle="tooltip" onclick="deleteIng(<?= $ingredient->getId();?>,this)">
+                                <button type="button" class="btn btn-danger" title="Supprimer l'ingrédient" data-toggle="tooltip" onclick="deleteIng(this)">
                                     <i class="fa fa-trash"></i>
                                 </button>
                             </div>
@@ -131,7 +135,7 @@ if (isset($_POST['ingredient'])){
         $('.select2').select2();
     });
 
-    function deleteIng(ing,elementIng){
+    function deleteIng(elementIng){
         $(elementIng).parent().parent().remove();
         $('.tooltip').remove()
     }

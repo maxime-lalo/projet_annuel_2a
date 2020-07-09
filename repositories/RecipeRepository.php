@@ -4,7 +4,7 @@ require_once __DIR__ . "/../models/Food.php";
 
 class RecipeRepository extends AbstractRepository
 {
-    public function getOneById(int $id):?Recipe{
+    public function getOneById(int $id){
         $recipe = $this->dbManager->getAll("SELECT a.name as name_recipe,a.id as id_recipe,c.id,c.name,c.weight,c.type,b.quantity,b.unity FROM recipe a INNER JOIN recipe_ingredients b ON a.id = b.id_recipe INNER JOIN food c ON b.id_food = c.id WHERE a.id = ?",[
             $id
         ]);
@@ -22,6 +22,12 @@ class RecipeRepository extends AbstractRepository
 
             return new Recipe($recipeArray);
         }else{
+            $recipe = $this->dbManager->find("SELECT * FROM recipe WHERE id = ?",[
+                $id
+            ]);
+            if ($recipe){
+                return $recipe;
+            }
             return null;
         }
     }
@@ -94,13 +100,13 @@ class RecipeRepository extends AbstractRepository
         }
     }
 
-    public function deleteAllIngredients(Recipe $recipe) :bool
+    public function deleteAllIngredients(int $id) :bool
     {
         $rows = $this->dbManager->exec("DELETE FROM recipe_ingredients WHERE id_recipe = ?",[
-            $recipe->getId()
+            $id
         ]);
 
-        return $rows > 0;
+        return $rows >= 0;
     }
 
     public function setIngredients(array $newIngredients, int $idRecipe):bool
@@ -123,5 +129,17 @@ class RecipeRepository extends AbstractRepository
         }
 
         return $error == true ? false:true;
+    }
+
+    public function create($recipeName):?int
+    {
+        $rows = $this->dbManager->exec("INSERT INTO recipe (name) VALUES (?)",[
+            $recipeName
+        ]);
+        if ($rows == 1){
+            return $this->dbManager->getLastInsertId();
+        }else{
+            return null;
+        }
     }
 }

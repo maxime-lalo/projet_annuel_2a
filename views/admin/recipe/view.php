@@ -6,7 +6,12 @@ $rRepo = new RecipeRepository();
 <div class="container">
     <div class="row">
         <div class="col-lg-12">
-            <h1 id="page-title"><?= translate("Gestion des recettes");?></h1>
+            <h1 id="page-title">
+                <?= translate("Gestion des recettes");?>
+                <span class="float-right">
+                    <a class="btn btn-primary mb-2" href="create"><?= translate("Ajouter une recette");?></a>
+                </span>
+            </h1>
             <table class="table table-bordered table-striped">
                 <thead>
                     <th><?= translate("Id");?></th>
