@@ -153,6 +153,7 @@ if (isset($_GET['pdf']) OR $url[count($url) - 1] == "deconnexion" OR ($urlWithou
                                     <li><a href="/<?= LANG; ?>/client/order/trucks"><?= translate("Une petite faim ?"); ?></a></li>
                                     <li><a href="/<?= LANG; ?>/client/order/history"><?= translate("Historique commandes"); ?></a></li>
                                     <li><a href="/<?= LANG; ?>/client/trucksMap"><?= translate("Tous nos FoodTruck"); ?></a></li>
+                                    <li><a href="/<?= LANG; ?>/client/showFidelityCard?pdf=true" target="_blank"><?= translate("Imprimer ma carte fidélité"); ?></a></li>
                                 </ul>
                             </li>
                             <?php

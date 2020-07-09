@@ -33,7 +33,6 @@
         <use xlink:href="#wave-path" x="50" y="9" fill="#fff">
       </g>
     </svg>
-
   </section><!-- End Hero -->
   <script src="Webgl/lib/three.js"></script>
 	<script src="Webgl/lib/ColladaLoader.js"></script>
