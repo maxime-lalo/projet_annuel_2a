@@ -78,9 +78,6 @@ $uRepository = new UserRepository();
                     <button class="btn btn-danger" title="<?= translate("Supprimer");?>" data-toggle="tooltip" onclick="deleteUser(<?= $user->getId();?>)">
                         <i class="fas fa-trash"></i>
                     </button>
-                    <button class="btn btn-primary" title="<?= translate("Éditer");?>" data-toggle="tooltip" onclick="editUser(<?= $user->getId();?>)">
-                        <i class="fas fa-edit"></i>
-                    </button>
                     <a class="btn btn-primary" title="<?= translate("Voir les commandes");?>" data-toggle="tooltip" href="franchisees/viewHistory?id=<?= $user->getId();?>">
                         <i class="fas fa-shopping-cart"></i>
                     </a>
@@ -96,3 +93,35 @@ $uRepository = new UserRepository();
     </table>
 
 </div>
+
+<script>
+    function deleteUser(idUser){
+        Swal.fire({
+            title: '<?= translate("Êtes-vous sûr ?");?>',
+            text: '<?= translate("Vous ne pourrez pas revenir en arrière");?>',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#0205a1',
+            confirmButtonText: "<?= translate('Supprimer');?>",
+            cancelButtonText: "<?= translate('Annuler');?>",
+        }).then((result) => {
+            if (result.value) {
+                $.ajax({
+                    url : '/api/user',
+                    type: 'DELETE',
+                    data: 'id=' + idUser
+                }).done(function(data){
+                    Swal.fire({
+                        title: "<?= translate('Supprimé');?>",
+                        text:"<?= translate('Ce franchisé a bien été supprimé');?>",
+                        icon: 'success'
+                    }).then((result) => {
+                        document.location.reload(true);
+                    })
+                });
+
+            }
+        })
+    }
+</script>
