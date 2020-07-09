@@ -73,12 +73,11 @@ if (isset($_GET['dateBegin']) && isset($_GET['dateEnd'])){
         $pdf->Cell(47, 10, " + " . $pdf->convertText($ca->getPriceCa()), 1, 1, 'C');
         
     }
-    $pdf->SetFont('Arial', 'B', 15);
-    $pdf->SetTextColor('0','255','0');
-    $pdf->Cell(47, 10, "TOTAL", 1, 0, 'C');
-    $pdf->Cell(47, 10, "TOTAL", 1, 0, 'C');
-    $pdf->Cell(47, 10, "TOTAL", 1, 0, 'C');
-    $pdf->Cell(47, 10, " + " . $total, 1, 1, 'C');
+    $pdf->setFillColor(0,230,0);
+    $pdf->Cell(47, 10, "TOTAL", 1, 0, 'C', true);
+    $pdf->Cell(47, 10, "TOTAL", 1, 0, 'C', true);
+    $pdf->Cell(47, 10, "TOTAL", 1, 0, 'C', true);
+    $pdf->Cell(47, 10, " + " . $total, 1, 1, 'C',true);
 
     $pdf->Output();
 }else{

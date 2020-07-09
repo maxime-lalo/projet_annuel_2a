@@ -85,9 +85,11 @@ else{
 
     <script type="text/javascript">
         function loadCa(dateBegin , dateEnd){
+            var dateB = dateBegin.replace("T", " ");
+            var dateE = dateEnd.replace("T", " ");
             Swal.fire({
                 title: '<?= translate("Actualisation du Ca ?");?>',
-                text: '<?= translate("Vous aller actualiser pour les dates : ");?>' + dateBegin + " à " + dateEnd,
+                text: '<?= translate("Vous aller actualiser pour les dates : ");?>' + dateB + " au " + dateE,
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#d33',
