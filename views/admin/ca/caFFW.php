@@ -7,8 +7,8 @@ if(isset($_GET['dateBegin']) && isset($_GET['dateEnd'])) {
     $dateEnd = date($_GET['dateEnd']);
 }
 else{
-    $dateBegin =  date('Y-m-d\TH:i:s', time());
-    $dateEnd =  date('Y-m-d\TH:i:s', time());
+    $dateBegin =  date('Y-m-d\TH:i', time()-2592000);
+    $dateEnd =  date('Y-m-d\TH:i', time());
 
 }
 
@@ -61,7 +61,7 @@ $total_price_ca = 0;
     <td><?=$ca->getIdUser()?></td>
     <td><?=$ca->getDate()->format('d/m/Y');?></td>
     <td><?=$ca->getPrice()?> €</td>
-    <td>+<?=$ca->getPriceCa()?> €</td>
+    <td>+<?=number_format($ca->getPriceCa(), 2 , ".","");?> €</td>
         </tr>
 
     <?php }  ?>
@@ -70,7 +70,7 @@ $total_price_ca = 0;
         <td>TOTAL</td>
         <td>TOTAL</td>
         <td><?=$total_price?> €</td>
-        <td>+<?=$total_price_ca?> €</td>
+        <td>+<?=number_format($total_price_ca, 2 , ".","");?> €</td>
     </tr>
 
 

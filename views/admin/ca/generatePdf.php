@@ -63,14 +63,14 @@ if (isset($_GET['dateBegin']) && isset($_GET['dateEnd'])){
 
     $total = 0;
     foreach($cas as $ca) {
-        $total += $ca->getPriceCa();
+        $total += number_format($ca->getPriceCa(), 2 , ".","");
 
         $pdf->SetFont('Times', '', 10);
 
         $pdf->Cell(47, 10, $pdf->convertText($ca->getIdUser()), 1, 0, 'C');
         $pdf->Cell(47, 10, $pdf->convertText($ca->getDate()->format("d/m/Y H:i")), 1, 0, 'C');
         $pdf->Cell(47, 10, $pdf->convertText($ca->getPrice()), 1, 0, 'C');
-        $pdf->Cell(47, 10, " + " . $pdf->convertText($ca->getPriceCa()), 1, 1, 'C');
+        $pdf->Cell(47, 10, " + " . $pdf->convertText(number_format($ca->getPriceCa(), 2 , ".","")), 1, 1, 'C');
         
     }
     $pdf->setFillColor(0,230,0);
