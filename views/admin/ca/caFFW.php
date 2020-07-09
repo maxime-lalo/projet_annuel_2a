@@ -24,6 +24,7 @@ $total_price_ca = 0;
 
     </h1>
     <p class="lead">
+        <a href="generatePdf?pdf=true&dateBegin=<?= $dateBegin;?>&dateEnd=<?=$dateEnd;?>" class="btn btn-primary ml-2" target="blank"><i class="fas fa-print"></i> <?= translate("Imprimer le ca");?></a>
 
     </p>
 
@@ -85,8 +86,8 @@ else{
     <script type="text/javascript">
         function loadCa(dateBegin , dateEnd){
             Swal.fire({
-                title: '<?= translate("Êtes-vous sûr ?");?>',
-                text: '<?= translate("Vous ne pourrez pas revenir en arrière");?>',
+                title: '<?= translate("Actualisation du Ca ?");?>',
+                text: '<?= translate("Vous aller actualiser pour les dates : ");?>' + dateBegin + " à " + dateEnd,
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#d33',
