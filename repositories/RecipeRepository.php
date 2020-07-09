@@ -93,4 +93,35 @@ class RecipeRepository extends AbstractRepository
             return $res['quantity'];
         }
     }
+
+    public function deleteAllIngredients(Recipe $recipe) :bool
+    {
+        $rows = $this->dbManager->exec("DELETE FROM recipe_ingredients WHERE id_recipe = ?",[
+            $recipe->getId()
+        ]);
+
+        return $rows > 0;
+    }
+
+    public function setIngredients(array $newIngredients, int $idRecipe):bool
+    {
+        $error = false;
+        $fRepo = new FoodRepository();
+        for ($i = 0; $i < count($newIngredients['ingredient']); $i++){
+            $food = $fRepo->getOneById($newIngredients['ingredient'][$i]);
+
+            $rows = $this->dbManager->exec("INSERT INTO recipe_ingredients (id_recipe, id_food, quantity, unity) VALUES (?,?,?,?)",[
+                $idRecipe,
+                $food->getId(),
+                $newIngredients['ingredientQuantity'][$i],
+                $food->getUnity()
+            ]);
+
+            if ($rows != 1){
+                $error = true;
+            }
+        }
+
+        return $error == true ? false:true;
+    }
 }

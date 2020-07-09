@@ -2,6 +2,7 @@
 require_once __DIR__ . "/../../../repositories/RecipeRepository.php";
 $rRepo = new RecipeRepository();
 ?>
+<title><?= translate("Gestion des recettes");?></title>
 <div class="container">
     <div class="row">
         <div class="col-lg-12">
